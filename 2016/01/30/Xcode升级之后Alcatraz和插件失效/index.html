@@ -17,7 +17,7 @@ find ~/Library/Application\ Sup">
 可以通过下面的方法激活之前安装的插件：
 
 find ~/Library/Application\ Sup">
-<meta property="og:updated_time" content="2016-01-30T05:46:55.000Z">
+<meta property="og:updated_time" content="2016-01-30T05:48:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Xcode升级之后Alcatraz和插件失效">
 <meta name="twitter:description" content="Alcatraz是一个非常好用的插件管理器。前一段时间把Xcode升级到了7.2之后Alcatraz失效了，而且之前安装的所有插件也都消失了。查了资料才知道Apple为了避免插件造成新版本的Xcode启动时崩溃，所以只允许匹配DVTPlugInCompatibilityUUIDs的插件被加载。
@@ -245,7 +245,9 @@ find ~/Library/Application\ Sup">
 <p>可以通过下面的方法激活之前安装的插件：</p>
 <blockquote>
 <pre><code><span class="keyword">find</span> ~<span class="regexp">/Library/</span>Application\ Support<span class="regexp">/Developer/</span>Shared<span class="regexp">/Xcode/</span>Plug-ins -name Info.plist -maxdepth <span class="number">3</span> | xargs -I{} defaults <span class="keyword">write</span> {} DVTPlugInCompatibilityUUIDs -array-add `defaults <span class="keyword">read</span> <span class="regexp">/Applications/</span>Xcode.app<span class="regexp">/Contents/I</span>nfo DVTPlugInCompatibilityUUID`
-</code></pre><p>另外如果你不小心在Xcode启动的时候点击了 <strong>Skip Bundle</strong>,你可以通过下面的方式避免重新安装的悲剧。</p>
+</code></pre></blockquote>
+<p>另外如果你不小心在Xcode启动的时候点击了 <strong>Skip Bundle</strong>,你可以通过下面的方式避免重新安装的悲剧。</p>
+<blockquote>
 <pre><code>defaults <span class="keyword">delete</span> com.apple.dt.Xcode DVTPlugInManagerNonApplePlugIns-Xcode-{your_xcode_version} 
 </code></pre></blockquote>
 
