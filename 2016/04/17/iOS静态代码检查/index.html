@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS静态代码检查 | 这是我新博客的地址，谢谢关注 by得胜</title>
+  <title>iOS静态代码检查 | 得胜的技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
 准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
@@ -13,7 +13,7 @@ Sonar">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS静态代码检查">
 <meta property="og:url" content="http://yoursite.com/2016/04/17/iOS静态代码检查/index.html">
-<meta property="og:site_name" content="这是我新博客的地址，谢谢关注 by得胜">
+<meta property="og:site_name" content="得胜的技术博客，谢谢关注">
 <meta property="og:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
 准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
 所需工具
@@ -22,7 +22,7 @@ Sonar">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/indexPage.jpg">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg">
-<meta property="og:updated_time" content="2016-04-17T13:34:53.000Z">
+<meta property="og:updated_time" content="2016-04-17T13:39:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS静态代码检查">
 <meta name="twitter:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
@@ -31,7 +31,7 @@ Sonar">
 SonarQube 官网下载链接
 Sonar">
   
-    <link rel="alternative" href="/atom.xml" title="这是我新博客的地址，谢谢关注 by得胜" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="得胜的技术博客，谢谢关注" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -55,7 +55,7 @@ Sonar">
 		</hgroup>
 
 		
-		<p class="header-subtitle">这城市华灯初上，多</p>
+		<p class="header-subtitle">这城市华灯初上，多两个人悲剧散场</p>
 		
 
 		
@@ -182,7 +182,7 @@ Sonar">
 			  <h1 class="header-author">刘德胜</h1>
 			</hgroup>
 			
-			<p class="header-subtitle">这城市华灯初上，多</p>
+			<p class="header-subtitle">这城市华灯初上，多两个人悲剧散场</p>
 			
 			<nav class="header-menu">
 				<ul>
@@ -338,9 +338,9 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 <p>如果在执行的时候出现<code>java.database.connetion</code>字样的错误，请仔细检查数据库连接及配置信息。</p>
 <p>我执行这一步的时候发现导出的结果除了文件信息外其他都是空，仔细的分析了下执行时的log，发现这是SonarQuebe有个bug，SonarQuebe代码分析时默认生成的文件oclint.xml在Sonar-reports目录，但是读取时它会到根目录读取，截止目前为止，SonarQuebe仍有这个bug。解决办法就是把生成的xml文件拷贝到根目录在重新执行<code>sonar-runer.sh</code>。</p>
 <p>继续执行的时候出现了<code>Incorrect string value: &#39;\xF0\x90\x8D\x83\xF0\x90...&#39; for column &#39;data&#39; at row 1</code>的错误，开始我以为是编码错误，后来发现是因为是插入数据的大小超过的字段限制的大小,这个也算是SonarQube的bug吧。我试了下，修改对应数据库字段类型longtext为longblob即可。</p>
-<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg" alt="Loading" title="http://localhost:9000/"></p>
+<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg" alt="Loading"></p>
 <p>执行成功后就可以看到扫描结果了:</p>
-<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg" alt="Loading" title="http://localhost:9000/"></p>
+<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg" alt="Loading"></p>
 <p>配合Jira能够更方便的跟踪和分配问题，配合Jenkins能够进行自动化部署和自动化单元测试，我将在以后的文章里纪录Jenkins自动化部署和单元测试的方法。</p>
 
       
