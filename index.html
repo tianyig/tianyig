@@ -255,6 +255,7 @@
 </code></pre></li>
 <li><p>测试sonarQube</p>
 <p> 浏览器输入<code>http://localhost:9000/</code>,出现以下界面:</p>
+<p> <img src="http://7xorsh.com1.z0.glb.clouddn.com/indexPage.jpg" alt="Loading" title="http://localhost:9000/"></p>
 </li>
 <li><p>Sonar Runner安装配置</p>
 <p>解压Sonar Runner到指定目录(如/usr/local)，配置Sonar Runner下的sonar-runner.properties。</p>
@@ -284,7 +285,7 @@ Must specify at least <span class="number">1</span> positional <span class="stri
   -<span class="ruby">e <span class="constant">EXCLUDES</span>, -exclude <span class="constant">EXCLUDES</span>, --exclude <span class="constant">EXCLUDES</span>
 </span>                    remove files matching pattern
 </code></pre><p> 但是在执行的时候报错说oclint不支持debug模式。又搜索很久还是无果，无奈进入官方翻了半天在某一页最后一行发现一行小字：<code>debug mode need oclint compile by debug mode</code>，知道真相的我眼泪掉下来，查了文档和stackoverflow最后也没找到如何<code>compile by debug mode</code>。</p>
-<p> 不抛弃，不放弃，which到目录看了一下<code>oclint-json-compilation-database</code>是<code>oclint</code>的<code>Python</code>脚本,主要功能就是拼接oclint的参数并开启子进程执行命令：</p>
+<p> 然后which到目录看了一下<code>oclint-json-compilation-database</code>是<code>oclint</code>的<code>Python</code>脚本,主要功能就是拼接oclint的参数并开启子进程执行命令：</p>
 <pre><code>oclint_invocation = OCLINT_BIN + debug_argument + oclint_arguments + <span class="string">' '</span> + source_paths
 <span class="keyword">if</span> args<span class="class">.invocation</span>:
 print <span class="string">'------------------------------ OCLint ------------------------------'</span>
@@ -312,6 +313,10 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 <p>如果在执行的时候出现<code>java.database.connetion</code>字样的错误，请仔细检查数据库连接及配置信息。</p>
 <p>我执行这一步的时候发现导出的结果除了文件信息外其他都是空，仔细的分析了下执行时的log，发现这是SonarQuebe有个bug，SonarQuebe代码分析时默认生成的文件oclint.xml在Sonar-reports目录，但是读取时它会到根目录读取，截止目前为止，SonarQuebe仍有这个bug。解决办法就是把生成的xml文件拷贝到根目录在重新执行<code>sonar-runer.sh</code>。</p>
 <p>继续执行的时候出现了<code>Incorrect string value: &#39;\xF0\x90\x8D\x83\xF0\x90...&#39; for column &#39;data&#39; at row 1</code>的错误，开始我以为是编码错误，后来发现是因为是插入数据的大小超过的字段限制的大小,这个也算是SonarQube的bug吧。我试了下，修改对应数据库字段类型longtext为longblob即可。</p>
+<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg" alt="Loading" title="http://localhost:9000/"></p>
+<p>执行成功后就可以看到扫描结果了:</p>
+<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg" alt="Loading" title="http://localhost:9000/"></p>
+<p>配合Jira能够更方便的跟踪和分配问题，配合Jenkins能够进行自动化部署和自动化单元测试，我将在以后的文章里纪录Jenkins自动化部署和单元测试的方法。</p>
 
       
     </div>
