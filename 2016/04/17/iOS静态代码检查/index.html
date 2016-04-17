@@ -3,17 +3,30 @@
 <head>
   <meta charset="utf-8">
   
-  <title>这是我新博客的地址，谢谢关注 by得胜</title>
+  <title>iOS静态代码检查 | 这是我新博客的地址，谢谢关注 by得胜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="测试">
-<meta property="og:type" content="website">
-<meta property="og:title" content="这是我新博客的地址，谢谢关注 by得胜">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
+准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
+所需工具
+SonarQube 官网下载链接
+Sonar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS静态代码检查">
+<meta property="og:url" content="http://yoursite.com/2016/04/17/iOS静态代码检查/index.html">
 <meta property="og:site_name" content="这是我新博客的地址，谢谢关注 by得胜">
-<meta property="og:description" content="测试">
+<meta property="og:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
+准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
+所需工具
+SonarQube 官网下载链接
+Sonar">
+<meta property="og:updated_time" content="2016-04-17T11:40:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="这是我新博客的地址，谢谢关注 by得胜">
-<meta name="twitter:description" content="测试">
+<meta name="twitter:title" content="iOS静态代码检查">
+<meta name="twitter:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
+准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
+所需工具
+SonarQube 官网下载链接
+Sonar">
   
     <link rel="alternative" href="/atom.xml" title="这是我新博客的地址，谢谢关注 by得胜" type="application/atom+xml">
   
@@ -194,9 +207,7 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-iOS静态代码检查" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iOS静态代码检查" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2016/04/17/iOS静态代码检查/" class="article-date">
@@ -212,12 +223,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/17/iOS静态代码检查/">iOS静态代码检查</a>
+    <h1 class="article-title" itemprop="name">
+      iOS静态代码检查
     </h1>
   
 
       </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -316,485 +338,62 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
       
     </div>
     
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/03/12/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">MarkDown语法学习</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/03/12/hello-world/" class="article-date">
-  	<time datetime="2016-03-12T12:37:07.000Z" itemprop="datePublished">2016-03-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/12/hello-world/">MarkDown语法学习</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>欢迎来到我的<a href="www.liudesheng.com">博客</a>,第一篇我们会学习使用MarkDown语法来书写文章。</p>
-<h2 id="标题">标题</h2><p>在Markdown语法中，标题是文本前面加上<code>#</code>来表示的，一个#代表一级标题，同里，还可以增加二级标题，三级标题，最大不能超过六级。例如:</p>
-<blockquote>
-<pre><code><span class="preprocessor"># 一级标题</span>
-<span class="preprocessor">## 二级标题</span>
-<span class="preprocessor">### 三级标题</span>
-<span class="preprocessor">#### 四级标题</span>
-<span class="preprocessor">##### 五级标题</span>
-<span class="preprocessor">###### 六级标题</span>
-</code></pre></blockquote>
-<h2 id="列表">列表</h2><p>无序列表只需在文字前面加上 <code>-</code>。例如：</p>
-<blockquote>
-<pre><code>-<span class="ruby"> 文本<span class="number">1</span>
-</span>-<span class="ruby"> 文本<span class="number">2</span>
-</span>-<span class="ruby"> 文本<span class="number">3</span></span>
-</code></pre></blockquote>
-<p>如果需要创建有序列表，在文字前加上1.2.3.。注意：-、1.和文本之间要保留一个空格。例如:</p>
-<blockquote>
-<pre><code><span class="number">1.</span> 文本<span class="number">1</span>
-<span class="number">2.</span> 文本<span class="number">2</span>
-<span class="number">3.</span> 文本<span class="number">3</span>
-</code></pre></blockquote>
-<h2 id="链接和图片">链接和图片</h2><p>在Markdown中，插入链接需要语法即可。例如:</p>
-<blockquote>
-<pre><code>[<span class="link_label">博客</span>](<span class="link_url">www.liudesheng.com</span>)
-</code></pre></blockquote>
-<p>插入图片使用以下的格式：</p>
-<blockquote>
-<pre><code>!<span class="attr_selector">[]</span>()(<span class="attribute">http</span>:<span class="comment">//weibo.com/hnrain?s=6cm7D0)</span>
-</code></pre></blockquote>
-<h2 id="引用">引用</h2><p>如果在写作的时候需要引用别人的文字，直接在需要引用的文字前面加<code>&gt;</code>就好。例如：</p>
-<blockquote>
-<pre><code>这是一段引用的文字。
-</code></pre></blockquote>
-<h2 id="粗体斜体">粗体斜体</h2><p>用两个<code>*</code>包含的文本是粗体，用一个<code>*</code>包含的文本是斜体。例如:</p>
-<blockquote>
-<pre><code><span class="keyword">*</span><span class="keyword">*</span>这是粗体<span class="keyword">*</span><span class="keyword">*</span>
-<span class="keyword">*</span>这是斜体<span class="keyword">*</span>
-</code></pre><p>生存还是<strong>毁灭</strong>,这是一个<em>问题</em>。</p>
-</blockquote>
-<h2 id="表格">表格</h2><p>在MarkDown中表格的表示方式非常形象。例子如下</p>
-<blockquote>
-<pre><code>|<span class="string"> table            </span>|<span class="string"> row           </span>|<span class="string"> pes  </span>|
-|<span class="string"> -------------     </span>|<span class="string">:-------------:</span>|<span class="string"> -----:</span>|
-|<span class="string"> col1              </span>|<span class="string"> right-aligned </span>|<span class="string"> data12345 </span>|
-|<span class="string"> col2              </span>|<span class="string"> centered      </span>|<span class="string"> data2 </span>|
-|<span class="string"> col3             </span>|<span class="string"> test      </span>|<span class="string">    d3 </span>|
-</code></pre></blockquote>
-<p>默认居左，横线两边加冒号的是居中，冒号在右边的是居右。效果如下：</p>
-<table>
-<thead>
-<tr>
-<th>table</th>
-<th style="text-align:center">row</th>
-<th style="text-align:right">pes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>col1</td>
-<td style="text-align:center">right-aligned</td>
-<td style="text-align:right">data12345</td>
-</tr>
-<tr>
-<td>col2</td>
-<td style="text-align:center">centered</td>
-<td style="text-align:right">data2</td>
-</tr>
-<tr>
-<td>col3</td>
-<td style="text-align:center">test</td>
-<td style="text-align:right">d3</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-nil0Nil0NULL0null0nullptr0NSNull" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/12/nil0Nil0NULL0null0nullptr0NSNull/" class="article-date">
-  	<time datetime="2016-02-12T02:41:47.000Z" itemprop="datePublished">2016-02-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/12/nil0Nil0NULL0null0nullptr0NSNull/">nil/Nil/NULL/NUL/nullptr/NSNull</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="如何表示“不存在”">如何表示“不存在”</h2><p>要理解不存在这个概念，首先需要理解存在。如何定义“存在”这个概念是一个哲学问题，海德格尔在《存在与时间》中提及了存在的不可定义性。原文如下：</p>
-<blockquote>
-<p>『存在』这个概念是不可定义的。这是从它的最高普遍性推论出来的。这话有道理——既然定义来自最近的种加属差。确实不能把『存在』理解为存在者，令存在者归属于存在并不能使『存在』得到规定。</p>
-</blockquote>
-<p>对于哲学来说，表示存在或者不存在这个概念是比较困难的问题。对于数学和计算机科学来说，表示不存在要简单的多，就是用存在的概念表示不存在概念。</p>
-<h2 id="NULL">NULL</h2><p>NULL一般是这么定义的：</p>
-<pre><code><span class="id">#ifdef</span> __cplusplus  
-<span class="hexcolor">#def</span>ine NULL    <span class="number">0</span>  
-<span class="id">#else</span>  
-<span class="hexcolor">#def</span>ine NULL    ((void *)<span class="number">0</span>)  
-<span class="id">#endif</span>  
-</code></pre><p> 可以看出在C和C++中NULL的定义不同。在C语言中，不需要考虑函数重载等问题，所以直接简单定义为一个0地址的<code>void*</code>就行了。由于C++引入了更严格的类型检查，所以把直接<code>void*</code>类型的值赋给一个有类型指针是不行的，编译器会报错(eg:<code>malloc</code>)。但同时C++要保持和C的兼容性，所以在C++里，<code>NULL</code>直接定义为整型0。</p>
-<h2 id="nullptr">nullptr</h2><p>将<code>NULL</code>直接定义成0一般是没问题的，但是假如遇到函数重载：</p>
-<pre><code><span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">void</span> *ptr)</span></span>;
-<span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>;
-</code></pre><p>如果这样调用<code>foo(1,NULL)</code>就会有歧义，因为NULL是指针类型，但是同时NULL也是整型。同样的，这样的问题在模版类型推导的时候也会出现：</p>
-<pre><code><span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-<span class="function"><span class="keyword">int</span> <span class="title">foo</span><span class="params">(T a)</span></span>;
-</code></pre><p>如果调用<code>foo(NULL)</code>是应该推导出<code>int foo(int a)</code>呢还是<code>int foo(void *a)</code>呢。为了解决这个问题。C++11引入了一个新的概念：nullptr。nullptr的实现如下：</p>
-<pre><code> <span class="keyword">const</span>
-<span class="keyword">class</span> <span class="keyword">nullptr_t</span>
-{
-<span class="keyword">public</span>:
-<span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;
-<span class="keyword">inline</span> <span class="keyword">operator</span> T*() <span class="keyword">const</span>
-    { <span class="keyword">return</span> <span class="number">0</span>; }
-<span class="keyword">template</span>&lt;<span class="keyword">class</span> C, <span class="keyword">class</span> T&gt;
-<span class="keyword">inline</span> <span class="keyword">operator</span> T C::*() <span class="keyword">const</span>
-    { <span class="keyword">return</span> <span class="number">0</span>; }
-
-<span class="keyword">private</span>:
-    <span class="keyword">void</span> <span class="keyword">operator</span>&amp;() <span class="keyword">const</span>;
-} <span class="literal">nullptr</span> = {};
-</code></pre><p>其实<code>nullptr</code>和swift中的<code>Optional</code>的实现非常像了。看了nullptr的实现，可以自己写一个Optional的实现。我会在下一篇博客去介绍Optional。</p>
-<h2 id="nil">nil</h2><p>nil和NULL语义不同，但是在底层实现上是等价的。需要注意的是，nil可以向对象发送消息，如果消息有返回值，会有以下几种情况：</p>
-<ul>
-<li>如果一个方法返回值是一个对象，那么发送给nil的消息将返回0(nil)。</li>
-<li>如果方法返回值为指针类型，其指针大小为小于或者等于sizeof(void*)，float，double，long double 或者long long的整型标量，发送给nil的消息将返回0。</li>
-<li>如果方法返回值为结构体，发送给nil的消息将返回0。结构体中各个字段的值将都是0。其他的结构体数据类型将不是用0填充的。</li>
-<li>如果方法的返回值不是上述提到的几种情况，那么发送给nil的消息的返回值将是未定义的。</li>
-</ul>
-<h2 id="Nil">Nil</h2><p>Nil是OC类类型的书面空值，对应<code>Class</code>类型对象。底层实现和nil是一样的。Nil的定义如下：</p>
-<pre><code><span class="preprocessor">#<span class="keyword">ifndef</span> Nil</span>
-<span class="preprocessor"># <span class="keyword">if</span> __has_feature(cxx_nullptr)</span>
-<span class="preprocessor">#   <span class="keyword">define</span> Nil nullptr</span>
-<span class="preprocessor"># <span class="keyword">else</span></span>
-<span class="preprocessor">#   <span class="keyword">define</span> Nil __DARWIN_NULL</span>
-<span class="preprocessor"># <span class="keyword">endif</span></span>
-<span class="preprocessor">#<span class="keyword">endif</span></span>
-
-<span class="preprocessor">#<span class="keyword">ifndef</span> nil</span>
-<span class="preprocessor"># <span class="keyword">if</span> __has_feature(cxx_nullptr)</span>
-<span class="preprocessor">#   <span class="keyword">define</span> nil nullptr</span>
-<span class="preprocessor"># <span class="keyword">else</span></span>
-<span class="preprocessor">#   <span class="keyword">define</span> nil __DARWIN_NULL</span>
-<span class="preprocessor"># <span class="keyword">endif</span></span>
-<span class="preprocessor">#<span class="keyword">endif</span></span>
-</code></pre><h2 id="NSNull">NSNull</h2><p>在OC的集合中中nil代表集合的结束，所以不能在集合里存储nil。所以就有了NSNull用一个类来表示空值。一般用来表示集合中的空对象。</p>
-<h2 id="NUL">NUL</h2><p>用来表示字符串的结束。注意：标准C中无定义。</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
-
-
-
-
-  
-    <article id="post-不经意间" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/02/07/不经意间/" class="article-date">
-  	<time datetime="2016-02-07T11:33:15.000Z" itemprop="datePublished">2016-02-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/02/07/不经意间/">你在哪里</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>不经意抬眼看见逐渐黯淡的黄昏</p>
-<p>难以言喻的风景浮现出你的身影</p>
-<p>若一切终将如清风般虚妄的飘散</p>
-<p>那让这思绪也随之散去又有何妨</p>
-<hr>
-<p>启程于春 从那天清晨起踏上旅途</p>
-<p>时至盛夏 怀想你我曾共赏的夜幕</p>
-<p>阴冷深秋 黑夜覆盖了傍晚的天际</p>
-<p>唤来隆冬 转眼又是一轮四季交替</p>
-<p>飞花乱舞 参杂在纷繁的夜景深处</p>
-<p>星辰陨落 款款光芒道出你的踪迹</p>
-<p>月光倾洒 刻画出两条长长的身影</p>
-<p>雪花飘散 掩埋往复的一年又一年</p>
-<p>而你的身影依然遥远……</p>
-<hr>
-<p>有一种事物一任四季变迁依然如故</p>
-<p>因为我将它年复一年的埋藏于心底</p>
-<p>若这飘渺歌声几经呼唤也无法传达</p>
-<p>请让它如失散的歌谣般在世间回荡</p>
-<hr>
-<p>渡过劫难 我与你的相逢突如其来</p>
-<p>梦中时空 那一切便真的宛若梦境</p>
-<p>幻想之乡 延展开无边无际的世界</p>
-<p>怪奇相谈 就像是和你正两手相牵</p>
-<p>红魔事变 将两人的命运写下定数</p>
-<p>妖妖梦幻 一幕幕又怎可能是幻觉</p>
-<p>永久之夜 不知将持续到几时几刻</p>
-<hr>
-<p>为何我们拥抱在一起 我却无法寻得你的所在</p>
-<p>你的视线彼岸究竟是谁的身影</p>
-<p>谁能来 回答我…..</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随笔/">随笔</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="iOS静态代码检查" data-title="iOS静态代码检查" data-url="http://yoursite.com/2016/04/17/iOS静态代码检查/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
 
 
 
 
-
-
-
-  
-    <article id="post-Xcode升级之后Alcatraz和插件失效" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/30/Xcode升级之后Alcatraz和插件失效/" class="article-date">
-  	<time datetime="2016-01-30T05:31:11.000Z" itemprop="datePublished">2016-01-30</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/01/30/Xcode升级之后Alcatraz和插件失效/">Xcode升级之后Alcatraz和插件失效</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="http://alcatraz.io" target="_blank" rel="external">Alcatraz</a>是一个非常好用的插件管理器。前一段时间把Xcode升级到了7.2之后Alcatraz失效了，而且之前安装的所有插件也都消失了。查了资料才知道Apple为了避免插件造成新版本的Xcode启动时崩溃，所以只允许匹配<code>DVTPlugInCompatibilityUUIDs</code>的插件被加载。</p>
-<p>可以通过下面的方法激活之前安装的插件：</p>
-<blockquote>
-<pre><code><span class="keyword">find</span> ~<span class="regexp">/Library/</span>Application\ Support<span class="regexp">/Developer/</span>Shared<span class="regexp">/Xcode/</span>Plug-ins -name Info.plist -maxdepth <span class="number">3</span> | xargs -I{} defaults <span class="keyword">write</span> {} DVTPlugInCompatibilityUUIDs -array-add `defaults <span class="keyword">read</span> <span class="regexp">/Applications/</span>Xcode.app<span class="regexp">/Contents/I</span>nfo DVTPlugInCompatibilityUUID`
-</code></pre></blockquote>
-<p>另外如果你不小心在Xcode启动的时候点击了 <strong>Skip Bundle</strong>,你可以通过下面的方式避免重新安装的悲剧。</p>
-<blockquote>
-<pre><code>defaults <span class="keyword">delete</span> com.apple.dt.Xcode DVTPlugInManagerNonApplePlugIns-Xcode-{your_xcode_version} 
-</code></pre></blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-Hello-World-0" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/11/24/Hello-World-0/" class="article-date">
-  	<time datetime="2015-11-24T02:38:41.000Z" itemprop="datePublished">2015-11-24</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/24/Hello-World-0/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="这是一个文章标题测试">这是一个文章标题测试</h1><h2 id="markdown语法二级标题">markdown语法二级标题</h2><h3 id="代码测试">代码测试</h3><pre><code>- (<span class="keyword">void</span>)longPress:(UILongPressGestureRecognizer *)press {
-    <span class="keyword">if</span> (press.state == UIGestureRecognizerStateBegan) {
-        <span class="keyword">int</span> <span class="keyword">index</span> = (<span class="keyword">int</span>)press.view.tag - KIMGTAG;
-        <span class="keyword">if</span> (<span class="keyword">index</span> &lt; <span class="number">0</span> || <span class="keyword">index</span> &gt;= _smallImgs.<span class="keyword">count</span>) {
-            <span class="keyword">return</span>;
-        }
-        [_smallImgs removeObjectAtIndex:<span class="keyword">index</span>];
-        [self updateAll];
-    }
-}
-</code></pre>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/人生/">人生</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学术/">学术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标签/">标签</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/新测试/">新测试</a>
-	</div>
-
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -818,8 +417,8 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
