@@ -310,7 +310,7 @@ memcpy(newObjs, _objs, _count <span class="keyword">*</span> sizeof(<span class=
     memmove(_objs + <span class="keyword">index</span>, _objs + <span class="keyword">index</span> + <span class="number">1</span>, ([self <span class="keyword">count</span>] - <span class="keyword">index</span> - <span class="number">1</span>) * sizeof(*_objs));
     _count--;
 }
-</code></pre><p>这里同样需要错误处理和参数合法性检查，为了方便，这里<br>不在处理。</p>
+</code></pre><p>这里同样需要错误处理和参数合法性检查，为了方便，这里不在处理。</p>
 <p>同样的原因，这里真正的实现应该尽量减少元素移动的次数。考虑一个极端情况，假设插入了几百万个元素，然后把它们全部移除。我们不希望每移除一个元素，就做一次内存调整。具体实现属于内存使用优化相关内容，这里采用最简单的实现。真正实现和<code>insertObject:atIndex:</code>类似。</p>
 <h3 id="元素替换">元素替换</h3><p>这个实现同样非常简单，直接替换即可:</p>
 <pre><code>- (<span class="keyword">void</span>)replaceObjectAtIndex: (NSUInteger)<span class="keyword">index</span> withObject: (id)anObject
