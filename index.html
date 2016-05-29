@@ -292,7 +292,7 @@ memcpy(newObjs, _objs, _count <span class="keyword">*</span> sizeof(<span class=
 }
 </code></pre><p>经过这样的操作之后，已经能保证有足够的空间存储新的元素。我们接着需要把要插入位置之后的元素向后挪动一个位置，给要插入的元素留出位置，这里可以使用<code>memmove</code>函数。</p>
 <pre><code>memmove(_objs + <span class="keyword">index</span> + <span class="number">1</span>, _objs + <span class="keyword">index</span>, ([self <span class="keyword">count</span>] - <span class="keyword">index</span>) * sizeof(*_objs));
-</code></pre><p>作为<code>memcpy</code>的变体，<code>memmove</code>允许移动的区域是有重叠的，而且会覆盖重叠的部分，并且它会假设要移动的位置有足够的空间容纳要移动的元素，否则就会指针越界。</p>
+</code></pre><p>作为<code>memcpy</code>的变体，标准是允许<code>memmove</code>允许移动的区域是有重叠的，而且会覆盖重叠的部分，并且它会假设要移动的位置有足够的空间容纳要移动的元素，否则就会指针越界。(注意：<code>memmove</code>的实现有多种，且在debug和release下行为不一定一致)</p>
 <p>移动完成之后，就需要在空出的位置放置我们的新元素，然后让元素个数加1：</p>
 <pre><code>    _objs<span class="string">[index]</span> = <span class="string">[anObject retain]</span>;
 
