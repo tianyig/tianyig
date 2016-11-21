@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: 人生 | 得胜的技术博客，谢谢关注</title>
+  <title>得胜的技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="得胜的技术博客，谢谢关注">
-<meta property="og:url" content="http://yoursite.com/tags/人生/index.html">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="得胜的技术博客，谢谢关注">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -196,56 +196,79 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Hello-World-0" class="article article-type-post" itemscope itemprop="blogPost">
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/11/24/Hello-World-0/" class="archive-article-date">
-  	<time datetime="2015-11-24T02:38:41.000Z" itemprop="datePublished">Nov 24</time>
+    <div class="article-meta">
+      <a href="/2015/11/24/Hello-World-0/" class="article-date">
+  	<time datetime="2015-11-24T02:38:41.000Z" itemprop="datePublished">2015-11-24</time>
 </a>
-        </div>
-    	 
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/24/Hello-World-0/">Hello World</a>
+      <a class="article-title" href="/2015/11/24/Hello-World-0/">Hello World</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="这是一个文章标题测试">这是一个文章标题测试</h1><h2 id="markdown语法二级标题">markdown语法二级标题</h2><h3 id="代码测试">代码测试</h3><pre><code>- (<span class="keyword">void</span>)longPress:(UILongPressGestureRecognizer *)press {
+    <span class="keyword">if</span> (press.state == UIGestureRecognizerStateBegan) {
+        <span class="keyword">int</span> <span class="keyword">index</span> = (<span class="keyword">int</span>)press.view.tag - KIMGTAG;
+        <span class="keyword">if</span> (<span class="keyword">index</span> &lt; <span class="number">0</span> || <span class="keyword">index</span> &gt;= _smallImgs.<span class="keyword">count</span>) {
+            <span class="keyword">return</span>;
+        }
+        [_smallImgs removeObjectAtIndex:<span class="keyword">index</span>];
+        [self updateAll];
+    }
+}
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/人生/">人生</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/学术/">学术</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标签/">标签</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 	<a class="article-category-link" href="/categories/新测试/">新测试</a>
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
+      
+      <div class="clearfix"></div>
+    </div>
     
+  </div>
+  
+</article>
 
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
+  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -269,10 +292,10 @@
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: false,
+		isHome: true,
 		isPost: false,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false
 	}
