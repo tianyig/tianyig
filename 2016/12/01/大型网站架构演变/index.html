@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>大型网站架构演变 | 得胜的技术博客，谢谢关注</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。
+Web Server和Database Server分离网站刚开始建站时，访问量比较小，可以将web服务器和数据库服务器部署在同一台服务器上。此时Web服务器和数据库服务器互相影响。任何一个出现性能瓶颈，都会影响网站的访问速度。不符合大并发服务器的高性能的要求。任何一个瘫痪，都会导致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大型网站架构演变">
+<meta property="og:url" content="http://yoursite.com/2016/12/01/大型网站架构演变/index.html">
+<meta property="og:site_name" content="得胜的技术博客，谢谢关注">
+<meta property="og:description" content="前言上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。
+Web Server和Database Server分离网站刚开始建站时，访问量比较小，可以将web服务器和数据库服务器部署在同一台服务器上。此时Web服务器和数据库服务器互相影响。任何一个出现性能瓶颈，都会影响网站的访问速度。不符合大并发服务器的高性能的要求。任何一个瘫痪，都会导致">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img01.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img02.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img03.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img04.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img08.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img09.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img10.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img11.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/img12.png">
+<meta property="og:updated_time" content="2016-12-04T09:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大型网站架构演变">
+<meta name="twitter:description" content="前言上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。
+Web Server和Database Server分离网站刚开始建站时，访问量比较小，可以将web服务器和数据库服务器部署在同一台服务器上。此时Web服务器和数据库服务器互相影响。任何一个出现性能瓶颈，都会影响网站的访问速度。不符合大并发服务器的高性能的要求。任何一个瘫痪，都会导致">
+  
+    <link rel="alternative" href="/atom.xml" title="得胜的技术博客，谢谢关注" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">刘得胜</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">这城市华灯初上，多两个人悲剧散场</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/C-服务器开发/" style="font-size: 10px;">C++服务器开发</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS开发/" style="font-size: 20px;">iOS开发</a> <a href="/tags/人生/" style="font-size: 10px;">人生</a> <a href="/tags/学术/" style="font-size: 10px;">学术</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/标签/" style="font-size: 10px;">标签</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">刘得胜</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img lazy-src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">刘得胜</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">这城市华灯初上，多两个人悲剧散场</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+      <div class="body-wrap"><article id="post-大型网站架构演变" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/12/01/大型网站架构演变/" class="article-date">
+  	<time datetime="2016-12-01T03:30:57.000Z" itemprop="datePublished">2016-12-01</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      大型网站架构演变
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="前言">前言</h3><p>上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。</p>
+<h3 id="Web_Server和Database_Server分离">Web Server和Database Server分离</h3><p>网站刚开始建站时，访问量比较小，可以将web服务器和数据库服务器部署在同一台服务器上。此时Web服务器和数据库服务器互相影响。任何一个出现性能瓶颈，都会影响网站的访问速度。不符合大并发服务器的高性能的要求。任何一个瘫痪，都会导致整个网站瘫痪，不符合大并发服务器的高可用要求。我们可以将Web Server和Database Server分离：</p>
+<p><img src="/assets/images/concurrent_server/img01.png" alt="img01"></p>
+<p>对Web资源的请求从请求方式上来说可以分为对静态资源和对动态资源的请求:</p>
+<ol>
+<li>静态请求：html,js,css,image等。这些请求由HTTP服务器（apache，nginx）处理</li>
+<li>动态请求：jsp,PHP,asp.Net等。这些请求由应用服务器（JBoss，Tomcat）处理。<br>对静态资源的访问不需要处理，而对动态资源的请求需要业务逻辑处理后返回，所以两者的访问速度是不一样的。为了提高性能，可以将Web服务器进行动静资源分离：</li>
+</ol>
+<p><img src="/assets/images/concurrent_server/img02.png" alt="img01"></p>
+<h3 id="缓存处理">缓存处理</h3><p><img src="/assets/images/concurrent_server/img03.png" alt="img01"></p>
+<h4 id="浏览器缓存">浏览器缓存</h4><p>浏览器缓存是将访问的文件保存在客户端，在同一个会话过程中会检查缓存的副本是否足够新，在后退网页时，访问过的资源可以从浏览器缓存中拿出使用。减少服务器处理请求的数量，提高访问速度。浏览器缓存状态是由header参数控制的，header的参数有四种：</p>
+<ol>
+<li>Cache-Control 取值如下：<ul>
+<li>max-age（单位为s）指定设置缓存最大的有效时间，定义的是时间长短。</li>
+<li>s-maxage（单位为s）同max-age，只用于共享缓存（比如CDN缓存）</li>
+<li>public 指定响应会被缓存，并且在多用户间共享。</li>
+<li>private 响应只作为私有的缓存</li>
+<li>no-cache 指定不缓存响应，表明资源不进行缓存.但是设置了no-cache之后并不代表浏览器不缓存，而是在缓存前要向服务器确认资源是否被更改。</li>
+<li>no-store 绝对禁止缓存</li>
+<li>must-revalidate指定如果页面是过期的，则去服务器进行获取。</li>
+</ul>
+</li>
+<li>Expires 缓存过期时间，用来指定资源到期的时间，是服务器端的具体的时间点。</li>
+<li>Last-modified 服务器端文件的最后修改时间，需要和cache-control共同使用，是检查服务器端资源是否更新的一种方式。</li>
+<li>ETag 根据实体内容生成一段hash字符串，标识资源的状态，由服务端产生。</li>
+</ol>
+<h4 id="前端页面缓存（Front_Page_Cache，squid）">前端页面缓存（Front Page Cache，squid）</h4><p>与浏览器缓存将页面缓存在客户端不同，squid是通过代理将页面缓存在单独的服务器上。它是这样实现其功能的，当客户端请求一个页面时，首先请求Squid服务器，Squid随之连接到远程服务器并向这个页面发出请求，然后Squid把页面返回到客户端机器同时本地缓存一份。当下一次某个客户端需要同样的数据的时候，Squid就从缓存中直接取出发送给客户端。</p>
+<h4 id="页面片段缓存（ESI，Edge_Side_Includes）">页面片段缓存（ESI，Edge Side Includes）</h4><p>前面提到的缓存技术，都是缓存整个页面的。但是有时候会存在某些页面，这些页面中的一部分是可静态的，一部分是动态的，这时候就需要用到动态内容缓存技术。动态内容缓存技术大致有三种，CSI，SSI，ESI。<br>这里讲下ESI,其中Squid就有支持ESI的模块。</p>
+<blockquote>
+<p>ESI是一种简单的标识语言，开发人员可以使用它标志内容片断以便通过相应的Cache服务器来加速缓存。同时ESI还定义了一 套内容效验标准，可以实现原服务器对Cache服务器中缓存内容的管理，提高了网站对内容的控制能力。CDN网络也可以利用在分布全国各地的节点中安装支 持ESI的Cache服务器来提供对网站动态内容提供CDN服务。</p>
+</blockquote>
+<p>举个例子，比如网站首页大部分内容都是静态的，但是会在登录之后显示某某，欢迎你的字样的动态内容。如果因为这一点动态内容不缓存页面就太可惜了。用ESI可以做如下处理：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;esi:<span class="keyword">include</span> src=<span class="string">"/welcome"</span> /&gt;</span><br><span class="line">&lt;ul&gt;</span><br><span class="line">#<span class="keyword">foreach</span>(<span class="label">$user</span> <span class="keyword">in</span> <span class="label">$users</span>)</span><br><span class="line">&lt;<span class="keyword">li</span>&gt;<span class="label">$user</span>.name&lt;/<span class="keyword">li</span>&gt;</span><br><span class="line">#end</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
+<p>缓存服务器会将整个页面cache，然后它发现这儿有个ESI标签，它会根据src指定的地址去源服务器请求内容，然后将其合并到缓存的页面中，然后将完整的内容发送到客户端。整个过程类似下图所示：</p>
+<p><img src="/assets/images/concurrent_server/img04.png" alt="img01"></p>
+<h4 id="本地数据缓存">本地数据缓存</h4><p>缓存数据库的查询结果到数据库服务器。</p>
+<h3 id="Web_Server集群">Web Server集群</h3><h4 id="前端负载均衡">前端负载均衡</h4><ul>
+<li>DNS负载均衡<br>在DNS服务器中，可以为多个不同的地址配置同一个名字，对于不同的客户机访问同一个名字，得到不同的地址。</li>
+<li>反向代理<br>使用代理服务器将请求发给内部服务器，让代理服务器将请求均匀转发给多台内部web服务器之一，从而达到负载均衡的目的。标准代理方式是客户使用代理访问多个外部Web服务器，而这种代理方式是多个客户使用它访问内部Web服务器，因此也被称为反向代理模式。</li>
+<li>基于NAT的负载均衡技术<br>简单的来说，NAT负载均衡是将外网IP地址转换为内部IP地址，将外网大量的访问合理的分配到内部的多台服务器上,从而降低服务器访问压力。</li>
+<li>LVS<br>Linux虚拟服务器负载均衡。</li>
+<li>F5硬件负载均衡</li>
+</ul>
+<h4 id="应用服务器负载均衡">应用服务器负载均衡</h4><p>增加任务服务器，由任务服务器调度业务服务器实现负载均衡。上一篇已经讲过，这里不在详细讲解。</p>
+<h4 id="数据库负载均衡">数据库负载均衡</h4><p>通过构建数据库服务器集群实在数据库服务器负载均衡。</p>
+<h3 id="CDN、分布式缓存、分库分表">CDN、分布式缓存、分库分表</h3><h4 id="CDN">CDN</h4><p>在各个运营商不同地区增加内容分发网络，这样不同地区、不同运营商接入都能提升访问数据。</p>
+<h4 id="分布式缓存">分布式缓存</h4><p>增加分布式缓存替代本地缓存，让所有的机器共享缓存。目前流行的分布式缓存方案有memcached、membase、redis。基本上当前的NoSql方案都可以用作分布式缓存方案。分布式缓存结构如下:</p>
+<p><img src="/assets/images/concurrent_server/img08.png" alt="img01"></p>
+<h4 id="数据库分库分表">数据库分库分表</h4><p>当数据库数据量非常大的时候，为了将数据库查询均衡到不同的服务器上，需要对数据库进行分区，数据库分区分为以下两种方式：</p>
+<ol>
+<li>垂直分区<br>当服务器并发量比较大的时候，数据库访问就会容易出现锁竞争，而锁竞争是数据库访问性能的杀手， 所以，我们可以将不同业务数据分离到不同的数据库。如图：</li>
+</ol>
+<p><img src="/assets/images/concurrent_server/img09.png" alt="img01"></p>
+<ol>
+<li>水平分区<br>数据库中有部分表可能数据量非常大，可以将数据库大表中的数据分摊到不同的数据库中对应的表。不同数据库中对应表的数据总和就是这张表对应的所有数据。数据分摊的方式有不同的实现，一般都使用hash算法。如图：</li>
+</ol>
+<p><img src="/assets/images/concurrent_server/img10.png" alt="img01"></p>
+<p>数据库分库分表之后数据库物理结构发生了改变，不能在像之前直接访问，需要增加DAL数据访问层。</p>
+<h3 id="多数据中心+分布式存储与计算">多数据中心+分布式存储与计算</h3><p>增加多数据中心和分布式存储与计算后的结构图</p>
+<p><img src="/assets/images/concurrent_server/img11.png" alt="img01"></p>
+<h4 id="分布式存储">分布式存储</h4><p>大型网站当中有一些数据对数据的一致性要求不高，这些数据没有必要保持在关系型数据库中。关系型数据库对关系的一致性要求比较高，数据库的事物，大表的join都是数据库性能的杀手。我们可以把这些数据分离出来，把这些数据放到数据中心里。数据中心一般都使用NoSql数据库，NoSql采用key/value存储数据。大并发的性能比关系型数据库的性能要高。</p>
+<p>NoSql的数据一般存在于分布式的文件系统中，为什么要使用自己的文件系统呢？举个淘宝例子，淘宝商品有很多小图片，假如放在操作系统管理的文件系统中，操作系统文件系统每一个块都比较小，这样查找某个图片时需要多次查找块，这个过程需要多次移动磁头，所以整体是比较耗时。假如把每一个块都增大，将相关性比较大的数据存到块里，每个块包含一些存储数据的信息。通过hash算法，就能快速找到文件。目前比较有名的分布式文件系统有：Lustre，HDFS，GFS，TFS，FreeNas等。</p>
+<h4 id="分布式计算">分布式计算</h4><h5 id="Map/Reduce">Map/Reduce</h5><p>假如我们要统计一些文件中每个单词出现的的个数。可能文件非常多，无法全部加载到内容中。我们可以使用多台机器来统计。每台机器统计一部分，把统计的结果暂时保存到key/value数据库中，这个过程称作Map。</p>
+<p>Map完成之后需要将相同结果合并，比如a机器出现单词hello3次，b机器出现4次，那么reduce服务器需要把统计结果相加为hello出现7次，合并的过程称作reduce。 </p>
+<p>Map/Reduce的过程如下：</p>
+<p><img src="/assets/images/concurrent_server/img12.png" alt="img01"></p>
+<p>key-value数据库，作为NoSql的解决方案，基本都支持Map/Reduce算法。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/20/大并发服务器架构/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">大并发服务器架构</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">分享到：</span>
+		<a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+		<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+<div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="大型网站架构演变" data-title="大型网站架构演变" data-url="http://yoursite.com/2016/12/01/大型网站架构演变/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 刘得胜
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

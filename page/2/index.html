@@ -196,6 +196,69 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Xcode升级之后Alcatraz和插件失效" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/01/30/Xcode升级之后Alcatraz和插件失效/" class="article-date">
+  	<time datetime="2016-01-30T05:31:11.000Z" itemprop="datePublished">2016-01-30</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/01/30/Xcode升级之后Alcatraz和插件失效/">Xcode升级之后Alcatraz和插件失效</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="http://alcatraz.io" target="_blank" rel="external">Alcatraz</a>是一个非常好用的插件管理器。前一段时间把Xcode升级到了7.2之后Alcatraz失效了，而且之前安装的所有插件也都消失了。查了资料才知道Apple为了避免插件造成新版本的Xcode启动时崩溃，所以只允许匹配<code>DVTPlugInCompatibilityUUIDs</code>的插件被加载。</p>
+<p>可以通过下面的方法激活之前安装的插件：</p>
+<blockquote>
+<pre><code><span class="keyword">find</span> ~<span class="regexp">/Library/</span>Application\ Support<span class="regexp">/Developer/</span>Shared<span class="regexp">/Xcode/</span>Plug-ins -name Info.plist -maxdepth <span class="number">3</span> | xargs -I{} defaults <span class="keyword">write</span> {} DVTPlugInCompatibilityUUIDs -array-add `defaults <span class="keyword">read</span> <span class="regexp">/Applications/</span>Xcode.app<span class="regexp">/Contents/I</span>nfo DVTPlugInCompatibilityUUID`
+</code></pre></blockquote>
+<p>另外如果你不小心在Xcode启动的时候点击了 <strong>Skip Bundle</strong>,你可以通过下面的方式避免重新安装的悲剧。</p>
+<blockquote>
+<pre><code>defaults <span class="keyword">delete</span> com.apple.dt.Xcode DVTPlugInManagerNonApplePlugIns-Xcode-{your_xcode_version} 
+</code></pre></blockquote>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-Hello-World-0" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

@@ -5,23 +5,26 @@
   
   <title>大并发服务器架构 | 得胜的技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover）。
-伸缩性(Scalability)服">
+  <meta name="description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
+高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
+伸缩性(Scalabili">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大并发服务器架构">
 <meta property="og:url" content="http://yoursite.com/2016/11/20/大并发服务器架构/index.html">
 <meta property="og:site_name" content="得胜的技术博客，谢谢关注">
-<meta property="og:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover）。
-伸缩性(Scalability)服">
+<meta property="og:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
+高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
+伸缩性(Scalabili">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
-<meta property="og:updated_time" content="2016-11-21T02:21:50.000Z">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
+<meta property="og:updated_time" content="2016-11-23T07:14:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="大并发服务器架构">
-<meta name="twitter:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover）。
-伸缩性(Scalability)服">
+<meta name="twitter:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
+高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
+伸缩性(Scalabili">
   
     <link rel="alternative" href="/atom.xml" title="得胜的技术博客，谢谢关注" type="application/atom+xml">
   
@@ -239,14 +242,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="服务器设计目标">服务器设计目标</h2><h3 id="高性能(High_Performance)">高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
-<h3 id="高可用(High_Availability)">高可用(High Availability)</h3><p>要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover）。</p>
+        <h2 id="服务器设计目标">服务器设计目标</h2><h3 id="高性能(High_Performance)">高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
+<h3 id="高可用(High_Availability)">高可用(High Availability)</h3><p>要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。</p>
 <h3 id="伸缩性(Scalability)">伸缩性(Scalability)</h3><p>服务器采用良好的架构，分层设计，业务分离，能够进行灵活的部署。比如服务器有A，B两个组件，这两个组件可以部署在同一台服务器上，也可以部署在不同的服务器上，这就要求这两个组件不能使用本地通信机制，比如共享内存。而应该使用TCP这样的跨机器的通信方式。</p>
-<h2 id="典型的服务器结构">典型的服务器结构</h2><p><img src="/assets/images/concurrent_server/cs_net.png" alt="CS结构图" title="加载中"></p>
-<h2 id="服务器并发量的影响因素">服务器并发量的影响因素</h2><h3 id="网络I/O+服务器高性能编程">网络I/O+服务器高性能编程</h3><p>对于Linux来说，网络I/O最高效的编程模型是epoll。</p>
+<h2 id="典型的服务器结构">典型的服务器结构</h2><p>常用的软件体系结构有C/S和B/S两种，C/S是指客户端-服务器模型，B/S是指浏览器-服务器模型，因为浏览器也是客户端程序，所以说本质上也是C/S结构。下图是C/S结构图。</p>
+<p><img src="/assets/images/concurrent_server/cs_net.png" alt="CS结构图" title="加载中"></p>
+<h2 id="服务器并发的影响因素">服务器并发的影响因素</h2><h3 id="网络I/O+服务器高性能编程技术">网络I/O+服务器高性能编程技术</h3><p>对于Linux来说，网络I/O最高效的编程模型是epoll。对于服务器编程来说，耗时操作有以下几个类型：</p>
 <ol>
-<li>数据拷贝 比如数据从内核拷贝到应用层，一般通过数据缓存解决。</li>
-<li>环境切换 线程切换，对于单核服务器来说，采用状态机模型解决最好。</li>
+<li>数据拷贝 比如数据从内核拷贝到应用层，一般通过缓存常用的数据解决。</li>
+<li>环境切换 线程切换，对于单核服务器来说，使用多线程不一定能提高性能，采用状态机模型解决最好。</li>
 <li>内存分配 增加内存池，减少向操作系统申请内存。</li>
 <li>锁竞争    尽量减少锁竞争。</li>
 </ol>
@@ -259,18 +263,25 @@
 </li>
 </ol>
 <h2 id="提高服务器性能">提高服务器性能</h2><h3 id="降低数据库访问压力">降低数据库访问压力</h3><ol>
-<li>增加DAL队列 + 连接池。为了解决这个问题，可以增加一个DAL队列，大量数据库访问的时候，我们可以让当前不能处理的连接排队。为了提升性能，也可以增加一个数据库连接池，连接池创建的时候申请一些数据库连接放到池里，当下一次需要数据库连接的时候直接从连接池中取出处理。</li>
-<li>尽量将业务逻辑挪到应用服务器，数据库少做业务处理。因为在数据库上计算占用CPU，不如在操作系统上业务处理效率高。</li>
+<li><p>增加DAL队列 + 连接池。为了解决这个问题，可以增加一个DAL队列，大量数据库访问的时候，我们可以让当前不能处理的连接排队。为了提升性能，也可以增加一个数据库连接池，连接池创建的时候申请一些数据库连接放到池里，当下一次需要数据库连接的时候直接从连接池中取出处理。如下图：</p>
+<p><img src="/assets/images/concurrent_server/cs_net.png" alt="" title="服务器结构图"></p>
+</li>
+<li><p>尽量将业务逻辑挪到应用服务器，数据库少做业务处理。因为在数据库上计算占用CPU，不如在操作系统上业务处理效率高。</p>
+</li>
 <li>缓存数据。把常用的数据缓存起来，下一次请求时从缓存中取数据。降低对数据库请求的次数。<ul>
-<li>缓存算法。常用缓存算法有FIFO、LRU、LFU，最近开源的nosql数据库一般都会实现内存缓存，例如分布式缓存框架redis、memcached。</li>
+<li>缓存算法。常用缓存算法有FIFO、LRU、LFU，最近开源的nosql数据库一般都会实现数据内存缓存，例如分布式缓存框架redis、memcached。</li>
 <li>缓存的实效性。另外缓存是有时效性的，使用缓存的时候会有同步的问题。一般有两种处理方案。一、缓存失效时，我们需要重新去数据库查询。这种方案实时性比较差。二、更新数据库时，将一些热点数据同步更新至缓存。这种方案实时性比较高，但是实现起来比较麻烦。</li>
 </ul>
 </li>
 <li>数据库负载均衡。大部分情况下，数据库读操作多于写操作。这时候就应该对数据进行数据库读写分离，也就是数据库的负载均衡。目前主流的数据库都具有replication进行负载均衡。（Master-Slaver模式）</li>
-<li>分库分表。因为不同类型的数据读写速度是不一样的，把不同数据分离能显著提升数据库性能。分库是指数据库可以按照一定的逻辑把表分散到不同的数据库（垂直分区），比如我们可以把一个数据库分为用户表、业务表、基础表组成的库。另外一种比较常用的方法是水平分区，每个数据库都有对应的表，只是把对应表里的记录分割到不同的数据库，这样就很方便的扩展数据库。</li>
+<li><p>分库分表。因为不同类型的数据读写速度是不一样的，把不同数据分离能显著提升数据库性能。分库是指数据库可以按照一定的逻辑把表分散到不同的数据库（垂直分区），比如我们可以把一个数据库分为用户表、业务表、基础表组成的库。另外一种比较常用的方法是水平分区，每个数据库都有对应的表，只是把对应表里的记录分割到不同的数据库，这样就很方便的扩展数据库。</p>
+<p><img src="/assets/images/concurrent_server/cs_net.png" alt="服务器结构图" title="服务器结构图"></p>
+</li>
 </ol>
-<h3 id="应用服务器">应用服务器</h3><ol>
-<li>业务分离。将业务分割到不同服务器上，对应的业务访问对应的服务器。此时应用服务器也应该进行负载均衡，可以通过增加一个任务服务器来实现。实现方案有下面两种。一、应用服务器提供接口提供自己的状态，任务服务器监视应用服务器的状态（CPU、IO、并发、换页），任务服务器就可以选择负载最低的应用服务器分配任务。二、应用服务器空闲时，主动去任务服务器取任务。任务服务器也要实现faileover机制。</li>
+<h3 id="应用服务器负载均衡">应用服务器负载均衡</h3><ol>
+<li><p>业务分离。将业务分割到不同服务器上，对应的业务访问对应的服务器。此时应用服务器也应该进行负载均衡，可以通过增加一个任务服务器来实现。实现方案有下面两种。一、应用服务器提供接口提供自己的状态，任务服务器监视应用服务器的状态（CPU、IO、并发、换页），任务服务器就可以选择负载最低的应用服务器分配任务。二、应用服务器空闲时，主动去任务服务器取任务。任务服务器也要实现faileover机制。</p>
+<p><img src="/assets/images/concurrent_server/cs_net.png" alt="服务器结构图" title="服务器结构图"></p>
+</li>
 </ol>
 
       
@@ -280,6 +291,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2016/12/01/大型网站架构演变/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          大型网站架构演变
+        
+      </div>
+    </a>
   
   
     <a href="/2016/09/09/关于iOS组件化方案的思考/" id="article-nav-older" class="article-nav-link-wrap">
