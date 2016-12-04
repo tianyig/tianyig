@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   
-  <title>大并发服务器架构 | 得胜的技术博客，谢谢关注</title>
+  <title>一、大并发服务器架构 | 得胜的技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
 伸缩性(Scalabili">
 <meta property="og:type" content="article">
-<meta property="og:title" content="大并发服务器架构">
-<meta property="og:url" content="http://yoursite.com/2016/11/20/大并发服务器架构/index.html">
+<meta property="og:title" content="一、大并发服务器架构">
+<meta property="og:url" content="http://yoursite.com/2016/11/20/一、大并发服务器架构/index.html">
 <meta property="og:site_name" content="得胜的技术博客，谢谢关注">
 <meta property="og:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
@@ -19,9 +19,9 @@
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
-<meta property="og:updated_time" content="2016-11-23T07:14:47.000Z">
+<meta property="og:updated_time" content="2016-12-04T13:15:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="大并发服务器架构">
+<meta name="twitter:title" content="一、大并发服务器架构">
 <meta name="twitter:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
 伸缩性(Scalabili">
@@ -125,7 +125,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/C-服务器开发/" style="font-size: 10px;">C++服务器开发</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS开发/" style="font-size: 20px;">iOS开发</a> <a href="/tags/人生/" style="font-size: 10px;">人生</a> <a href="/tags/学术/" style="font-size: 10px;">学术</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/标签/" style="font-size: 10px;">标签</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS开发/" style="font-size: 20px;">iOS开发</a> <a href="/tags/人生/" style="font-size: 10px;">人生</a> <a href="/tags/大并发服务区/" style="font-size: 10px;">大并发服务区</a> <a href="/tags/大并发服务器/" style="font-size: 15px;">大并发服务器</a> <a href="/tags/学术/" style="font-size: 10px;">学术</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/标签/" style="font-size: 10px;">标签</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -205,10 +205,10 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap"><article id="post-大并发服务器架构" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-一、大并发服务器架构" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/11/20/大并发服务器架构/" class="article-date">
+      <a href="/2016/11/20/一、大并发服务器架构/" class="article-date">
   	<time datetime="2016-11-20T11:41:42.000Z" itemprop="datePublished">2016-11-20</time>
 </a>
     </div>
@@ -222,7 +222,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      大并发服务器架构
+      一、大并发服务器架构
     </h1>
   
 
@@ -231,7 +231,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C-服务器开发/">C++服务器开发</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/大并发服务器/">大并发服务器</a></li></ul>
 	</div>
 
         
@@ -292,11 +292,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/12/01/大型网站架构演变/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2016/12/01/二、大型网站架构演变/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          大型网站架构演变
+          二、大型网站架构演变
         
       </div>
     </a>
@@ -332,7 +332,7 @@
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="大并发服务器架构" data-title="大并发服务器架构" data-url="http://yoursite.com/2016/11/20/大并发服务器架构/"></div>
+	<div class="ds-thread" data-thread-key="一、大并发服务器架构" data-title="一、大并发服务器架构" data-url="http://yoursite.com/2016/11/20/一、大并发服务器架构/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
