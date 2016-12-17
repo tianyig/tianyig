@@ -394,6 +394,10 @@
 <h4 id="ET模型">ET模型</h4><p>ET表示边缘触发，是电平从低到高或者从高到低才会触发。我们一开始就可以关注EPOLLIN事件和EPOLLOUT事件，不回出现busy loop。所以当接收缓冲区处于高电平状态时，一定要一次性把数据全部读完。因为如果一次没有读完，接收缓冲区仍然处于高电平状态，下次不会在触发EPOLLIN事件。同理，发送缓冲区的处理类似。处理流程如下：</p>
 <p><img src="/assets/images/concurrent_server/05img02.png" alt="img01"></p>
 <p>ET模型如何处理EMFILE事件呢？如果accept返回了了EMFILE事件，那么epoll将一直保持在高电平状态，后面新的客户端连接都没有办法处理，需要更复杂的处理逻辑。</p>
+<h3 id="select/poll/epoll对比">select/poll/epoll对比</h3><p><img src="/assets/images/concurrent_server/05img03.png" alt="img01"></p>
+<p><img src="/assets/images/concurrent_server/05img04.png" alt="img01"></p>
+<p><img src="/assets/images/concurrent_server/05img05.png" alt="img01"></p>
+<p><img src="/assets/images/concurrent_server/05img06.png" alt="img01"></p>
 
       
     </div>
