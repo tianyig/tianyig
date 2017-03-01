@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>SDWebImage源码阅读(一) | 得胜的技术博客，谢谢关注</title>
+  <title>SDWebImage源码阅读笔记 | 得胜的技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前言SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。
 SDWebImage结构首先我们看看SDWebImage的项目组织结构：
@@ -13,7 +13,7 @@ Downloader负责图片的异步下载；
 Cache负责图片的缓存；
 SDWebImageManager是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SDWebImage源码阅读(一)">
+<meta property="og:title" content="SDWebImage源码阅读笔记">
 <meta property="og:url" content="http://yoursite.com/2017/02/27/SDWebImage源码阅读-一/index.html">
 <meta property="og:site_name" content="得胜的技术博客，谢谢关注">
 <meta property="og:description" content="前言SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。
@@ -26,9 +26,9 @@ SDWebImageManager是">
 <meta property="og:image" content="http://yoursite.com/assets/images/SDWebImage/01.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/SDWebImage/02.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/SDWebImage/03.png">
-<meta property="og:updated_time" content="2017-03-01T02:08:39.000Z">
+<meta property="og:updated_time" content="2017-03-01T09:40:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SDWebImage源码阅读(一)">
+<meta name="twitter:title" content="SDWebImage源码阅读笔记">
 <meta name="twitter:description" content="前言SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。
 SDWebImage结构首先我们看看SDWebImage的项目组织结构：
 
@@ -233,7 +233,7 @@ SDWebImageManager是">
         
   
     <h1 class="article-title" itemprop="name">
-      SDWebImage源码阅读(一)
+      SDWebImage源码阅读笔记
     </h1>
   
 
@@ -253,8 +253,8 @@ SDWebImageManager是">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言">前言</h2><p>SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。</p>
-<h2 id="SDWebImage结构">SDWebImage结构</h2><p>首先我们看看SDWebImage的项目组织结构：</p>
+        <h2 id="前言"><strong>前言</strong></h2><p>SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。</p>
+<h2 id="SDWebImage结构"><strong>SDWebImage结构</strong></h2><p>首先我们看看SDWebImage的项目组织结构：</p>
 <p><img src="/assets/images/SDWebImage/01.png" alt="img01"></p>
 <blockquote>
 <p>Downloader负责图片的异步下载；</p>
@@ -266,7 +266,7 @@ SDWebImageManager是">
 <p>为了便于大家从宏观上有个把握，我这里先给出项目的框架结构:</p>
 <p><img src="/assets/images/SDWebImage/02.png" alt="img01"></p>
 <p>从这个图我们明显可以看出来，UIImageView+WebCache和UIButton+WebCache负责为用户提供接口；SDWebImageManger负责协调Downloader和Cache，并且为UIKit层提供支持；最底层的两个类为高层抽象提供支持；我们将采用至顶向下分析的方法，一层层分析。</p>
-<h2 id="接口层的实现">接口层的实现</h2><h3 id="UIImageView+WebCache">UIImageView+WebCache</h3><p>这里我们拿UIImageView+WebCache举例，UIButton+WebCache与此类似。UIImageView+WebCache提供的接口如下：</p>
+<h2 id="接口层的实现"><strong>接口层的实现</strong></h2><h3 id="UIImageView+WebCache"><strong>UIImageView+WebCache</strong></h3><p>这里我们拿UIImageView+WebCache举例，UIButton+WebCache与此类似。UIImageView+WebCache提供的接口如下：</p>
 <pre><code><span class="pp">- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url;
 - <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder;
 - <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder options:<span class="params">(<span class="variable">SDWebImageOptions</span>)</span>options;
@@ -579,7 +579,7 @@ BOOL cacheOnDisk = !(options &amp; SDWebImageCacheMemoryOnly);
     }
 }<span class="comment">;</span>
 </code></pre><p>在自己的<code>cancelBlock</code>把下载操作<code>subOperation</code>取消掉。由此可见封装的<code>CombinedOperation</code>包含了下载和缓存的操作，使代码变得更简洁。</p>
-<h2 id="下载和缓存层">下载和缓存层</h2><h3 id="下载层">下载层</h3><p>SDWebImageDownloader提供的方法有以下几个：</p>
+<h2 id="下载和缓存层"><strong>下载和缓存层</strong></h2><h3 id="下载层"><strong>下载层</strong></h3><p>SDWebImageDownloader提供的方法有以下几个：</p>
 <pre><code><span class="comment">//给每个HTTP下载请求头的指定field设置值。</span>
 - (<span class="keyword">void</span>)setValue:(<span class="built_in">NSString</span> *)value forHTTPHeaderField:(<span class="built_in">NSString</span> *)field;
 <span class="comment">//返回HTTP特定field的值</span>
@@ -643,10 +643,233 @@ dispatch_barrier_sync(<span class="keyword">self</span><span class="variable">.b
         createCallback();
     }
 });
-</code></pre><p>并发控制的地方为什么要使用<code>dispatch_barrier_sync</code>，是因为<code>dispatch_barrier_sync</code>这个函数可以设置一个同步执行block，它会等到在这个block加入队列之前的block执行完毕后，才开始执行。在它之后加入队列的block，则等到这个block执行完毕后才开始执行。。这里的<code>dispatch_barrier_sync</code>实际上相当于一个写锁，任何写操作(删除，添加)，都要在之前的写操作完成后执行，而之后的写操作，也要在之前的的写操作完成之后执行。</p>
+</code></pre><p>这里的并发控制的地方为什么要使用<code>dispatch_barrier_sync</code>，是因为<code>dispatch_barrier_sync</code>这个函数可以设置一个同步执行block，它会等到在这个block加入队列之前的block执行完毕后，才开始执行。在它之后加入队列的block，则等到这个block执行完毕后才开始执行。。这里的<code>dispatch_barrier_sync</code>实际上相当于一个写锁，任何写操作(删除，添加)，都要在之前的写操作完成后执行，而之后的写操作，也要在之前的的写操作完成之后执行。</p>
 <p>URLCallbacks是一个以url作为key的字典，字典的value是一个数组，数组的元素是一个字典。可以看出<code>URLCallbacks</code>、<code>callbacksForURL</code>、<code>callbacks</code>之间的关系如下图：</p>
 <p><img src="/assets/images/SDWebImage/03.png" alt="img01"></p>
+<p>如果URLCallbacks以url对应的value是空，说明是第一次请求这个url，需要调用<code>createCallback</code>创建下载任务，即调用：</p>
+<pre><code><span class="pp">- <span class="params">(id)</span>initWithRequest:<span class="params">(<span class="variable">NSURLRequest</span> *)</span>request
+        inSession:<span class="params">(<span class="variable">NSURLSession</span> *)</span>session
+          options:<span class="params">(<span class="variable">SDWebImageDownloaderOptions</span>)</span>options
+         progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock
+        completed:<span class="params">(<span class="variable">SDWebImageDownloaderCompletedBlock</span>)</span>completedBlock
+        cancelled:<span class="params">(<span class="variable">SDWebImageNoParamsBlock</span>)</span>cancelBlock</span>
+</code></pre><p>设置默认超时时间15s，然后使用此<code>request</code>创建一个<code>SDWebImageDownloaderOperation</code>,方便把这个下载任务添加到下载队列里：</p>
+<pre><code><span class="pp">- <span class="params">(id)</span>initWithRequest:<span class="params">(<span class="variable">NSURLRequest</span> *)</span>request
+          options:<span class="params">(<span class="variable">SDWebImageDownloaderOptions</span>)</span>options
+         progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock
+        completed:<span class="params">(<span class="variable">SDWebImageDownloaderCompletedBlock</span>)</span>completedBlock
+        cancelled:<span class="params">(<span class="variable">SDWebImageNoParamsBlock</span>)</span>cancelBlock</span>
+</code></pre><p>重点看下这个方法的三个block，第一个progress，取出存储在URLCallbacks中的progressBlock并调用：</p>
+<pre><code><span class="comment">//只是读操作，dispatch_sync即可</span>
+ <span class="built_in">dispatch_sync</span>(sself<span class="variable">.barrierQueue</span>, ^{
+     callbacksForURL = [sself<span class="variable">.URLCallbacks</span>[url] <span class="keyword">copy</span>];
+ });
+ <span class="keyword">for</span> (<span class="built_in">NSDictionary</span> *callbacks <span class="keyword">in</span> callbacksForURL) {
+     <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+         SDWebImageDownloaderProgressBlock callback = callbacks[kProgressCallbackKey];
+         <span class="keyword">if</span> (callback) callback(receivedSize, expectedSize);
+     });
+ }
+</code></pre><p>同理，<code>completed</code>也是从URLCallbacks中的completedBlock并调用：</p>
+<pre><code><span class="comment">//这里有写操作，须用dispatch_barrier_sync</span>
+dispatch_barrier_sync(sself.barrierQueue, ^{
+    callbacksForURL = [sself.URLCallbacks[url] copy];
+    <span class="keyword">if</span> (finished) {
+        [sself.URLCallbacks removeObjectForKey:url];
+    }
+});
+<span class="keyword">for</span> (NSDictionary *callbacks <span class="keyword">in</span> callbacksForURL) {
+    <span class="comment">//这里为什么不像progressBlock一样使用dispatch_async(dispatch_get_main_queue()？</span>
+    SDWebImageDownloaderCompletedBlock <span class="keyword">callback</span> = callbacks[kCompletedCallbackKey];
+    <span class="keyword">if</span> (<span class="keyword">callback</span>) <span class="keyword">callback</span>(image, data, error, finished);
+}
+</code></pre><p>不同图片的下载任务会异步完成，所以要等待其他图片下载完成，并执行完<code>completedBlock</code>中对<code>URLCallbacks</code>的操作，才能继续之后的操作。</p>
+<pre><code>cancelled:^{
+    SDWebImageDownloader *sself = wself<span class="comment">;</span>
+    if (!sself) return<span class="comment">;</span>
+    dispatch_barrier_async(sself.barrierQueue, ^{
+        [sself.URLCallbacks removeObjectForKey:url]<span class="comment">;</span>
+    })<span class="comment">;</span>
+}
+</code></pre><p>取消时用的<code>dispatch_barrier_async</code>,dispatch_barrier_async表示的是先等之前的执行完成，然后把该barrier放入queue中，而不等待barrier中代码执行结束，而dispat_barrier_sync表示需要等待barrier中代码执行结束。</p>
+<p>然后设置operation</p>
+<pre><code><span class="comment">//是否解压下载的图片</span>
+operation.shouldDecompressImages = wself.shouldDecompressImages;
+<span class="comment">//有证书设置证书</span>
+<span class="keyword">if</span> (wself.urlCredential) {
+    operation.credential = wself.urlCredential;
+} <span class="keyword">else</span> <span class="keyword">if</span> (wself.username &amp;&amp; wself.password) {
+    operation.credential = [NSURLCredential <span class="string">credentialWithUser:</span>wself.username <span class="string">password:</span>wself.password <span class="string">persistence:</span>NSURLCredentialPersistenceForSession];
+}
+<span class="comment">//设置优先级</span>
+<span class="keyword">if</span> (options &amp; SDWebImageDownloaderHighPriority) {
+    operation.queuePriority = NSOperationQueuePriorityHigh;
+} <span class="keyword">else</span> <span class="keyword">if</span> (options &amp; SDWebImageDownloaderLowPriority) {
+    operation.queuePriority = NSOperationQueuePriorityLow;
+}
 
+[wself.downloadQueue <span class="string">addOperation:</span>operation];
+<span class="keyword">if</span> (wself.executionOrder == SDWebImageDownloaderLIFOExecutionOrder) {
+    <span class="comment">// Emulate LIFO execution order by systematically adding new operations as last operation's dependency</span>
+    [wself.lastAddedOperation <span class="string">addDependency:</span>operation];
+    wself.lastAddedOperation = operation;
+}
+</code></pre><p>最后将这个下载的操作加入到下载队列里。下载方式有两种，FIFO和LIFO。最后根据下载的方式调增任务的依赖。</p>
+<h3 id="SDWebImageDownloaderOperation"><strong>SDWebImageDownloaderOperation</strong></h3><p>上面的<code>SDWebImageDownloader</code>主要操作就是创建<code>SDWebImageDownloaderOperation</code>添加到下载队列里，可知具体的操作是在<code>SDWebImageDownloaderOperation</code>，我们研究下具体是如何下载的。首先这个类是继承于<code>NSOperation</code>，并重写了<code>start</code>方法。我们首先看看它的<code>start</code>方法的实现：</p>
+<p>检测下载状态</p>
+<pre><code><span class="comment">//管理下载状态，如果已取消，则重置当前下载并设置完成状态为YES</span>
+<span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isCancelled</span>) {
+    <span class="keyword">self</span><span class="variable">.finished</span> = <span class="literal">YES</span>;
+    [<span class="keyword">self</span> reset];
+    <span class="keyword">return</span>;
+}
+</code></pre><p>如果是iOS4.0以上的版本，需要设置后台执行的操作：</p>
+<pre><code><span class="comment">//作为具体的下载操作，尽量不依赖其他类，所以这里使用字符串创建</span>
+Class <span class="built_in">UIApplicationClass</span> = <span class="built_in">NSClassFromString</span>(<span class="string">@"UIApplication"</span>);
+<span class="built_in">BOOL</span> hasApplication = <span class="built_in">UIApplicationClass</span> &amp;&amp; [<span class="built_in">UIApplicationClass</span> respondsToSelector:<span class="keyword">@selector</span>(sharedApplication)];
+<span class="comment">//如果用户设置了后台下载</span>
+<span class="keyword">if</span> (hasApplication &amp;&amp; [<span class="keyword">self</span> shouldContinueWhenAppEntersBackground]) {
+    <span class="comment">//如果设置了在后台执行，则进行后台执行</span>
+     __<span class="keyword">weak</span> __typeof__ (<span class="keyword">self</span>) wself = <span class="keyword">self</span>;
+    <span class="built_in">UIApplication</span> * app = [<span class="built_in">UIApplicationClass</span> performSelector:<span class="keyword">@selector</span>(sharedApplication)];
+    <span class="comment">//向系统申请更长的时间执行下载操作</span>
+    <span class="keyword">self</span><span class="variable">.backgroundTaskId</span> = [app beginBackgroundTaskWithExpirationHandler:^{
+        <span class="comment">// 如果在系统规定时间内任务还没有完成（一般是10分钟），结束后台任务</span>
+        __<span class="keyword">strong</span> __<span class="keyword">typeof</span> (wself) sself = wself;
+        <span class="keyword">if</span> (sself) {
+            [sself cancel];
+            [app endBackgroundTask:sself<span class="variable">.backgroundTaskId</span>];
+            sself<span class="variable">.backgroundTaskId</span> = <span class="built_in">UIBackgroundTaskInvalid</span>;
+        }
+    }];
+｝
+</code></pre><p>这里注册的block会在APP进入后台时执行，block里调用<code>cancel</code>对应的<code>endBackgroundTask</code>,这个block的主要目的是持有<code>self</code>不要被系统销毁，只要<code>self</code>不被系统销毁，当前下载操作就可以继续执行。<code>self</code>被销毁后，我们看看<code>cancel</code>操作做了什么：</p>
+<pre><code>- (<span class="keyword">void</span>)cancel {
+    <span class="keyword">@synchronized</span> (<span class="keyword">self</span>) {
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.thread</span>) {
+            [<span class="keyword">self</span> performSelector:<span class="keyword">@selector</span>(cancelInternalAndStop) onThread:<span class="keyword">self</span><span class="variable">.thread</span> withObject:<span class="literal">nil</span> waitUntilDone:<span class="literal">NO</span>];
+        }
+        <span class="keyword">else</span> {
+            [<span class="keyword">self</span> cancelInternal];
+        }
+    }
+}
+
+- (<span class="keyword">void</span>)cancelInternalAndStop {
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isFinished</span>) <span class="keyword">return</span>;
+    [<span class="keyword">self</span> cancelInternal];
+    <span class="built_in">CFRunLoopStop</span>(<span class="built_in">CFRunLoopGetCurrent</span>());
+}
+
+- (<span class="keyword">void</span>)cancelInternal {
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isFinished</span>) <span class="keyword">return</span>;
+    [<span class="keyword">super</span> cancel];
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.cancelBlock</span>) <span class="keyword">self</span><span class="variable">.cancelBlock</span>();
+
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.connection</span>) {
+        [<span class="keyword">self</span><span class="variable">.connection</span> cancel];
+        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+            [[<span class="built_in">NSNotificationCenter</span> defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:<span class="keyword">self</span>];
+        });
+
+        <span class="comment">// As we cancelled the connection, its callback won't be called and thus won't</span>
+        <span class="comment">// maintain the isFinished and isExecuting flags.</span>
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isExecuting</span>) <span class="keyword">self</span><span class="variable">.executing</span> = <span class="literal">NO</span>;
+        <span class="keyword">if</span> (!<span class="keyword">self</span><span class="variable">.isFinished</span>) <span class="keyword">self</span><span class="variable">.finished</span> = <span class="literal">YES</span>;
+    }
+
+    [<span class="keyword">self</span> reset];
+}
+</code></pre><p>底下有三个和<code>cancel</code>相关的操作，如果当前线程存在，在当前线程调用<code>cancelInternalAndStop</code>，否者调用<code>cancelInternal</code>;这两者的区别是<code>cancelInternalAndStop</code>中多了一句<code>CFRunLoopStop(CFRunLoopGetCurrent())</code>,在中止当前线程的时候，也要关闭对应的RunLoop。<code>cancelInternal</code>做了几件事：</p>
+<ul>
+<li>调用自定义的cancelBlock</li>
+<li>调用NSURLConnection的cancel取消self.connection</li>
+<li>回收资源</li>
+<li>抛出通知</li>
+</ul>
+<p>注册的后台操作是在进入到后台如果<code>NSOperation</code>未执行完成才执行的，假如在进入到后台之前<code>NSOperation</code>已经完成了呢？</p>
+<pre><code><span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.backgroundTaskId</span> != <span class="built_in">UIBackgroundTaskInvalid</span>) {
+    <span class="built_in">UIApplication</span> * app = [<span class="built_in">UIApplication</span> performSelector:<span class="keyword">@selector</span>(sharedApplication)];
+    [app endBackgroundTask:<span class="keyword">self</span><span class="variable">.backgroundTaskId</span>];
+    <span class="keyword">self</span><span class="variable">.backgroundTaskId</span> = <span class="built_in">UIBackgroundTaskInvalid</span>;
+}
+</code></pre><p>如果下载任务完成，中止后台操作，将backgroundTaskId置为UIBackgroundTaskInvalid。</p>
+<p>注册后台操作的准备工作完成之后，就该开始下载了：</p>
+<pre><code><span class="keyword">self</span><span class="variable">.executing</span> = <span class="literal">YES</span>;
+<span class="keyword">self</span><span class="variable">.connection</span> = [[<span class="built_in">NSURLConnection</span> alloc] initWithRequest:<span class="keyword">self</span><span class="variable">.request</span> delegate:<span class="keyword">self</span> startImmediately:<span class="literal">NO</span>];
+<span class="keyword">self</span><span class="variable">.thread</span> = [<span class="built_in">NSThread</span> currentThread];
+</code></pre><p>初始化相关的数据，创建<code>NSURLConnection</code>,如果创建失败就调用<code>completedBlock</code>,成功就启动下载，关键代码如下：</p>
+<pre><code><span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.progressBlock</span>) {
+    <span class="keyword">self</span><span class="variable">.progressBlock</span>(<span class="number">0</span>, <span class="built_in">NSURLResponseUnknownLength</span>);
+}
+....
+<span class="built_in">CFRunLoopRun</span>();
+....
+<span class="keyword">if</span> (!<span class="keyword">self</span><span class="variable">.isFinished</span>) {
+    [<span class="keyword">self</span><span class="variable">.connection</span> cancel];
+    [<span class="keyword">self</span> connection:<span class="keyword">self</span><span class="variable">.connection</span> didFailWithError:[<span class="built_in">NSError</span> errorWithDomain:<span class="built_in">NSURLErrorDomain</span> code:<span class="built_in">NSURLErrorTimedOut</span> userInfo:@{<span class="built_in">NSURLErrorFailingURLErrorKey</span> : <span class="keyword">self</span><span class="variable">.request</span><span class="variable">.URL</span>}]];
+}
+</code></pre><p>使用<code>NSURLConnection</code>调用了<code>[self.connection start]</code>后，<code>NSURLConnection</code>的delegate就会不停收到事件回调。当这个connection完成或者终止，才会跳出CFRunLoopRun()(可以理解为CFRunLoopRun阻塞了当前线程)。当跳出Runloop后，就要判断NSURLConnection是不是正常完成任务了。如果没有，也就是说self.isFinished == NO。那么就取消该connection，并且调用</p>
+<pre><code>(<span class="typename">void</span>)<span class="string">connection:</span>(NSURLConnection *)connection <span class="string">didFailWithError:</span>(NSError *)error;
+</code></pre><p>返回错误信息。然后就是<code>NSURLConnection</code>几个delegate过程的处理：</p>
+<pre><code><span class="comment">//如果是304代表服务端资源未改变，可直接使用客户端未过期的资源，此时需要取消operation并返回缓存中的image，code小于400说明请求成功</span>
+<span class="comment">//如果响应成功，开始初始化数组，准备接收imageData</span>
+<span class="keyword">if</span> (![response respondsToSelector:<span class="keyword">@selector</span>(statusCode)] || ([((<span class="built_in">NSHTTPURLResponse</span> *)response) statusCode] &lt; <span class="number">400</span> &amp;&amp; [((<span class="built_in">NSHTTPURLResponse</span> *)response) statusCode] != <span class="number">304</span>)) {
+    <span class="built_in">NSInteger</span> expected = response<span class="variable">.expectedContentLength</span> &gt; <span class="number">0</span> ? (<span class="built_in">NSInteger</span>)response<span class="variable">.expectedContentLength</span> : <span class="number">0</span>;
+    <span class="keyword">self</span><span class="variable">.expectedSize</span> = expected;
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.progressBlock</span>) {
+        <span class="keyword">self</span><span class="variable">.progressBlock</span>(<span class="number">0</span>, expected);
+    }
+
+    <span class="keyword">self</span><span class="variable">.imageData</span> = [[<span class="built_in">NSMutableData</span> alloc] initWithCapacity:expected];
+    <span class="keyword">self</span><span class="variable">.response</span> = response;
+    <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+        [[<span class="built_in">NSNotificationCenter</span> defaultCenter] postNotificationName:SDWebImageDownloadReceiveResponseNotification object:<span class="keyword">self</span>];
+    });
+}
+<span class="comment">//请求失败之后，抛通知并清理相关资源</span>
+<span class="keyword">else</span> {
+    <span class="built_in">NSUInteger</span> code = [((<span class="built_in">NSHTTPURLResponse</span> *)response) statusCode];
+
+    <span class="comment">//This is the case when server returns '304 Not Modified'. It means that remote image is not changed.</span>
+    <span class="comment">//In case of 304 we need just cancel the operation and return cached image from the cache.</span>
+    <span class="keyword">if</span> (code == <span class="number">304</span>) {
+        [<span class="keyword">self</span> cancelInternal];
+    } <span class="keyword">else</span> {
+        [<span class="keyword">self</span><span class="variable">.connection</span> cancel];
+    }
+    <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+        [[<span class="built_in">NSNotificationCenter</span> defaultCenter] postNotificationName:SDWebImageDownloadStopNotification object:<span class="keyword">self</span>];
+    });
+
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.completedBlock</span>) {
+        <span class="keyword">self</span><span class="variable">.completedBlock</span>(<span class="literal">nil</span>, <span class="literal">nil</span>, [<span class="built_in">NSError</span> errorWithDomain:<span class="built_in">NSURLErrorDomain</span> code:[((<span class="built_in">NSHTTPURLResponse</span> *)response) statusCode] userInfo:<span class="literal">nil</span>], <span class="literal">YES</span>);
+    }
+    <span class="built_in">CFRunLoopStop</span>(<span class="built_in">CFRunLoopGetCurrent</span>());
+    [<span class="keyword">self</span> done];
+}
+</code></pre><p>然后在下载过程中接收数据，以下是部分代码：</p>
+<pre><code><span class="keyword">if</span> (partialImageRef) {
+    <span class="comment">//把data转换成image</span>
+    <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWith<span class="built_in">CGImage</span>:partialImageRef scale:<span class="number">1</span> orientation:orientation];
+    <span class="built_in">NSString</span> *key = [[SDWebImageManager sharedManager] cacheKeyForURL:<span class="keyword">self</span><span class="variable">.request</span><span class="variable">.URL</span>];
+    <span class="built_in">UIImage</span> *scaledImage = [<span class="keyword">self</span> scaledImageForKey:key image:image];
+    <span class="comment">//判断是否要解解码，默认是需要解码，解码的操作是在子线程里(delegate在子线程执行的)</span>
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.shouldDecompressImages</span>) {
+        image = [<span class="built_in">UIImage</span> decodedImageWithImage:scaledImage];
+    }
+    <span class="keyword">else</span> {
+        image = scaledImage;
+    }
+    <span class="built_in">CGImageRelease</span>(partialImageRef);
+    dispatch_main_sync_safe(^{
+        <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.completedBlock</span>) {
+        <span class="comment">//显示在imageView上（不一定下载完，可以显示一部分）</span>
+            <span class="keyword">self</span><span class="variable">.completedBlock</span>(image, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">NO</span>);
+        }
+    });
+}
+</code></pre>
       
     </div>
     
@@ -686,7 +909,7 @@ dispatch_barrier_sync(<span class="keyword">self</span><span class="variable">.b
 
 <div class="duoshuo">
 	<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="SDWebImage源码阅读-一" data-title="SDWebImage源码阅读(一)" data-url="http://yoursite.com/2017/02/27/SDWebImage源码阅读-一/"></div>
+	<div class="ds-thread" data-thread-key="SDWebImage源码阅读-一" data-title="SDWebImage源码阅读笔记" data-url="http://yoursite.com/2017/02/27/SDWebImage源码阅读-一/"></div>
 	<!-- 多说评论框 end -->
 	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 	<script type="text/javascript">
