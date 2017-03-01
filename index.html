@@ -114,7 +114,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS开发/" style="font-size: 20px;">iOS开发</a> <a href="/tags/人生/" style="font-size: 10px;">人生</a> <a href="/tags/大并发服务器/" style="font-size: 15px;">大并发服务器</a> <a href="/tags/学术/" style="font-size: 10px;">学术</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/标签/" style="font-size: 10px;">标签</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/iOS开发/" style="font-size: 20px;">iOS开发</a> <a href="/tags/人生/" style="font-size: 10px;">人生</a> <a href="/tags/大并发服务器/" style="font-size: 15px;">大并发服务器</a> <a href="/tags/学术/" style="font-size: 10px;">学术</a> <a href="/tags/数据结构/" style="font-size: 10px;">数据结构</a> <a href="/tags/标签/" style="font-size: 10px;">标签</a> <a href="/tags/测试/" style="font-size: 10px;">测试</a> <a href="/tags/源码阅读/" style="font-size: 10px;">源码阅读</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -195,6 +195,453 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-SDWebImage源码阅读-一" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/27/SDWebImage源码阅读-一/" class="article-date">
+  	<time datetime="2017-02-27T02:55:02.000Z" itemprop="datePublished">2017-02-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/27/SDWebImage源码阅读-一/">SDWebImage源码阅读(一)</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言">前言</h2><p>SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。</p>
+<h2 id="SDWebImage结构">SDWebImage结构</h2><p>首先我们看看SDWebImage的项目组织结构：</p>
+<p><img src="/assets/images/SDWebImage/01.png" alt="img01"></p>
+<blockquote>
+<p>Downloader负责图片的异步下载；</p>
+<p>Cache负责图片的缓存；</p>
+<p>SDWebImageManager是总的管理类，维护了一个SDWebImageDownloader实例和一个SDImageCache实例，是下载与缓存的桥梁;SDWebImageDecoder负责图片的解压缩;SDWebImagePrefetcher负责图片的预取;</p>
+<p>UIImageView+WebCache和其他的扩展负责给用户提供接口;</p>
+</blockquote>
+<p>其中，最重要的就是SDWebImageDownloader、SDImageCache、SDWebImageManager三个类，接下来我们就一步步详细分析一下这些类具体如何实现的。</p>
+<p>为了便于大家从宏观上有个把握，我这里先给出项目的框架结构:</p>
+<p><img src="/assets/images/SDWebImage/02.png" alt="img01"></p>
+<p>从这个图我们明显可以看出来，UIImageView+WebCache和UIButton+WebCache负责为用户提供接口；SDWebImageManger负责协调Downloader和Cache，并且为UIKit层提供支持；最底层的两个类为高层抽象提供支持；我们将采用至顶向下分析的方法，一层层分析。</p>
+<h2 id="接口层的实现">接口层的实现</h2><h3 id="UIImageView+WebCache">UIImageView+WebCache</h3><p>这里我们拿UIImageView+WebCache举例，UIButton+WebCache与此类似。UIImageView+WebCache提供的接口如下：</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url;
+- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder;
+- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder options:<span class="params">(<span class="variable">SDWebImageOptions</span>)</span>options;
+- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url completed:<span class="params">(<span class="variable">SDWebImageCompletedBlock</span>)</span>completedBlock;
+- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder completed:<span class="params">(<span class="variable">SDWebImageCompletedBlock</span>)</span>completedBlock;
+- <span class="params">(void)</span>setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder options:<span class="params">(<span class="variable">SDWebImageOptions</span>)</span>options completed:<span class="params">(<span class="variable">SDWebImageCompletedBlock</span>)</span>completedBlock;</span>
+</code></pre><p>这些接口都调用了</p>
+<pre><code><span class="pp">- <span class="params">(void)</span>sd_setImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url placeholderImage:<span class="params">(<span class="variable">UIImage</span> *)</span>placeholder options:<span class="params">(<span class="variable">SDWebImageOptions</span>)</span>options progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock completed:<span class="params">(<span class="variable">SDWebImageCompletionBlock</span>)</span>completedBlock；</span>
+</code></pre><p>这是一种常用的封装的方法，一个函数提供最复杂的实现，其他函数给这个函数在此基础上通过调用的时候提供默认参数，浅浅的封装一层方便用户使用。因为OC函数不支持默认参数(C++支持)，所以需要在提供几个函数包装一下。</p>
+<p>这个函数的上半部分实现如下：</p>
+<pre><code><span class="list">[<span class="keyword">self</span> sd_cancelCurrentImageLoad]<span class="comment">;</span>
+objc_setAssociatedObject<span class="list">(<span class="keyword">self</span>, &amp;imageURLKey, url,     OBJC_ASSOCIATION_RETAIN_NONATOMIC)</span><span class="comment">;</span>
+
+if <span class="list">(<span class="keyword">!</span><span class="list">(<span class="keyword">options</span> &amp; SDWebImageDelayPlaceholder)</span>)</span> {
+    dispatch_main_async_safe<span class="list">(<span class="keyword">^</span>{
+        self.image = placeholder<span class="comment">;</span>
+    })</span><span class="comment">;</span>
+}</span>
+</code></pre><p>在加载一张图片的时候首先取消当前正在加载图片的操作，然后给当前的UIImageView关联一个对应图片的URL，关联的这个url库里本身没有用到，只是暴露出<code>- (NSURL *)sd_imageURL;</code>接口提供给用户使用；if里判断用户是否使用了<code>SDWebImageDelayPlaceholder</code>，如果没有使用就设置<code>placeholder</code>,默认情况没有设置选项，图片在加载完成之前会显示占位图，如果设置了这个选项，会在图片加载完成之后在显示占位图，关于其它选项的具体含义，可以看叶孤城的解析<a href="http://www.jianshu.com/p/6ae6f99b6c4c" title="链接" target="_blank" rel="external">这里</a>。<code>dispatch_main_async_safe</code>是SDWebImage封装的一个保证参数block在主线程执行的宏，宏的实现比较简单，这里不在解释。</p>
+<p>我们具体分析一下取消操作是如何实现的，<code>[self sd_cancelCurrentImageLoad]</code>调用了父类<code>UIView+EMWebCacheOperation</code>的函数：</p>
+<pre><code><span class="collection">[self sd_cancelImageLoadOperationWithKey:@<span class="string">"UIImageViewImageLoad"</span>]</span><span class="comment">;</span>
+</code></pre><p>我们可以看到，这里的key是写死的，因为一个UIImageView在任何时候至多只能对应一种类型的下载操作(可以同时下载image和highlightedImage，两者的key是不一样的)。网络下载以及缓存都是比较耗费系统资源的操作，这么做可以尽量避免资源浪费。例如UITableView在滑动到需要复用UITableViewCell时，如果此时滑出屏幕之前的图片还未加载完成，就没必要在下载了。我们继续深入看父类<code>UIView+EMWebCacheOperation</code>的实现，<code>sd_cancelImageLoadOperationWithKey</code>的全部实现如下：</p>
+<pre><code><span class="comment">//这里通过给Category关联属性的方式给每个UIView添加了一个NSMutableDictionary属性，保存了operation或者operation数组;operation从下面可以看出是id &lt;EMSDWebImageOperation&gt;类型,之所以用这样的类型是为了通用性，不局限于使用系统的NSOperation，用户也可以自定义自己的Operation(如SDWebImage里的用到的SDWebImageCombinedOperation)。</span>
+<span class="built_in">NSMutableDictionary</span> *operationDictionary = [<span class="keyword">self</span> operationDictionary];
+    <span class="keyword">id</span> operations = [operationDictionary objectForKey:key];
+    <span class="keyword">if</span> (operations) {
+    <span class="comment">//gif图有多张图片，多张图片对应多个operation</span>
+        <span class="keyword">if</span> ([operations isKindOfClass:[<span class="built_in">NSArray</span> class]]) {
+            <span class="keyword">for</span> (<span class="keyword">id</span> &lt;SDWebImageOperation&gt; operation <span class="keyword">in</span> operations) {
+                <span class="keyword">if</span> (operation) {
+                    [operation cancel];
+                }
+            }
+        } <span class="keyword">else</span> <span class="keyword">if</span> ([operations conformsToProtocol:<span class="class"><span class="keyword">@protocol</span>(<span class="title">SDWebImageOperation</span>)])</span>{
+            <span class="comment">//单个图片，直接调用cancle</span>
+            [(<span class="keyword">id</span>&lt;SDWebImageOperation&gt;) operations cancel];
+        }
+        [operationDictionary removeObjectForKey:key];
+    }
+</code></pre><p>然后我们接着看sd_setImageWithURL的下半部分的实现，截取部分关键的代码：</p>
+<pre><code>__<span class="keyword">weak</span> __<span class="keyword">typeof</span>(<span class="keyword">self</span>)wself = <span class="keyword">self</span>;
+<span class="comment">//创建一个id &lt;SDWebImageOperation&gt;(于UIView+EMWebCacheOperation对应)类型的下载task,</span>
+<span class="keyword">id</span> &lt;SDWebImageOperation&gt; operation = [SDWebImageManager<span class="variable">.sharedManager</span> downloadImageWithURL:url options:options progress:progressBlock completed:^(<span class="built_in">UIImage</span> *image, <span class="built_in">NSError</span> *error, SDImageCacheType cacheType, <span class="built_in">BOOL</span> finished, <span class="built_in">NSURL</span> *imageURL) {
+          [wself removeActivityIndicator];
+        <span class="keyword">if</span> (!wself) <span class="keyword">return</span>;
+        dispatch_main_sync_safe(^{
+            <span class="keyword">if</span> (!wself) <span class="keyword">return</span>;
+            <span class="comment">//如果用户不希望下载完成直接设置image，就只调用completedBlock</span>
+            <span class="keyword">if</span> (image &amp;&amp; (options &amp; SDWebImageAvoidAutoSetImage) &amp;&amp; completedBlock)
+            {
+                completedBlock(image, error, cacheType, url);
+                <span class="keyword">return</span>;
+            }
+            <span class="keyword">else</span> <span class="keyword">if</span> (image) {
+                wself<span class="variable">.image</span> = image;
+                [wself setNeedsLayout];
+            } <span class="keyword">else</span> {
+                <span class="comment">//下载完成设置placeholder</span>
+                <span class="keyword">if</span> ((options &amp; SDWebImageDelayPlaceholder)) {
+                    wself<span class="variable">.image</span> = placeholder;
+                    [wself setNeedsLayout];
+                }
+            }
+            <span class="keyword">if</span> (completedBlock &amp;&amp; finished) {
+                completedBlock(image, error, cacheType, url);
+            }
+        });
+    }];
+<span class="comment">//将这个Operation添加到此UIImageView的字典里</span>
+[<span class="keyword">self</span> sd_setImageLoadOperation:operation forKey:<span class="string">@"UIImageViewImageLoad"</span>];
+</code></pre><p>接口层的实现到这里就结束了。这里有几个小问题:</p>
+<ul>
+<li><strong><font color="red">iOS底层如何实现Category关联属性的？</font></strong></li>
+<li><strong><font color="red">iOS的Category如何关联weak属性？</font></strong></li>
+</ul>
+<h2 id="调度层的实现">调度层的实现</h2><p> 调度层就一个类SDWebImageManager，在头文件中描述如下：</p>
+<blockquote>
+<p>The SDWebImageManager is the class behind the UIImageView+WebCache category and likes.<br> It ties the asynchronous downloader (SDWebImageDownloader) with the image cache store (SDImageCache).<br> You can use this class directly to benefit from web image downloading with caching in another context than<br> a UIView.</p>
+</blockquote>
+<p>意思就是SDWebImageManager是位于UIImageView+WebCache之下的用于图片异步下载和缓存的类，你也可以直接使用SDWebImageManager的函数直接下载图片。</p>
+<p>SDWebImageManager是一个用dispatch_once实现的单例(关于<font color="red"><strong>dispatch_once底层如何实现的？</strong></font>也是一个有趣的话题，我们以后在讨论它),维护了一个SDImageCache实例和SDWebImageDownloader实例。提供的函数如下：</p>
+<p>//初始化SDWebImageManager单例，在init方法中已经初始化了cache单例和downloader单例。</p>
+<pre><code>- (instancetype)initWithCache:(SDImageCache *)cache downloader:(SDWebImageDownloader *)downloader;
+<span class="comment">//下载图片</span>
+- (<span class="keyword">id</span> )downloadImageWithURL:(<span class="built_in">NSURL</span> *)url
+                                         options:(SDWebImageOptions)options
+                                        progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                                       completed:(SDWebImageCompletionWithFinishedBlock)completedBlock;
+<span class="comment">//缓存给定URL的图片</span>
+- (<span class="keyword">void</span>)saveImageToCache:(<span class="built_in">UIImage</span> *)image forURL:(<span class="built_in">NSURL</span> *)url;
+<span class="comment">//取消当前所有的操作</span>
+- (<span class="keyword">void</span>)cancelAll;
+<span class="comment">//监测当前是否有进行中的操作</span>
+- (<span class="built_in">BOOL</span>)isRunning;
+<span class="comment">//监测图片是否在缓存中， 先在memory cache里面找  再到disk cache里面找</span>
+- (<span class="built_in">BOOL</span>)cachedImageExistsForURL:(<span class="built_in">NSURL</span> *)url;
+<span class="comment">//监测图片是否缓存在disk里</span>
+- (<span class="built_in">BOOL</span>)diskImageExistsForURL:(<span class="built_in">NSURL</span> *)url;
+<span class="comment">//监测图片是否在缓存中,监测结束后调用completionBlock</span>
+- (<span class="keyword">void</span>)cachedImageExistsForURL:(<span class="built_in">NSURL</span> *)url
+                     completion:(SDWebImageCheckCacheCompletionBlock)completionBlock;
+<span class="comment">//监测图片是否缓存在disk里,监测结束后调用completionBlock</span>
+- (<span class="keyword">void</span>)diskImageExistsForURL:(<span class="built_in">NSURL</span> *)url
+                   completion:(SDWebImageCheckCacheCompletionBlock)completionBlock;
+<span class="comment">//返回给定URL的cache key，默认是图片的url</span>
+- (<span class="built_in">NSString</span> *)cacheKeyForURL:(<span class="built_in">NSURL</span> *)url;
+</code></pre><p>定义了SDWebImageManagerDelegate协议：</p>
+<pre><code><span class="comment">@protocol SDWebImageManagerDelegate </span>
+
+<span class="comment">@optional</span>
+
+/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Controls which image should be downloaded when the image is not found in the cache.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="comment">@param imageManager The current `SDWebImageManager`</span>
+ <span class="keyword">*</span> <span class="comment">@param imageURL     The url of the image to be downloaded</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="comment">@return Return NO to prevent the downloading of the image on cache misses. If not implemented, YES is implied.</span>
+ <span class="keyword">*</span> 控制在cache中没有找到image时 是否应该去下载。默认是YES。
+ <span class="keyword">*</span>/
+- (BOOL)imageManager:(SDWebImageManager <span class="keyword">*</span>)imageManager shouldDownloadImageForURL:(NSURL <span class="keyword">*</span>)imageURL;
+
+/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> Allows to transform the image immediately after it has been downloaded and just before to cache it on disk and memory.
+ <span class="keyword">*</span> NOTE: This method is called from a global queue in order to not to block the main thread.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="comment">@param imageManager The current `SDWebImageManager`</span>
+ <span class="keyword">*</span> <span class="comment">@param image        The image to transform</span>
+ <span class="keyword">*</span> <span class="comment">@param imageURL     The url of the image to transform</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="comment">@return The transformed image object.</span>
+ <span class="keyword">*</span> 在下载之后，缓存之前转换图片。在全局队列中操作，不阻塞主线程
+ <span class="keyword">*</span>/
+- (UIImage <span class="keyword">*</span>)imageManager:(SDWebImageManager <span class="keyword">*</span>)imageManager transformDownloadedImage:(UIImage <span class="keyword">*</span>)image withURL:(NSURL <span class="keyword">*</span>)imageURL;
+
+<span class="comment">@end</span>
+</code></pre><p> 我们主要看下</p>
+<pre><code><span class="pp">- <span class="params">(id )</span>downloadImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url
+                                        options:<span class="params">(<span class="variable">SDWebImageOptions</span>)</span>options
+                                       progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock
+                                      completed:<span class="params">(<span class="variable">SDWebImageCompletionWithFinishedBlock</span>)</span>completedBlock</span>
+</code></pre><p>这个函数返回<code>id &lt;SDWebImageOperation&gt;</code>类型保存当前UIImageView的下载操作；</p>
+<p>首先检查URL是否合法：</p>
+<pre><code><span class="keyword">if</span> ([url <span class="string">isKindOfClass:</span>NSString.<span class="keyword">class</span>]) {
+    url = [NSURL <span class="string">URLWithString:</span>(NSString *)url];
+}
+
+<span class="comment">// Prevents app crashing on argument type error like sending NSNull instead of NSURL</span>
+<span class="keyword">if</span> (![url <span class="string">isKindOfClass:</span>NSURL.<span class="keyword">class</span>]) {
+    url = nil;
+}
+</code></pre><p>这两个判断都是检查用户传递参数类型是否正确；</p>
+<pre><code><span class="built_in">BOOL</span> isFailedUrl = <span class="literal">NO</span>;
+<span class="keyword">@synchronized</span> (<span class="keyword">self</span><span class="variable">.failedURLs</span>) {
+    isFailedUrl = [<span class="keyword">self</span><span class="variable">.failedURLs</span> containsObject:url];
+}
+
+<span class="keyword">if</span> (url<span class="variable">.absoluteString</span><span class="variable">.length</span> == <span class="number">0</span> || (!(options &amp; SDWebImageRetryFailed) &amp;&amp; isFailedUrl)) {
+    dispatch_main_sync_safe(^{
+        <span class="built_in">NSError</span> *error = [<span class="built_in">NSError</span> errorWithDomain:<span class="built_in">NSURLErrorDomain</span> code:<span class="built_in">NSURLErrorFileDoesNotExist</span> userInfo:<span class="literal">nil</span>];
+        completedBlock(<span class="literal">nil</span>, error, SDImageCacheTypeNone, <span class="literal">YES</span>, url);
+    });
+    <span class="keyword">return</span> operation;
+}
+</code></pre><p>若URL对应的image之前下载失败过并且用户没有设置错误重试，直接调用completedBlock；</p>
+<pre><code><span class="variable">@synchronized</span> (self.runningOperations) {
+    <span class="attr_selector">[self.runningOperations addObject:operation]</span>;
+}
+</code></pre><p>把当前下载操作加入到runningOperations中，因为runningOperations是多线程共享的，所以要加synchronized控制并发；<strong>synchronized底层是如何实现的呢？</strong>我们在以后的文章里去探究。</p>
+<p>SDWebImageManager首先去检查cache(memeory &amp;&amp; disk)中是否缓存过要下载的图片，调用imageCache的</p>
+<pre><code><span class="pp">- <span class="params">(<span class="variable">NSOperation</span> *)</span>queryDiskCacheForKey:<span class="params">(<span class="variable">NSString</span> *)</span>key done:<span class="params">(<span class="variable">SDWebImageQueryCompletedBlock</span>)</span>doneBlock</span>
+</code></pre><p>函数里首先判断当前操作是否被取消，如果取消从runningOperations中移除，并直接返回：</p>
+<pre><code><span class="tag">if</span> (operation.isCancelled) {
+    <span class="variable">@synchronized</span> (self.runningOperations) {
+        <span class="attr_selector">[self.runningOperations removeObject:operation]</span>;
+    }
+
+    return;
+}
+</code></pre><p>接下来需要讨论二种情况情况：1.（缓存未找到图片）或（缓存找到了图片但是用户设置了刷新缓存） 2. （用户没有实现shouldDownloadImageForURL协议）或（用户实现了shouldDownloadImageForURL协议并且返回值是YES）</p>
+<pre><code>if <span class="list">(<span class="list">(!image || options &amp; SDWebImageRefreshCached)</span> <span class="keyword">&amp;&amp;</span> <span class="list">(![self.delegate respondsToSelector:@selector<span class="list">(<span class="keyword">imageManager</span><span class="keyword">:shouldDownloadImageForURL</span>:)</span>] || [self.delegate imageManager<span class="keyword">:self</span> shouldDownloadImageForURL<span class="keyword">:url</span>])</span>)</span>
+</code></pre><p>这两种情况下需要下载图片，上面这一坨就是判断上面的二种情况。</p>
+<p>除了上面二种情况还有不需要下载图片的二种情况：1.缓存找到图片 2.缓存未找到图片并且用户禁止下载：</p>
+<pre><code><span class="comment">//第一种情况，缓存找到图片(用户未设置刷新缓存并且用户未禁止下载)</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (image) {
+    dispatch_main_sync_safe(^{
+        __<span class="keyword">strong</span> __<span class="keyword">typeof</span>(weakOperation) strongOperation = weakOperation;
+        <span class="keyword">if</span> (strongOperation &amp;&amp; !strongOperation<span class="variable">.isCancelled</span>) {
+            completedBlock(image, <span class="literal">nil</span>, cacheType, <span class="literal">YES</span>, url);
+        }
+    });
+    <span class="keyword">@synchronized</span> (<span class="keyword">self</span><span class="variable">.runningOperations</span>) {
+        [<span class="keyword">self</span><span class="variable">.runningOperations</span> removeObject:operation];
+    }
+}
+<span class="comment">//第二种情况(缓存未找到且用户通过delegate设置在缓存未找到时禁止下载图片)</span>
+<span class="keyword">else</span> {
+    <span class="comment">// Image not in cache and download disallowed by delegate</span>
+    dispatch_main_sync_safe(^{
+        __<span class="keyword">strong</span> __<span class="keyword">typeof</span>(weakOperation) strongOperation = weakOperation;
+        <span class="keyword">if</span> (strongOperation &amp;&amp; !weakOperation<span class="variable">.isCancelled</span>) {
+            completedBlock(<span class="literal">nil</span>, <span class="literal">nil</span>, SDImageCacheTypeNone, <span class="literal">YES</span>, url);
+        }
+    });
+    <span class="keyword">@synchronized</span> (<span class="keyword">self</span><span class="variable">.runningOperations</span>) {
+        [<span class="keyword">self</span><span class="variable">.runningOperations</span> removeObject:operation];
+    }
+}
+</code></pre><p>如果需要下载图片，就调用</p>
+<pre><code><span class="pp">- <span class="params">(id )</span>downloadImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url options:<span class="params">(<span class="variable">SDWebImageDownloaderOptions</span>)</span>options progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock completed:<span class="params">(<span class="variable">SDWebImageDownloaderCompletedBlock</span>)</span>completedBlock</span>
+</code></pre><p>下载图片，如果下载失败。直接调用completedBlock返回错误，并根据错误类型将URL添加到failedURLs里。</p>
+<pre><code><span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">error</span>) {
+    dispatch_main_sync_safe(^{
+        <span class="keyword">if</span> (strongOperation &amp;&amp; !strongOperation.isCancelled) {
+            completedBlock(nil, <span class="built_in">error</span>, SDImageCacheTypeNone, finished, url);
+        }
+    });
+
+    <span class="keyword">if</span> (   <span class="built_in">error</span>.code != NSURLErrorNotConnectedToInternet
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorCancelled
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorTimedOut
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorInternationalRoamingOff
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorDataNotAllowed
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorCannotFindHost
+        &amp;&amp; <span class="built_in">error</span>.code != NSURLErrorCannotConnectToHost) {
+        @synchronized (<span class="variable">self</span>.failedURLs) {
+            [<span class="variable">self</span>.failedURLs addObject:url];
+        }
+    }
+}
+</code></pre><p>若图片下载成功，将url从failURLs里删除：</p>
+<pre><code><span class="tag">if</span> ((options &amp; SDWebImageRetryFailed)) {
+    <span class="variable">@synchronized</span> (self.failedURLs) {
+        <span class="attr_selector">[self.failedURLs removeObject:url]</span>;
+    }
+}
+</code></pre><p>这个地方需要解释下，因为<code>[self.failedURLs addObject:url]</code>是<strong>只在下载失败时添加</strong>的，而下载成功和下载失败是互斥的，也就是说，下载成功时failedURLs数组里就不应该有这个url，为什么要这么写呢，这是为了解决竞态条件下的问题，若两个线程下载同一个url的图片，若第一个线程下载失败，第二个下载成功。如果不从failedURLs移除这个url的话，以后下载此url的图片都会失败。</p>
+<p>然后处理下载完成的图片：</p>
+<pre><code><span class="comment">//是否设置了只缓存内存</span>
+BOOL cacheOnDisk = !(options &amp; SDWebImageCacheMemoryOnly);
+
+<span class="comment">//设置刷新缓存且cache找到图片且NSURLCache找到图片，不处理</span>
+<span class="keyword">if</span> (options &amp; SDWebImageRefreshCached &amp;&amp; image &amp;&amp; !downloadedImage) {
+    <span class="comment">// Image refresh hit the NSURLCache cache, do not call the completion block</span>
+}
+<span class="comment">//若delegate实现imageManager:transformDownloadedImage:withURL:方法，在缓存之前，需要做调用此delegate方法转换</span>
+<span class="keyword">else</span> <span class="keyword">if</span> (downloadedImage &amp;&amp; (!downloadedImage.images || (options &amp; SDWebImageTransformAnimatedImage)) &amp;&amp; [self.delegate <span class="string">respondsToSelector:</span><span class="annotation">@selector</span>(<span class="string">imageManager:</span><span class="string">transformDownloadedImage:</span><span class="string">withURL:</span>)]) {
+    <span class="comment">//在全局队列中转换，不阻塞主线程dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{</span>
+        UIImage *transformedImage = [self.delegate <span class="string">imageManager:</span>self <span class="string">transformDownloadedImage:</span>downloadedImage <span class="string">withURL:</span>url];
+        <span class="comment">//转换成功后，存入缓存</span>
+        <span class="keyword">if</span> (transformedImage &amp;&amp; finished) {
+            BOOL imageWasTransformed = ![transformedImage <span class="string">isEqual:</span>downloadedImage];
+            [self.imageCache <span class="string">storeImage:</span>transformedImage <span class="string">recalculateFromImage:</span>imageWasTransformed <span class="string">imageData:</span>(imageWasTransformed ? nil : data) <span class="string">forKey:</span>key <span class="string">toDisk:</span>cacheOnDisk];
+        }
+        <span class="comment">//缓存成功之后，调用completedBlock</span>
+        dispatch_main_sync_safe(^{
+            <span class="keyword">if</span> (strongOperation &amp;&amp; !strongOperation.isCancelled) {
+                completedBlock(transformedImage, nil, SDImageCacheTypeNone, finished, url);
+            }
+        });
+    });
+}
+<span class="keyword">else</span> {
+    <span class="comment">//没有实现转换的delegate，就不做转换直接缓存</span>
+    <span class="keyword">if</span> (downloadedImage &amp;&amp; finished) {
+        [self.imageCache <span class="string">storeImage:</span>downloadedImage <span class="string">recalculateFromImage:</span>NO <span class="string">imageData:</span>data <span class="string">forKey:</span>key <span class="string">toDisk:</span>cacheOnDisk];
+    }
+    <span class="comment">//缓存成功之后，调用completedBlock</span>
+    dispatch_main_sync_safe(^{
+        <span class="keyword">if</span> (strongOperation &amp;&amp; !strongOperation.isCancelled) {
+            completedBlock(downloadedImage, nil, SDImageCacheTypeNone, finished, url);
+        }
+    });
+}
+</code></pre><p>}</p>
+<p>下载完成之后，从队列里移除：</p>
+<pre><code><span class="tag">if</span> (finished) {
+    <span class="variable">@synchronized</span> (self.runningOperations) {
+        <span class="tag">if</span> (strongOperation) {
+            <span class="attr_selector">[self.runningOperations removeObject:strongOperation]</span>;
+        }
+    }
+}
+</code></pre><p>最后说下返回的<code>SDWebImageCombinedOperation</code>类型，这个类型包含<code>NSOperation *cacheOperation</code>的一个子类型，其中<code>cacheOperation</code>中又存在<code>id &lt;SDWebImageOperation&gt;</code>的下载图片的<code>subOperation</code>。在<code>cancel</code>的时候也应该把这两个操作都<code>cancle</code>。</p>
+<pre><code>- (<span class="keyword">void</span>)cancel {
+    <span class="keyword">self</span><span class="variable">.cancelled</span> = <span class="literal">YES</span>;
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.cacheOperation</span>) {
+        [<span class="keyword">self</span><span class="variable">.cacheOperation</span> cancel];
+        <span class="keyword">self</span><span class="variable">.cacheOperation</span> = <span class="literal">nil</span>;
+    }
+    <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.cancelBlock</span>) {
+        <span class="keyword">self</span><span class="variable">.cancelBlock</span>();
+
+        <span class="comment">// <span class="doctag">TODO:</span> this is a temporary fix to #809.</span>
+        <span class="comment">// Until we can figure the exact cause of the crash, going with the ivar instead of the setter</span>
+<span class="comment">//        self.cancelBlock = nil;</span>
+        _cancelBlock = <span class="literal">nil</span>;
+    }
+}
+</code></pre><p>所以<code>CombinedOperation</code>在<code>cancel</code>的时候会先cancel掉自己的<code>cacheOperation</code>,在调用自己的<code>cancelBlock</code>。</p>
+<pre><code><span class="label">operation.cancelBlock</span> = ^{
+    [<span class="keyword">subOperation </span>cancel]<span class="comment">;</span>
+
+
+    <span class="comment">@synchronized (self.runningOperations) {</span>
+        __strong __typeof(weakOperation) <span class="keyword">strongOperation </span>= weakOperation<span class="comment">;</span>
+        <span class="preprocessor">if</span> (<span class="keyword">strongOperation) </span>{
+            [<span class="keyword">self.runningOperations </span>removeObject:<span class="keyword">strongOperation];
+</span>        }
+    }
+}<span class="comment">;</span>
+</code></pre><p>在自己的<code>cancelBlock</code>把下载操作<code>subOperation</code>取消掉。由此可见封装的<code>CombinedOperation</code>包含了下载和缓存的操作，使代码变得更简洁。</p>
+<h2 id="下载和缓存层">下载和缓存层</h2><h3 id="下载层">下载层</h3><p>SDWebImageDownloader提供的方法有以下几个：</p>
+<pre><code><span class="comment">//给每个HTTP下载请求头的指定field设置值。</span>
+- (<span class="keyword">void</span>)setValue:(<span class="built_in">NSString</span> *)value forHTTPHeaderField:(<span class="built_in">NSString</span> *)field;
+<span class="comment">//返回HTTP特定field的值</span>
+- (<span class="built_in">NSString</span> *)valueForHTTPHeaderField:(<span class="built_in">NSString</span> *)field;
+<span class="comment">//设置一个SDWebImageDownloaderOperation的子类作为下载请求的默认NSOperation</span>
+- (<span class="keyword">void</span>)setOperationClass:(Class)operationClass;
+<span class="comment">//创建一个SDWebImageDownloader异步下载实例，图片下载完成或错误时，通知delegate回调。方法返回一个 SDWebImageOperation</span>
+- (<span class="keyword">id</span> )downloadImageWithURL:(<span class="built_in">NSURL</span> *)url
+                                     options:(SDWebImageDownloaderOptions)options
+                                    progress:(SDWebImageDownloaderProgressBlock)progressBlock
+                                   completed:(SDWebImageDownloaderCompletedBlock)completedBlock;
+<span class="comment">// 设置下载队列为挂起状态</span>
+- (<span class="keyword">void</span>)setSuspended:(<span class="built_in">BOOL</span>)suspended;
+<span class="comment">//取消队列中的所有操作。</span>
+- (<span class="keyword">void</span>)cancelAllDownloads;
+</code></pre><p>我们重点研究下载方法：</p>
+<pre><code><span class="pp">- <span class="params">(id )</span>downloadImageWithURL:<span class="params">(<span class="variable">NSURL</span> *)</span>url
+                                     options:<span class="params">(<span class="variable">SDWebImageDownloaderOptions</span>)</span>options
+                                    progress:<span class="params">(<span class="variable">SDWebImageDownloaderProgressBlock</span>)</span>progressBlock
+                                   completed:<span class="params">(<span class="variable">SDWebImageDownloaderCompletedBlock</span>)</span>completedBlock;</span>
+</code></pre><p>这几个参数的含义代码注释里都有，这里就不再一一解释。</p>
+<pre><code>__block SDWebImageDownloaderOperation *operation;
+__<span class="keyword">weak</span> __<span class="keyword">typeof</span>(<span class="keyword">self</span>)wself = <span class="keyword">self</span>;
+
+[<span class="keyword">self</span> addProgressCallback:progressBlock completedBlock:completedBlock forURL:url createCallback:^{
+    <span class="comment">//block实现</span>
+    ...
+    operation = [[wself<span class="variable">.operationClass</span> alloc] initWithRequest:request
+                                                      options:options
+                                                     progress:^(<span class="built_in">NSInteger</span> receivedSize, <span class="built_in">NSInteger</span> expectedSize)
+    ...
+}];
+
+<span class="keyword">return</span> operation;
+</code></pre><p>上面是这个方法的框架，可以看出主要调用了<code>addProgressCallback</code>方法，方法的内部创建了下载的<code>operation</code>。我们首先看看<code>addProgressCallback</code>方法的实现:</p>
+<pre><code><span class="comment">//如果url为nil，调用completedBlock后return</span>
+<span class="keyword">if</span> (url == <span class="literal">nil</span>) {
+    <span class="keyword">if</span> (completedBlock != <span class="literal">nil</span>) {
+        completedBlock(<span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">nil</span>, <span class="literal">NO</span>);
+    }
+    <span class="keyword">return</span>;
+}
+
+<span class="comment">//允许多线程下载，使用了并发控制，避免同时修改URLCallbacks</span>
+dispatch_barrier_sync(<span class="keyword">self</span><span class="variable">.barrierQueue</span>, ^{
+    <span class="built_in">BOOL</span> first = <span class="literal">NO</span>;
+    <span class="keyword">if</span> (!<span class="keyword">self</span><span class="variable">.URLCallbacks</span>[url]) {
+        <span class="keyword">self</span><span class="variable">.URLCallbacks</span>[url] = [<span class="built_in">NSMutableArray</span> new];
+        first = <span class="literal">YES</span>;
+    }
+
+    <span class="comment">// Handle single download of simultaneous download request for the same URL</span>
+    <span class="built_in">NSMutableArray</span> *callbacksForURL = <span class="keyword">self</span><span class="variable">.URLCallbacks</span>[url];
+    <span class="built_in">NSMutableDictionary</span> *callbacks = [<span class="built_in">NSMutableDictionary</span> new];
+    <span class="keyword">if</span> (progressBlock) callbacks[kProgressCallbackKey] = [progressBlock <span class="keyword">copy</span>];
+    <span class="keyword">if</span> (completedBlock) callbacks[kCompletedCallbackKey] = [completedBlock <span class="keyword">copy</span>];
+    [callbacksForURL addObject:callbacks];
+    <span class="keyword">self</span><span class="variable">.URLCallbacks</span>[url] = callbacksForURL;
+
+    <span class="keyword">if</span> (first) {
+        createCallback();
+    }
+});
+</code></pre><p>并发控制的地方为什么要使用<code>dispatch_barrier_sync</code>，是因为<code>dispatch_barrier_sync</code>这个函数可以设置一个同步执行block，它会等到在这个block加入队列之前的block执行完毕后，才开始执行。在它之后加入队列的block，则等到这个block执行完毕后才开始执行。。这里的<code>dispatch_barrier_sync</code>实际上相当于一个写锁，任何写操作(删除，添加)，都要在之前的写操作完成后执行，而之后的写操作，也要在之前的的写操作完成之后执行。</p>
+<p>URLCallbacks是一个以url作为key的字典，字典的value是一个数组，数组的元素是一个字典。可以看出<code>URLCallbacks</code>、<code>callbacksForURL</code>、<code>callbacks</code>之间的关系如下图：</p>
+<p><img src="/assets/images/SDWebImage/03.png" alt="img01"></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码阅读/">源码阅读</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
   
     <article id="post-大并发服务器/四、epoll函数" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -1297,131 +1744,6 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/03/12/hello-world/" class="article-date">
-  	<time datetime="2016-03-12T12:37:07.000Z" itemprop="datePublished">2016-03-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/12/hello-world/">MarkDown语法学习</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>欢迎来到我的<a href="www.liudesheng.com">博客</a>,第一篇我们会学习使用MarkDown语法来书写文章。</p>
-<h2 id="标题">标题</h2><p>在Markdown语法中，标题是文本前面加上<code>#</code>来表示的，一个#代表一级标题，同里，还可以增加二级标题，三级标题，最大不能超过六级。例如:</p>
-<blockquote>
-<pre><code><span class="preprocessor"># 一级标题</span>
-<span class="preprocessor">## 二级标题</span>
-<span class="preprocessor">### 三级标题</span>
-<span class="preprocessor">#### 四级标题</span>
-<span class="preprocessor">##### 五级标题</span>
-<span class="preprocessor">###### 六级标题</span>
-</code></pre></blockquote>
-<h2 id="列表">列表</h2><p>无序列表只需在文字前面加上 <code>-</code>。例如：</p>
-<blockquote>
-<pre><code>-<span class="ruby"> 文本<span class="number">1</span>
-</span>-<span class="ruby"> 文本<span class="number">2</span>
-</span>-<span class="ruby"> 文本<span class="number">3</span></span>
-</code></pre></blockquote>
-<p>如果需要创建有序列表，在文字前加上1.2.3.。注意：-、1.和文本之间要保留一个空格。例如:</p>
-<blockquote>
-<pre><code><span class="number">1.</span> 文本<span class="number">1</span>
-<span class="number">2.</span> 文本<span class="number">2</span>
-<span class="number">3.</span> 文本<span class="number">3</span>
-</code></pre></blockquote>
-<h2 id="链接和图片">链接和图片</h2><p>在Markdown中，插入链接需要语法即可。例如:</p>
-<blockquote>
-<pre><code>[<span class="link_label">博客</span>](<span class="link_url">www.liudesheng.com</span>)
-</code></pre></blockquote>
-<p>插入图片使用以下的格式：</p>
-<blockquote>
-<pre><code>!<span class="attr_selector">[]</span>()(<span class="attribute">http</span>:<span class="comment">//weibo.com/hnrain?s=6cm7D0)</span>
-</code></pre></blockquote>
-<h2 id="引用">引用</h2><p>如果在写作的时候需要引用别人的文字，直接在需要引用的文字前面加<code>&gt;</code>就好。例如：</p>
-<blockquote>
-<pre><code>这是一段引用的文字。
-</code></pre></blockquote>
-<h2 id="粗体斜体">粗体斜体</h2><p>用两个<code>*</code>包含的文本是粗体，用一个<code>*</code>包含的文本是斜体。例如:</p>
-<blockquote>
-<pre><code><span class="keyword">*</span><span class="keyword">*</span>这是粗体<span class="keyword">*</span><span class="keyword">*</span>
-<span class="keyword">*</span>这是斜体<span class="keyword">*</span>
-</code></pre><p>生存还是<strong>毁灭</strong>,这是一个<em>问题</em>。</p>
-</blockquote>
-<h2 id="表格">表格</h2><p>在MarkDown中表格的表示方式非常形象。例子如下</p>
-<blockquote>
-<pre><code>|<span class="string"> table            </span>|<span class="string"> row           </span>|<span class="string"> pes  </span>|
-|<span class="string"> -------------     </span>|<span class="string">:-------------:</span>|<span class="string"> -----:</span>|
-|<span class="string"> col1              </span>|<span class="string"> right-aligned </span>|<span class="string"> data12345 </span>|
-|<span class="string"> col2              </span>|<span class="string"> centered      </span>|<span class="string"> data2 </span>|
-|<span class="string"> col3             </span>|<span class="string"> test      </span>|<span class="string">    d3 </span>|
-</code></pre></blockquote>
-<p>默认居左，横线两边加冒号的是居中，冒号在右边的是居右。效果如下：</p>
-<table>
-<thead>
-<tr>
-<th>table</th>
-<th style="text-align:center">row</th>
-<th style="text-align:right">pes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>col1</td>
-<td style="text-align:center">right-aligned</td>
-<td style="text-align:right">data12345</td>
-</tr>
-<tr>
-<td>col2</td>
-<td style="text-align:center">centered</td>
-<td style="text-align:right">data2</td>
-</tr>
-<tr>
-<td>col3</td>
-<td style="text-align:center">test</td>
-<td style="text-align:right">d3</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1432,7 +1754,7 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2016 刘得胜
+    		&copy; 2017 刘得胜
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
