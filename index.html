@@ -548,7 +548,7 @@ BOOL cacheOnDisk = !(options &amp; SDWebImageCacheMemoryOnly);
     }
 }<span class="comment">;</span>
 </code></pre><p>在自己的<code>cancelBlock</code>把下载操作<code>subOperation</code>取消掉。由此可见封装的<code>CombinedOperation</code>包含了下载和缓存的操作，使代码变得更简洁。</p>
-<h2 id="下载和缓存层"><strong>下载和缓存层</strong></h2><h3 id="下载层"><strong>下载层</strong></h3><p>SDWebImageDownloader提供的方法有以下几个：</p>
+<h2 id="下载和缓存层"><strong>下载和缓存层</strong></h2><h3 id="下载层SDWebImageDownloader"><strong>下载层SDWebImageDownloader</strong></h3><p>SDWebImageDownloader提供的方法有以下几个：</p>
 <pre><code><span class="comment">//给每个HTTP下载请求头的指定field设置值。</span>
 - (<span class="keyword">void</span>)setValue:(<span class="built_in">NSString</span> *)value forHTTPHeaderField:(<span class="built_in">NSString</span> *)field;
 <span class="comment">//返回HTTP特定field的值</span>
@@ -684,7 +684,7 @@ operation.shouldDecompressImages = wself.shouldDecompressImages;
     wself.lastAddedOperation = operation;
 }
 </code></pre><p>最后将这个下载的操作加入到下载队列里。下载方式有两种，FIFO和LIFO。最后根据下载的方式调增任务的依赖。</p>
-<h3 id="SDWebImageDownloaderOperation"><strong>SDWebImageDownloaderOperation</strong></h3><p>上面的<code>SDWebImageDownloader</code>主要操作就是创建<code>SDWebImageDownloaderOperation</code>添加到下载队列里，可知具体的操作是在<code>SDWebImageDownloaderOperation</code>，我们研究下具体是如何下载的。首先这个类是继承于<code>NSOperation</code>，并重写了<code>start</code>方法。我们首先看看它的<code>start</code>方法的实现：</p>
+<h4 id="具体的下载操作SDWebImageDownloaderOperation"><strong>具体的下载操作SDWebImageDownloaderOperation</strong></h4><p>上面的<code>SDWebImageDownloader</code>主要操作就是创建<code>SDWebImageDownloaderOperation</code>添加到下载队列里，可知具体的操作是在<code>SDWebImageDownloaderOperation</code>，我们研究下具体是如何下载的。首先这个类是继承于<code>NSOperation</code>，并重写了<code>start</code>方法。我们首先看看它的<code>start</code>方法的实现：</p>
 <p>检测下载状态</p>
 <pre><code><span class="comment">//管理下载状态，如果已取消，则重置当前下载并设置完成状态为YES</span>
 <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.isCancelled</span>) {
@@ -823,7 +823,7 @@ Class <span class="built_in">UIApplicationClass</span> = <span class="built_in">
     <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageWith<span class="built_in">CGImage</span>:partialImageRef scale:<span class="number">1</span> orientation:orientation];
     <span class="built_in">NSString</span> *key = [[SDWebImageManager sharedManager] cacheKeyForURL:<span class="keyword">self</span><span class="variable">.request</span><span class="variable">.URL</span>];
     <span class="built_in">UIImage</span> *scaledImage = [<span class="keyword">self</span> scaledImageForKey:key image:image];
-    <span class="comment">//判断是否要解解码，默认是需要解码，解码的操作是在子线程里(delegate在子线程执行的)</span>
+    <span class="comment">//判断是否要解解码，默认是需要解码，解码的操作是在子线程里(delegate在子线程执行的),为什么要解码？我们之后解释</span>
     <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.shouldDecompressImages</span>) {
         image = [<span class="built_in">UIImage</span> decodedImageWithImage:scaledImage];
     }
@@ -838,7 +838,133 @@ Class <span class="built_in">UIApplicationClass</span> = <span class="built_in">
         }
     });
 }
-</code></pre>
+</code></pre><blockquote>
+<p>因为通过 imageNamed 创建 UIImage 时，系统实际上只是在 Bundle 内查找到文件名，然后把这个文件名放到 UIImage 里返回，并没有进行实际的文件读取和解码。当 UIImage 第一次显示到屏幕上时，其内部的解码方法才会被调用，同时解码结果会保存到一个全局缓存去。在图片解码后，App 第一次退到后台和收到内存警告时，该图片的缓存才会被清空，其他情况下缓存会一直存在。具体的说就是一个UIImage加载了jpeg或者png，当UIImageView将要显示这个UIImage的时候会先把png和jpeg解码成未压缩格式，所以SDWebImage有一个decodeImage方法，就是把这一步放在了异步线程做，防止tableViewCell中的imageView加载图片的时候在主线程解码图片，导致滑动卡顿。这样效率很低，但是只有瞬时的内存需求。为了提高效率通过SDWebImageDecoder将包装在Data下的资源解压，然后画在另外一张图片上，这样这张新图片就不再需要重复解压了,这种做法是典型的空间换时间的做法，如下从硬盘中去图片时，分别对图片进行了缩放和解压缩操作。</p>
+</blockquote>
+<h3 id="缓存层SDImageCache">缓存层SDImageCache</h3><p>我们看下<code>SDWebImage</code>的缓存<code>SDImageCache</code>，<code>SDImageCache</code>主要包含两部分，内存缓存<code>memCache</code>和磁盘缓存<code>fileManager</code>,磁盘缓存的写操作是异步的。</p>
+<blockquote>
+<p>SDImageCache maintains a memory cache and an optional disk cache. Disk cache write operations are performed asynchronous so it doesn’t add unnecessary latency to the UI. </p>
+</blockquote>
+<p>内存缓存是使用<code>NSCache</code>实现的，<code>NSCache</code>使用上类似字典，可以用key-Value的方式存取数据。但是NSCache底层实现和<code>NSDictionary</code>不同(NSCache是线程安全的)。<code>NSCache</code>的具体介绍可以看<a href="http://nshipster.cn/nscache/" target="_blank" rel="external">NSCache</a>。</p>
+<p>先看看<code>SDImageCache</code>的属性：</p>
+<pre><code><span class="comment">//是否解压下载的图片，默认是YES,但是会消耗掉很多内存，如果遇到内存不足的crash时，将值设为NO</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">BOOL</span> shouldDecompressImages;
+<span class="comment">//是否自动上传iCloud</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">BOOL</span> shouldDisableiCloud;
+<span class="comment">//使用内存缓存</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">BOOL</span> shouldCacheImagesInMemory;
+<span class="comment">//内存缓存的代价（占用的内存大小）</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSUInteger</span> maxMemoryCost;
+<span class="comment">//内存缓存的最大元素个数</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSUInteger</span> maxMemoryCountLimit;
+<span class="comment">//元素在缓存中最大寿命</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSInteger</span> maxCacheAge;
+<span class="comment">//最大缓存大小</span>
+<span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSUInteger</span> maxCacheSize;
+</code></pre><p>前面<code>SDWebImageManager</code>在下载图片成功时，会调用</p>
+<pre><code>[self.imageCache <span class="string">storeImage:</span>downloadedImage <span class="string">recalculateFromImage:</span>NO <span class="string">imageData:</span>data <span class="string">forKey:</span>key <span class="string">toDisk:</span>cacheOnDisk]
+</code></pre><p>缓存到内存和磁盘，我们重点看下这个函数的实现:</p>
+<pre><code><span class="comment">//错误处理</span>
+<span class="keyword">if</span> (!image || !key) {
+    <span class="keyword">return</span>;
+}
+<span class="comment">//需要内存缓存，计算内存占用，直接缓存</span>
+<span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.shouldCacheImagesInMemory</span>) {
+    <span class="built_in">NSUInteger</span> cost = SDCacheCostForImage(image);
+    [<span class="keyword">self</span><span class="variable">.memCache</span> setObject:image forKey:key cost:cost];
+}
+
+<span class="comment">//需要磁盘异步缓存</span>
+<span class="keyword">if</span> (toDisk) {
+    <span class="built_in">dispatch_async</span>(<span class="keyword">self</span><span class="variable">.ioQueue</span>, ^{
+        <span class="built_in">NSData</span> *data = imageData;
+
+        <span class="keyword">if</span> (image &amp;&amp; (recalculate || !data)) {
+<span class="preprocessor">#if TARGET_OS_IPHONE</span>
+            <span class="comment">//确定图片是png还是jpeg. imageData为nil而且有alapha通道，当作png处理</span>
+            <span class="keyword">int</span> alphaInfo = <span class="built_in">CGImageGetAlphaInfo</span>(image<span class="variable">.CGImage</span>);
+            <span class="built_in">BOOL</span> hasAlpha = !(alphaInfo == k<span class="built_in">CGImageAlphaNone</span> ||
+                              alphaInfo == k<span class="built_in">CGImageAlphaNoneSkipFirst</span> ||
+                              alphaInfo == k<span class="built_in">CGImageAlphaNoneSkipLast</span>);
+            <span class="built_in">BOOL</span> imageIsPng = hasAlpha;
+
+            <span class="comment">// But if we have an image data, we will look at the preffix</span>
+            <span class="keyword">if</span> ([imageData length] &gt;= [kPNGSignatureData length]) {
+                imageIsPng = ImageDataHasPNGPreffix(imageData);
+            }
+            <span class="comment">//根据类型返回image的data</span>
+            <span class="keyword">if</span> (imageIsPng) {
+                data = <span class="built_in">UIImagePNGRepresentation</span>(image);
+            }
+            <span class="keyword">else</span> {
+                data = <span class="built_in">UIImageJPEGRepresentation</span>(image, (<span class="built_in">CGFloat</span>)<span class="number">1.0</span>);
+            }
+<span class="preprocessor">#else</span>
+            data = [<span class="built_in">NSBitmapImageRep</span> representationOfImageRepsInArray:image<span class="variable">.representations</span> usingType: <span class="built_in">NSJPEGFileType</span> properties:<span class="literal">nil</span>];
+<span class="preprocessor">#endif</span>
+        }
+        <span class="comment">//磁盘存储</span>
+        <span class="keyword">if</span> (data) {
+            <span class="keyword">if</span> (![_fileManager fileExistsAtPath:_diskCachePath]) {
+                [_fileManager createDirectoryAtPath:_diskCachePath withIntermediateDirectories:<span class="literal">YES</span> attributes:<span class="literal">nil</span> error:<span class="literal">NULL</span>];
+            }
+
+            <span class="comment">// 获取缓存路径</span>
+            <span class="built_in">NSString</span> *cachePathForKey = [<span class="keyword">self</span> defaultCachePathForKey:key];
+            <span class="comment">// transform to NSUrl</span>
+            <span class="built_in">NSURL</span> *fileURL = [<span class="built_in">NSURL</span> fileURLWithPath:cachePathForKey];
+            <span class="comment">//存储到disk里</span>
+            [_fileManager createFileAtPath:cachePathForKey contents:data attributes:<span class="literal">nil</span>];
+
+            <span class="comment">// disable iCloud backup</span>
+            <span class="keyword">if</span> (<span class="keyword">self</span><span class="variable">.shouldDisableiCloud</span>) {
+                [fileURL setResourceValue:[<span class="built_in">NSNumber</span> numberWithBool:<span class="literal">YES</span>] forKey:<span class="built_in">NSURLIsExcludedFromBackupKey</span> error:<span class="literal">nil</span>];
+            }
+        }
+    });
+}
+</code></pre><p>同样的。<code>SDWebImageManager</code>在下载之前会检查缓存是否有此图片：</p>
+<pre><code><span class="pp">- <span class="params">(<span class="variable">NSOperation</span> *)</span>queryDiskCacheForKey:<span class="params">(<span class="variable">NSString</span> *)</span>key done:<span class="params">(<span class="variable">SDWebImageQueryCompletedBlock</span>)</span>doneBlock</span>
+</code></pre><p>关键代码如下：</p>
+<pre><code><span class="comment">//从内存缓存里查找</span>
+<span class="built_in">UIImage</span> *image = [<span class="keyword">self</span> imageFromMemoryCacheForKey:key];
+<span class="keyword">if</span> (image) {
+    doneBlock(image, SDImageCacheTypeMemory);
+    <span class="keyword">return</span> <span class="literal">nil</span>;
+}
+
+<span class="comment">//NSOperation的特殊用法，用于取消一个异步操作</span>
+<span class="built_in">NSOperation</span> *operation = [<span class="built_in">NSOperation</span> new];
+<span class="built_in">dispatch_async</span>(<span class="keyword">self</span><span class="variable">.ioQueue</span>, ^{
+    <span class="keyword">if</span> (operation<span class="variable">.isCancelled</span>) {
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">//disk查找图片成功之后需要解码，所以放在`autoreleasepool`里</span>
+    <span class="keyword">@autoreleasepool</span> {
+        <span class="comment">//从磁盘查找，解码</span>
+        <span class="built_in">UIImage</span> *diskImage = [<span class="keyword">self</span> diskImageForKey:key];
+        <span class="keyword">if</span> (diskImage &amp;&amp; <span class="keyword">self</span><span class="variable">.shouldCacheImagesInMemory</span>) {
+            <span class="built_in">NSUInteger</span> cost = SDCacheCostForImage(diskImage);
+            [<span class="keyword">self</span><span class="variable">.memCache</span> setObject:diskImage forKey:key cost:cost];
+        }
+        <span class="comment">//查找完成</span>
+        <span class="built_in">dispatch_async</span>(dispatch_get_main_queue(), ^{
+            doneBlock(diskImage, SDImageCacheTypeDisk);
+        });
+    }
+});
+</code></pre><p>最后还有一个Cache清除的方式，对于memory cache来说是完全清空的，对于disk cache，根据设置参数的不同，有两种清除方式：</p>
+<ul>
+<li>文件的缓存有效期：默认是一周。如果文件的缓存时间超过这个时间值，则将其移除。</li>
+<li>最大缓存空间大小：如果所有缓存文件的总大小超过最大缓存空间，则会按照文件最后修改时间的逆序，以每次一半的递归来移除那些过早的文件，直到缓存的实际大小小于我们设置的最大使用空间。</li>
+</ul>
+<h2 id="底层支持(工具类)">底层支持(工具类)</h2><h3 id="SDWebImageDecoder和SDWebImageCompat">SDWebImageDecoder和SDWebImageCompat</h3><p><code>SDWebImageDecoder</code>是用来图片解码的，在上面下载的时候和磁盘读取图片数据时，都调用了解码操作，图片为什么需要解码，可以参考如下解释:</p>
+<blockquote>
+<p>因为通过 imageNamed 创建 UIImage 时，系统实际上只是在 Bundle 内查找到文件名，然后把这个文件名放到 UIImage 里返回，并没有进行实际的文件读取和解码。当 UIImage 第一次显示到屏幕上时，其内部的解码方法才会被调用，同时解码结果会保存到一个全局缓存去。在图片解码后，App 第一次退到后台和收到内存警告时，该图片的缓存才会被清空，其他情况下缓存会一直存在。具体的说就是一个UIImage加载了jpeg或者png，当UIImageView将要显示这个UIImage的时候会先把png和jpeg解码成未压缩格式，所以SDWebImage有一个decodeImage方法，就是把这一步放在了异步线程做，防止tableViewCell中的imageView加载图片的时候在主线程解码图片，导致滑动卡顿。这样效率很低，但是只有瞬时的内存需求。为了提高效率通过SDWebImageDecoder将包装在Data下的资源解压，然后画在另外一张图片上，这样这张新图片就不再需要重复解压了,这种做法是典型的空间换时间的做法，如下从硬盘中去图片时，分别对图片进行了缩放和解压缩操作。</p>
+</blockquote>
+<p><code>SDWebImageCompat</code>是根据屏幕大小设置图片的<code>scale</code>，实现比较简单，这里不再解释。</p>
+
       
     </div>
     
