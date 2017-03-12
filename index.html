@@ -196,6 +196,359 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Autorelease的原理与实现" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/10/Autorelease的原理与实现/" class="article-date">
+  	<time datetime="2017-03-10T05:32:24.000Z" itemprop="datePublished">2017-03-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/10/Autorelease的原理与实现/">Autorelease的原理与实现</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><strong>前言</strong></h2><p>众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;&amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Counting)。ARC是如何实现的？objc和编译器底层帮我们做了哪些事情，它们是如何管理内存的？</p>
+<h2 id="Autorelease"><strong>Autorelease</strong></h2><p>在MRC时代，<code>alloc</code>创建的对象必须在对象生命周期结束时调用<code>release</code>或者在创建之初调用<code>autorelease</code>。如下：</p>
+<pre><code>方式1
+NSObject *testObj = <span class="comment">[<span class="comment">[NSObject alloc]</span>init]</span>;
+//insert code
+<span class="comment">[testObj release]</span>;
+
+方式2
+NSObject *testObj = <span class="comment">[<span class="comment">[<span class="comment">[NSObject alloc]</span>init]</span> autorelease]</span>;
+</code></pre><p>内存管理的第一原则：谁创建，谁释放。所以方式1我们很容易理解；方式2是如何管理对象的生命周期的？其实调用<code>autorelease</code>方法其实是把当前对象添加到<code>autoreleasepool</code>中管理，我们就不需要手动释放了。</p>
+<h2 id="@autoreleasepool"><strong>@autoreleasepool</strong></h2><p>iOS工程<code>main.m</code>中<code>main</code>函数的实现如下：</p>
+<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[]) {  
+    <span class="keyword">@autoreleasepool</span> {
+        <span class="keyword">return</span> <span class="built_in">UIApplicationMain</span>(argc, argv, <span class="literal">nil</span>, <span class="built_in">NSStringFromClass</span>([AppDelegate class]));
+    }
+}
+</code></pre><p>main函数的的业务实现我们不关心，我们只关心<code>@autoreleasepool</code>到底是什么，为了方便，我们改写main函数如下：</p>
+<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+    <span class="keyword">@autoreleasepool</span> {
+        <span class="built_in">NSObject</span> *objTest = [[<span class="built_in">NSObject</span> alloc]init];
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>在命令行中使用<code>clang -rewrite-objc main.m</code>让编译器用<code>C++</code>改写这个函数,改写后的代码简化如下：</p>
+<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+    <span class="comment">/* @autoreleasepool */</span> { __AtAutoreleasePool __autoreleasepool; 
+        <span class="built_in">NSObject</span> *objTest = ((<span class="built_in">NSObject</span> *(*)(<span class="keyword">id</span>, SEL))(<span class="keyword">void</span> *)objc_msgSend)((<span class="keyword">id</span>)((<span class="built_in">NSObject</span> *(*)(<span class="keyword">id</span>, SEL))(<span class="keyword">void</span> *)objc_msgSend)((<span class="keyword">id</span>)objc_getClass(<span class="string">"NSObject"</span>), sel_registerName(<span class="string">"alloc"</span>)), sel_registerName(<span class="string">"init"</span>));
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p><code>@autoreleasepool</code>在改写后被注释掉了，同时在作用域的第一行生成了一个<code>__AtAutoreleasePool</code>的C++对象，全局搜索可以看到<code>__AtAutoreleasePool</code>定义如下：</p>
+<pre><code>struct __AtAutoreleasePool {
+  __AtAutoreleasePool() {atautoreleasepoolobj = objc_autoreleasePoolPush()<span class="comment">;}</span>
+  ~__AtAutoreleasePool() {objc_autoreleasePoolPop(atautoreleasepoolobj)<span class="comment">;}</span>
+  void * atautoreleasepoolobj<span class="comment">;</span>
+}<span class="comment">;</span>
+</code></pre><p>这个结构体(和class的唯一区别是不能定义私有变量或私有函数)只有一个构造函数和析构函数，析构函数是在作用域结束时自动调用的，所以<code>main</code>函数代码等价如下：</p>
+<pre><code><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>{  
+    {
+        <span class="keyword">void</span> * atautoreleasepoolobj = objc_autoreleasePoolPush();
+        <span class="comment">//other operator</span>
+         objc_autoreleasePoolPop(atautoreleasepoolobj);
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>然后看下这两个函数的实现：</p>
+<pre><code><span class="function"><span class="keyword">void</span> *
+<span class="title">objc_autoreleasePoolPush</span><span class="params">(<span class="keyword">void</span>)</span>
+</span>{
+    <span class="keyword">return</span> AutoreleasePoolPage::push();
+}
+
+<span class="function"><span class="keyword">void</span>
+<span class="title">objc_autoreleasePoolPop</span><span class="params">(<span class="keyword">void</span> *ctxt)</span>
+</span>{
+    AutoreleasePoolPage::pop(ctxt);
+}
+</code></pre><p>可以看出只是简单的对<code>AutoreleasePoolPage</code>的封装。<code>AutoreleasePoolPage</code>又是什么？下面就从它的结构和实现上逐步剖析<code>AutoreleasePoolPage</code>。</p>
+<h3 id="AutoreleasePoolPage的结构"><em>AutoreleasePoolPage的结构</em></h3><p>它的结构如下：</p>
+<pre><code><span class="keyword">class</span> AutoreleasePoolPage {  
+    <span class="keyword">magic_t</span> <span class="keyword">const</span> magic;
+    id *next;
+    <span class="keyword">pthread_t</span> <span class="keyword">const</span> thread;
+    AutoreleasePoolPage * <span class="keyword">const</span> parent;
+    AutoreleasePoolPage *child;
+    <span class="keyword">uint32_t</span> <span class="keyword">const</span> depth;
+    <span class="keyword">uint32_t</span> hiwat;
+};
+</code></pre><ol>
+<li>magic 用来校验 AutoreleasePoolPage 的结构是否完整；</li>
+<li>next 指向最新添加的 autoreleased 对象的下一个位置，初始化时指向 begin() ；</li>
+<li>thread 指向当前线程；</li>
+<li>parent 指向父结点，第一个结点的 parent 值为 nil ；</li>
+<li>child 指向子结点，最后一个结点的 child 值为 nil ；</li>
+<li>depth 代表深度，从 0 开始，往后递增 1；</li>
+<li>hiwat 代表 high water mark。</li>
+</ol>
+<h3 id="push操作"><em>push操作</em></h3><p><code>objc_autoreleasePoolPush()</code>函数实际上调用了<code>AutoreleasePoolPage::push()</code>函数。</p>
+<pre><code><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *<span class="title">push</span><span class="params">()</span> 
+</span>{
+    id *dest;
+    dest = autoreleaseFast(POOL_BOUNDARY);
+    <span class="keyword">return</span> dest;
+}
+</code></pre><p>其中<code>POOL_BOUNDARY</code>是<code>nil</code>的宏定义</p>
+<pre><code><span class="preprocessor">#   <span class="keyword">define</span> POOL_BOUNDARY nil`</span>
+</code></pre><p>在首次创建AutoRelease Pool的时候插入一个nil值表示嵌套的<code>AutoreleasePool</code>的边界。</p>
+<p>push函数调又<code>autoreleaseFast</code>实现具体的插入：</p>
+<pre><code>static <span class="keyword">inline</span> id *autoreleaseFast(id obj)
+{
+    AutoreleasePoolPage *page = hotPage();
+    <span class="keyword">if</span> (page <span class="subst">&amp;&amp;</span> <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="literal">full</span>()) {
+        <span class="keyword">return</span> page<span class="subst">-&gt;</span>add(obj);
+    } <span class="keyword">else</span> <span class="keyword">if</span> (page) {
+        <span class="keyword">return</span> autoreleaseFullPage(obj, page);
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> autoreleaseNoPage(obj);
+    }
+}
+</code></pre><p>插入新元素的时候分三种情况需要处理：</p>
+<ol>
+<li>当前page未满，直接插入到当前page</li>
+<li>当前page已满，创建一个新page并插入</li>
+<li>当前page不存在，创建一个新page并插入</li>
+</ol>
+<p>这三种情况最终都会调用<code>page-&gt;add(obj)</code>：</p>
+<pre><code>id *add(id obj)
+{
+    assert(!full())<span class="comment">;</span>
+    unprotect()<span class="comment">;</span>
+    id *ret = next<span class="comment">;</span>
+    *next++ = obj<span class="comment">;</span>
+    protect()<span class="comment">;</span>
+    return ret<span class="comment">;</span>
+}
+</code></pre><p>首先断言当前page非满(<code>next != end()</code>),然后解除当前页保护(因为要插入，要使当前页可读可写),更新<code>next</code>指针地址，返回插入的元素地址。第一次初始化<code>autoreleasepool</code>时,传的nil值，返回值是nil值所在的地址。</p>
+<h3 id="Pop操作"><em>Pop操作</em></h3><p>同上，<code>objc_autoreleasePoolPop</code> 实际调用了<code>AutoreleasePoolPage::pop(ctxt)</code>,传入的参数是初始化是返回的<code>nil</code>值的地址:</p>
+<pre><code>static <span class="keyword">inline</span> <span class="literal">void</span> pop(<span class="literal">void</span> *token) 
+{
+    AutoreleasePoolPage *page;
+    id *stop;
+
+    <span class="keyword">if</span> (token == (<span class="literal">void</span>*)EMPTY_POOL_PLACEHOLDER) {
+        <span class="keyword">if</span> (hotPage()) {
+            pop(coldPage()<span class="subst">-&gt;</span>begin());
+        } <span class="keyword">else</span> {
+            setHotPage(nil);
+        }
+        <span class="keyword">return</span>;
+    }
+
+    page = pageForPointer(token);
+    stop = (id *)token;
+    <span class="keyword">if</span> (*stop != POOL_BOUNDARY) {
+        <span class="keyword">if</span> (stop == page<span class="subst">-&gt;</span>begin()  <span class="subst">&amp;&amp;</span>  <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="keyword">parent</span>) {
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> badPop(token);
+        }
+    }
+
+    <span class="keyword">if</span> (PrintPoolHiwat) printHiwat();
+
+    page<span class="subst">-&gt;</span>releaseUntil(stop);
+
+    <span class="comment">// memory: delete empty children</span>
+      <span class="keyword">if</span> (page<span class="subst">-&gt;</span>lessThanHalfFull()) {                page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>kill();
+    }
+    <span class="keyword">else</span> <span class="keyword">if</span> (page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>child) {
+        page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>kill();
+   }
+}
+</code></pre><p><code>pop</code>的参数的含义是需要<code>pop</code>到参数元素所在的地址，Pop的时候首先判断是不是<code>EMPTY_POOL_PLACEHOLDER</code>, <code>EMPTY_POOL_PLACEHOLDER</code>的解释如下：</p>
+<blockquote>
+<p>EMPTY_POOL_PLACEHOLDER is stored in TLS when exactly one pool is pushed and it has never contained any objects. This saves memory when the top level (i.e. libdispatch) pushes and pops pools but never uses them.</p>
+</blockquote>
+<p><code>EMPTY_POOL_PLACEHOLDER</code>是存储在TLS中的用来表示链表最上层没有元素的<code>pool</code>,这样就不用创建<code>pool</code>可以节约内存。TLS是什么以及具体实现<a href="http://blog.csdn.net/cywosp/article/details/26469435" target="_blank" rel="external">这篇文章</a>介绍的比较详细，这里不在解释。如果<code>pool</code>里面有数据，就把里面的数据清空；否者就把<code>hotPage</code>设置为<code>nil</code>。接着调用<code>page-&gt;releaseUntil(stop)</code>给此参数之前的所有对象发送<code>release</code>释放内存，对象内存释放之后，<code>终点page</code>之前的<code>page</code>都会变成空的，最后调用<code>page-&gt;child-&gt;kill()</code>回收这些<code>空page</code>资源。</p>
+<p>假设某个线程的autoreleasepool的结构如下图所示，这个autoreleasepool的堆栈里有两个<code>POOL_SENTINEL</code>，说明代码里嵌套了两个autoreleasepool，在整个双向链表里，起始的第一个page为<code>coldPage</code>，最新的最后一个是<code>hotpage</code>。<code>hotPage</code>里保存了最新添加的对象:</p>
+<p><img src="/assets/images/autorelease/AutoreleasePoolPage1.png" alt="img01"></p>
+<p>此时，如果执行<code>pop(POOL_BOUNDARY)</code>操作，那么<code>autoreleasepool</code>的堆栈结构会变成下图：</p>
+<p><img src="/assets/images/autorelease/autoreleasepool2.png" alt="img01"></p>
+<p>所以处理嵌套的<code>autoreleasepool</code>就很简单了，因为<code>autoreleasepool</code>与<code>autoreleasepool</code>之间用特殊的标记分割了，每个<code>autoreleasepool</code>的释放只需要释放到指定位置(初始化时push的nil指针的地址)即可,内层与外层互相不影响。</p>
+<h2 id="autorelease操作"><strong>autorelease操作</strong></h2><p>我们已经清楚了<code>autoreleasepool</code>的结构以及<code>autoreleasepool</code>对对象的管理方式，那么我们自己创建的对象是怎么和<code>autoreleasepool</code>关联的？在MRC中,<code>autorelease</code>的调用例如<code>[[[NSObject alloc]init] autorelease]</code>调用堆栈如下：</p>
+<p><img src="/assets/images/autorelease/page3.jpeg" alt="img01"></p>
+<p><code>autorelease</code>转发给了<code>rootAutorelease</code>调用:</p>
+<pre><code>- (<span class="keyword">id</span>)autorelease {
+    <span class="keyword">return</span> ((<span class="keyword">id</span>)<span class="keyword">self</span>)-&gt;rootAutorelease();
+}
+
+<span class="keyword">inline</span> <span class="keyword">id</span> 
+objc_object::rootAutorelease()
+{
+    <span class="keyword">if</span> (isTaggedPointer()) <span class="keyword">return</span> (<span class="keyword">id</span>)<span class="keyword">this</span>;
+    <span class="keyword">if</span> (prepareOptimizedReturn(ReturnAtPlus1)) <span class="keyword">return</span> (<span class="keyword">id</span>)<span class="keyword">this</span>;
+
+    <span class="keyword">return</span> rootAutorelease2();
+}
+</code></pre><p><code>rootAutorelease</code>首先判断是不是<code>Tagged Pointer</code>,是的话直接返回，因为<code>Tagged Pointer</code>是栈上的对象，不需要内存管理(文末有解释)。接着用<code>__builtin_return_address</code>判断外部是不是ARC环境。最终调用<code>autoreleaseFast</code>将对象插入到<code>autoreleasepool</code>中。</p>
+<pre><code>static <span class="keyword">inline</span> id *autoreleaseFast(id obj)
+{
+    AutoreleasePoolPage *page = hotPage();
+    <span class="keyword">if</span> (page <span class="subst">&amp;&amp;</span> <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="literal">full</span>()) {
+        <span class="keyword">return</span> page<span class="subst">-&gt;</span>add(obj);
+    } <span class="keyword">else</span> <span class="keyword">if</span> (page) {
+        <span class="keyword">return</span> autoreleaseFullPage(obj, page);
+    } <span class="keyword">else</span> {
+        <span class="keyword">return</span> autoreleaseNoPage(obj);
+    }
+}
+</code></pre><p>可以看出，在MRC中，通过对象主动调用<code>autorelease</code>的方式将对象加入到<code>autoreleasepool</code>的管理。那么在ARC中是怎么处理的呢？</p>
+<p>在ARC环境下，我们改写main函数如下：<br>    int main(int argc, const char <em> argv[]) {<br>    @autoreleasepool {<br>        NSString </em>testObj = [[NSObject alloc]init];<br>        @autoreleasepool {<br>            NSObject *objTest2 = [[NSObject alloc]init];<br>            objTest2 = testObj;<br>        }<br>    }<br>    return 0;<br>}</p>
+<p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
+<pre><code><span class="xml">define i32 @main(i32, i8**) #0 {
+</span><span class="perl">  <span class="variable">%3</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%4</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%5</span> = alloca i8**, align <span class="number">8</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%6</span> = alloca <span class="variable">%0</span>*, align <span class="number">8</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%7</span> = alloca <span class="variable">%1</span>*, align <span class="number">8</span></span><span class="xml">
+  store i32 0, i32* %3, align 4
+  store i32 %0, i32* %4, align 4
+  store i8** %1, i8*** %5, align 8
+</span><span class="perl">  <span class="variable">%8</span> = call i8* <span class="variable">@objc_autoreleasePoolPush</span>() <span class="comment">#2</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%9</span> = load <span class="variable">%struct</span>._class_t*, <span class="variable">%struct</span>._class_t** <span class="variable">@"</span>OBJC_CLASSLIST_REFERENCES<span class="number">_</span><span class="variable">$_</span><span class="string">", align 8</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%10</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>, align 8, !invariant.load !7</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%11</span> = bitcast <span class="variable">%struct</span>._class_t* <span class="variable">%9</span> to i8*</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%12</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%11</span>, i8* <span class="variable">%10</span>)</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%13</span> = bitcast i8* <span class="variable">%12</span> to <span class="variable">%1</span>*</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%14</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>.2, align 8, !invariant.load !7</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%15</span> = bitcast <span class="variable">%1</span>* <span class="variable">%13</span> to i8*</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%16</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%15</span>, i8* <span class="variable">%14</span>)</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%17</span> = bitcast i8* <span class="variable">%16</span> to <span class="variable">%1</span>*</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%18</span> = bitcast <span class="variable">%1</span>* <span class="variable">%17</span> to <span class="variable">%0</span>*</span></span><span class="xml">
+  store %0* %18, %0** %6, align 8
+</span><span class="perl"><span class="string">  <span class="variable">%19</span> = call i8* <span class="variable">@objc_autoreleasePoolPush</span>() #2</span></span><span class="xml">
+</span><span class="perl"><span class="string">  <span class="variable">%20</span> = load <span class="variable">%struct</span>._class_t*, <span class="variable">%struct</span>._class_t** <span class="variable">@"</span>OBJC_CLASSLIST_REFERENCES_<span class="variable">$_</span>"</span>, align <span class="number">8</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%21</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>, align <span class="number">8</span>, !invariant.load !<span class="number">7</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%22</span> = bitcast <span class="variable">%struct</span>._class_t* <span class="variable">%20</span> to i8*</span><span class="xml">
+</span><span class="perl">  <span class="variable">%23</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%22</span>, i8* <span class="variable">%21</span>)</span><span class="xml">
+</span><span class="perl">  <span class="variable">%24</span> = bitcast i8* <span class="variable">%23</span> to <span class="variable">%1</span>*</span><span class="xml">
+</span><span class="perl">  <span class="variable">%25</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>.<span class="number">2</span>, align <span class="number">8</span>, !invariant.load !<span class="number">7</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%26</span> = bitcast <span class="variable">%1</span>* <span class="variable">%24</span> to i8*</span><span class="xml">
+</span><span class="perl">  <span class="variable">%27</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%26</span>, i8* <span class="variable">%25</span>)</span><span class="xml">
+</span><span class="perl">  <span class="variable">%28</span> = bitcast i8* <span class="variable">%27</span> to <span class="variable">%1</span>*</span><span class="xml">
+  store %1* %28, %1** %7, align 8
+</span><span class="perl">  <span class="variable">%29</span> = load <span class="variable">%0</span>*, <span class="variable">%0</span>** <span class="variable">%6</span>, align <span class="number">8</span></span><span class="xml">
+</span><span class="perl">  <span class="variable">%30</span> = bitcast <span class="variable">%0</span>* <span class="variable">%29</span> to <span class="variable">%1</span>*</span><span class="xml">
+</span><span class="perl">  <span class="variable">%31</span> = bitcast <span class="variable">%1</span>** <span class="variable">%7</span> to i8**</span><span class="xml">
+</span><span class="perl">  <span class="variable">%32</span> = bitcast <span class="variable">%1</span>* <span class="variable">%30</span> to i8*</span><span class="xml">
+  call void @objc_storeStrong(i8** %31, i8* %32) #2
+</span><span class="perl">  <span class="variable">%33</span> = bitcast <span class="variable">%1</span>** <span class="variable">%7</span> to i8**</span><span class="xml">
+  call void @objc_storeStrong(i8** %33, i8* null) #2
+  call void @objc_autoreleasePoolPop(i8* %19)
+</span><span class="perl">  <span class="variable">%34</span> = bitcast <span class="variable">%0</span>** <span class="variable">%6</span> to i8**</span><span class="xml">
+  call void @objc_storeStrong(i8** %34, i8* null) #2
+  call void @objc_autoreleasePoolPop(i8* %8)
+  ret i32 0
+}</span>
+</code></pre><p>可以看出在ARC环境下，在<code>autoreleasePoolPop</code>之前会自动为我们生成<code>objc_storeStrong</code>,第一个参数是当前对象，第二个是赋值的对象(=右边的)。对象在外部被引用时，就retain:</p>
+<p><img src="/assets/images/autorelease/page4.jpeg" alt="img01"></p>
+<p>当对象没有被引用时，直接释放资源:</p>
+<p><img src="/assets/images/autorelease/page5.jpeg" alt="img01"></p>
+<p>这里比较奇怪的是对象并没有被加入到<code>autoreleasepool</code>中，应该是编译器对简单的情况作了优化，毕竟<code>autoreleasepool</code>的管理也是一个不小的开销。</p>
+<h2 id="@autoreleasepool使用场景"><strong>@autoreleasepool使用场景</strong></h2><p>什么情况下我们需要显示使用<code>Autorelease Pool</code>？可以参考下苹果文档<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html" target="_blank" rel="external">这里</a>。</p>
+<blockquote>
+<p>Each thread in a Cocoa application maintains its own stack of autorelease pool blocks. If you are writing a Foundation-only program or if you detach a thread, you need to create your own autorelease pool block.</p>
+<p>If your application or thread is long-lived and potentially generates a lot of autoreleased objects, you should use autorelease pool blocks (like AppKit and UIKit do on the main thread); otherwise, autoreleased objects accumulate and your memory footprint grows. If your detached thread does not make Cocoa calls, you do not need to use an autorelease pool block.</p>
+</blockquote>
+<p>需要程序员自己使用<code>@autoreleasepool</code></p>
+<ol>
+<li>If you are writing a program that is not based on a<br>UI framework, such as a command-line tool.</li>
+<li><p>If you write a loop that creates many temporary objects.<br>You may use an autorelease pool block inside the loop to dispose of those objects before the next iteration. Using an autorelease pool block in the loop helps to reduce the maximum memory footprint of the application.</p>
+</li>
+<li><p>If you spawn a secondary thread.<br>You must create your own autorelease pool block as soon as the thread begins executing; otherwise, your application will leak objects. (See Autorelease Pool Blocks and Threads for details.)</p>
+</li>
+</ol>
+<p>大致意思就是大部分时候都不需要程序员关心，但是以下情况需要注意</p>
+<ol>
+<li>代码不是基于UI framework;比如基于命令行</li>
+<li>创建大量的临时对象或者大对象需要立即释放的时候</li>
+<li>创建了子线程时，子线程里应该使用<code>@autoreleasepool</code>；如从<code>NSThread</code>中<code>detach</code>出的线程用了<code>Cocoa calls</code><br>以上两种情况需要使用。</li>
+</ol>
+<p>以下是几种使用的例子：</p>
+<pre><code><span class="comment">//情景1 SDWebImage源码</span>
+<span class="annotation">@autoreleasepool</span> {
+        UIImage *diskImage = [self <span class="string">diskImageForKey:</span>key];
+        <span class="comment">//other code</span>
+    }
+
+<span class="comment">//情景2 (MBProgressHUD源码)</span>
+[NSThread <span class="string">detachNewThreadSelector:</span><span class="annotation">@selector</span>(launchExecution) <span class="string">toTarget:</span>self <span class="string">withObject:</span>nil];
+
+- (<span class="typename">void</span>)launchExecution {
+    <span class="annotation">@autoreleasepool</span> {
+    <span class="comment">//代码实现</span>
+    }
+}
+
+<span class="comment">//情景3 (Realm源码)</span>
+RLMSchema *cachedRealmSchema;
+<span class="annotation">@autoreleasepool</span> {
+    <span class="comment">// ensure that cachedRealm doesn't end up in this thread's autorelease pool</span>
+    <span class="comment">//确保cachedRealm在当前线程的autorelease pool没有被释放</span>
+    cachedRealmSchema = RLMGetAnyCachedRealmForPath(config.path).schema;
+}
+
+<span class="comment">// if we have a cached realm on another thread, copy without a transaction</span>
+<span class="keyword">if</span> (cachedRealmSchema) {
+    RLMRealmSetSchemaAndAlign(realm, cachedRealmSchema);
+}
+<span class="keyword">else</span> <span class="keyword">if</span> (dynamic) {
+    RLMRealmSetSchemaAndAlign(realm, [RLMSchema <span class="string">dynamicSchemaFromObjectStoreSchema:</span>realm-&gt;_realm-&gt;schema()]
+</code></pre><h2 id="自己实现一个autoreleasepool">自己实现一个autoreleasepool</h2><p>根据以上原理，我们可以实现一个和系统功能差不多类似的<code>autoreleasepool</code>,源代码在GitHub<a href="https://github.com/tianyig/iOSAdvance.git" target="_blank" rel="external">autoreleasepool</a>.</p>
+<h2 id="相关知识点"><strong>相关知识点</strong></h2><h3 id="Tagged_Pointer"><strong>Tagged Pointer</strong></h3><p>苹果对于Tagged Pointer特点的介绍：</p>
+<ol>
+<li>Tagged Pointer专门用来存储小的对象，例如NSNumber和NSDate</li>
+<li>Tagged Pointer指针的值不再是地址了，而是真正的值。所以，实际上它不再是一个对象了，它只是一个披着对象皮的普通变量而已。所以，它的内存并不存储在堆中，也不需要malloc和free。</li>
+<li>在内存读取上有着3倍的效率，创建时比以前快106倍。</li>
+</ol>
+<p>为什么要用<code>Tagged Pointer</code>?因为数据类型的长度是和CPU长度有关的，这样就导致了在64位CPU上一些对象占用的内存会翻倍。同时维护程序中的对象需要 分配内存，维护引用计数，管理生命周期，使用对象给程序的运行增加了负担。我们可以将一个对象的指针拆成两部分，一部分直接保存数据，另一部分作为特殊标记，表示这是一个特别的指针，不指向任何一个地址。因为<code>Tagged pointer</code>不是一个真正的对象，如果使用isa指针在编译时会报错。</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+  
     <article id="post-SDWebImage源码阅读-一" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -1916,155 +2269,6 @@ cb2 = __<span class="built_in">CFArrayGetCallBacks</span>(array2);
 <p>另外，我们在开发的过程中，产品经常会有动态更新某个模块或者页面的需求。</p>
 <p>所以，我们需要一种更灵活，更方便的方式来修改线上Bug或者动态更改线上的App的行为。</p>
 <h3 id="Hotfix/Hotdeploy方案">Hotfix/Hotdeploy方案</h3><h4 id="WebApp">WebApp</h4><p>这个没啥说的，如果使用WebApp的方式，随时可以动态更改想要的模块。但是关于WebApp的体验方面，</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS开发/">iOS开发</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-  
-    <article id="post-iOS静态代码检查" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/04/17/iOS静态代码检查/" class="article-date">
-  	<time datetime="2016-04-17T07:52:46.000Z" itemprop="datePublished">2016-04-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/17/iOS静态代码检查/">iOS静态代码检查</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="前言">前言</h3><p>代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。</p>
-<h3 id="准备工作">准备工作</h3><p>我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。</p>
-<h4 id="所需工具">所需工具</h4><ol>
-<li>SonarQube <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="external">官网下载链接</a></li>
-<li>Sonar Runner <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="external">官网下载链接</a></li>
-<li>MySQL <a href="http://dev.mysql.com/downloads/mysql/" target="_blank" rel="external">官网下载链接</a></li>
-<li>OClint <a href="http://oclint.org/downloads.html" target="_blank" rel="external">官网下载链接</a></li>
-<li>xcodebuild (无需单独安装，Xcode自带,如果使用xctool，需要单独下载<a href="https://github.com/facebook/xctool" target="_blank" rel="external">Git链接</a>)</li>
-<li>XCPretty (xcodebuild格式化程序)  <a href="https://github.com/mneorr/xcpretty" target="_blank" rel="external">git链接</a></li>
-</ol>
-<p>以上工具都可以使用brew安装。关于brew不是本文的重点，这里不作介绍。<a href="http://brew.sh/" target="_blank" rel="external">brew官网</a></p>
-<h4 id="所需组件">所需组件</h4><p>Sonar Plugin for Objective C<br>可以直接下载Sonar官方提供的sonar-objective-c-plugin-x.x.x-SNAPSHOT.jar，不过这个是收费的。github上有提供的开源代码<a href="https://github.com/octo-technology/sonar-objective-c/tree/oclint" target="_blank" rel="external">sonar-plugin</a>,可以自己下载编译。也可以在网上搜编译安装好的jar文件。</p>
-<h3 id="环境搭建">环境搭建</h3><ol>
-<li><p>创建sonar用户和sonar数据库</p>
-<p>第一次登陆mysql无需密码，直接执行<code>mysql -uroot</code>即可，在安装任何工具的时候都要注意console上的提示信息。</p>
-<pre><code><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> sonar <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span>
- <span class="operator"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'sonar'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span>
-</code></pre></li>
-<li><p>安装SonarQube</p>
-<p>解压SonarQube到安装目录(如/usr/local/),将sonar- objective-c-plugin-x.x.x-SNAPSHOT.jar放入sonarqube/extensions/plugins下。编辑配置文件sonar.properties。<br>设置数据库为mysql:</p>
-<pre><code>sonar<span class="class">.jdbc</span><span class="class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance</span>
-</code></pre></li>
-<li><p>启动SonarQube</p>
-<p>终端执行<code>/etc/sonarqube/bin/macosx-universal-64/sonar.sh start</code>启动服务器。如果不想每次都写这么长的命令，可以把Sonar目录配置到环境变量里，或者直接给命令设置alias别名。启动成功会输出以下信息：</p>
-<pre><code><span class="string">liudesheng:</span> sheng$ <span class="regexp">/usr/</span>local<span class="regexp">/sonarqube-4.5.6/</span>bin<span class="regexp">/macosx-universal-64/</span>sonar.sh start
-  Starting SonarQube...
- Started SonarQube.
-</code></pre></li>
-<li><p>测试sonarQube</p>
-<p> 浏览器输入<code>http://localhost:9000/</code>,出现以下界面:</p>
-<p> <img src="http://7xorsh.com1.z0.glb.clouddn.com/indexPage.jpg" alt="Loading" title="http://localhost:9000/"></p>
-</li>
-<li><p>Sonar Runner安装配置</p>
-<p>解压Sonar Runner到指定目录(如/usr/local)，配置Sonar Runner下的sonar-runner.properties。</p>
-<pre><code>#----- Default SonarQube server
-sonar<span class="class">.host</span><span class="class">.url</span>=http:<span class="comment">//localhost:9000</span>
-   #----- MySQL
-sonar<span class="class">.jdbc</span><span class="class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8</span>
-#----- Global database settings
-sonar<span class="class">.jdbc</span><span class="class">.username</span>=sonar
-sonar<span class="class">.jdbc</span><span class="class">.password</span>=sonar
-</code></pre></li>
-<li><p>oclint安装配置</p>
-</li>
-</ol>
-<p>解压oclint到指定目录，并配置环境变量。终端输入<code>oclint</code>，有以下输出说明安装正确:</p>
-<pre><code><span class="string">oclint:</span> Not enough positional command line arguments specified!
-Must specify at least <span class="number">1</span> positional <span class="string">arguments:</span> <span class="string">See:</span> oclint -help
-</code></pre><h3 id="代码扫描">代码扫描</h3><p>进入项目根目录，执行</p>
-<pre><code>oclint-json-compilation-database -v -i scanPath/  -- -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">1</span> <span class="number">10000</span> -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">2</span> <span class="number">10000</span> -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">3</span> <span class="number">10000</span> -report-<span class="built_in">type</span> pmd -o oclint.xml
-</code></pre><p> 我在执行这个命令的时候，发现命令能执行完成，但是不能生成oclint.xml文件。查了下帮助文件发现有个debug模式：</p>
-<pre><code>optional arguments:
-  -<span class="ruby">h, --help            show this help message <span class="keyword">and</span> exit
-</span>  -<span class="ruby">v                    show invocation command with arguments
-</span>  -<span class="ruby">debug, --debug       invoke <span class="constant">OCLint</span> <span class="keyword">in</span> debug mode
-</span>  -<span class="ruby">i <span class="constant">INCLUDES</span>, -<span class="keyword">include</span> <span class="constant">INCLUDES</span>, --<span class="keyword">include</span> <span class="constant">INCLUDES</span>
-</span>                    extract files matching pattern
-  -<span class="ruby">e <span class="constant">EXCLUDES</span>, -exclude <span class="constant">EXCLUDES</span>, --exclude <span class="constant">EXCLUDES</span>
-</span>                    remove files matching pattern
-</code></pre><p> 但是在执行的时候报错说oclint不支持debug模式。又搜索很久还是无果，无奈进入官方翻了半天在某一页最后一行发现一行小字：<code>debug mode need oclint compile by debug mode</code>，知道真相的我眼泪掉下来，查了文档和stackoverflow最后也没找到如何<code>compile by debug mode</code>。</p>
-<p> 然后which到目录看了一下<code>oclint-json-compilation-database</code>是<code>oclint</code>的<code>Python</code>脚本,主要功能就是拼接oclint的参数并开启子进程执行命令：</p>
-<pre><code>oclint_invocation = OCLINT_BIN + debug_argument + oclint_arguments + <span class="string">' '</span> + source_paths
-<span class="keyword">if</span> args<span class="class">.invocation</span>:
-print <span class="string">'------------------------------ OCLint ------------------------------'</span>
-print oclint_invocation
-print <span class="string">'--------------------------------------------------------------------'</span>
-exit_code = subprocess.<span class="function"><span class="title">call</span><span class="params">(oclint_invocation, shell=True)</span></span>
-sys.<span class="function"><span class="title">exit</span><span class="params">(exit_code)</span></span>
-</code></pre><p>怪不得没有任何输出信息，原来是在子进程里执行的。开启-v模式把拼接的命令直接放入终端执行(因为文件太多，这个命令足足有3屏)，终于出现短短一行的出错信息：<br><code>Segmentation fault: 11</code>。</p>
-<p>段错误是Linux系统编程中非常常见的错误，原因主要是非法的内存访问，但是这个段错误没有生成Core dump文件，所以没办法分析具体错误原因。这时我想起了Linux下非常强大的系统级调试工具<code>trace</code>和<code>truss</code>。查了一下在Mac下与之对应的是<code>dtrace</code>和<code>dtruss</code>工具。dtrace一般用于系统函数跟踪，它的优点在于：可以在不影响原有程序运行的情况下调试，跟踪系统调用并生成日志文件。详细用法及说明可以man查看。</p>
-<p>执行<code>sudo dtruss -f oclint_invocation &amp;&gt;result.txt</code>分析命令执行情况并把所有输出重定向到result.txt中。打开文件并查找文件中的ERR或者ERROR字样，定位到很多这样的错误：</p>
-<pre><code><span class="number">44317</span>/<span class="number">0x485ef</span>:  stat64(<span class="string">"/AppleInternal/XBS/.isChrooted\0"</span>, <span class="number">0x7FFF56824EE8</span>, <span class="number">0x1</span>)         = -<span class="number">1</span> Err<span class="preprocessor">#<span class="number">2</span></span>
-<span class="number">44317</span>/<span class="number">0x485ef</span>:  stat64(<span class="string">"/AppleInternal\0"</span>, <span class="number">0x7FFF56824E58</span>, <span class="number">0x1</span>)         = -<span class="number">1</span> Err<span class="preprocessor">#<span class="number">2</span></span>
-</code></pre><p>说明是在调用stat64这个函数出错的，出错的返回值是-1，用man查下这个函数的说明：</p>
-<pre><code>The stat() <span class="function"><span class="keyword">function</span> <span class="title">obtains</span> <span class="title">information</span> <span class="title">about</span> <span class="title">the</span> <span class="title">file</span> <span class="title">pointed</span> <span class="title">to</span> <span class="title">by</span></span>
- path.  Read, <span class="built_in">write</span> <span class="operator">or</span> execute permission <span class="operator">of</span> <span class="operator">the</span> named <span class="built_in">file</span> is <span class="operator">not</span>
- required, but all <span class="built_in">directories</span> listed <span class="operator">in</span> <span class="operator">the</span> path name leading <span class="built_in">to</span> <span class="operator">the</span> <span class="built_in">file</span>
- must be searchable.
-
- <span class="constant">RETURN</span> VALUES
- Upon successful completion <span class="operator">a</span> <span class="built_in">value</span> <span class="operator">of</span> <span class="number">0</span> is returned.  Otherwise, <span class="operator">a</span> <span class="built_in">value</span>
- <span class="operator">of</span> -<span class="number">1</span> is returned <span class="operator">and</span> errno is <span class="built_in">set</span> <span class="built_in">to</span> indicate <span class="operator">the</span> error.
-</code></pre><p> 这个函数是获取文件信息的，成功返回0，失败返回-1并设置errno。到这里原因就大致清楚了，原因大概是同时分析的文件超过了oclint的上限。修改下参数重新执行就可以了。</p>
-<h3 id="导出扫描结果到Sonar">导出扫描结果到Sonar</h3><p>将<code>sonar-project.properties</code>放入代码根目录，根据具体情况修改对应的项，注意必须修改设置<code>sonar.objectivec.project</code>和<code>sonar.objectivec.appScheme</code>。如果是workspace工程，需要设置<code>sonar.objectivec.workspace</code>项。</p>
-<p>然后在SonarQube中执行Sonar Runner：<code>sonar-runer.sh</code> （前面已经配置好环境变量，所以这里可以直接执行）。</p>
-<p>如果在执行的时候出现<code>java.database.connetion</code>字样的错误，请仔细检查数据库连接及配置信息。</p>
-<p>我执行这一步的时候发现导出的结果除了文件信息外其他都是空，仔细的分析了下执行时的log，发现这是SonarQuebe有个bug，SonarQuebe代码分析时默认生成的文件oclint.xml在Sonar-reports目录，但是读取时它会到根目录读取，截止目前为止，SonarQuebe仍有这个bug。解决办法就是把生成的xml文件拷贝到根目录在重新执行<code>sonar-runer.sh</code>。</p>
-<p>继续执行的时候出现了<code>Incorrect string value: &#39;\xF0\x90\x8D\x83\xF0\x90...&#39; for column &#39;data&#39; at row 1</code>的错误，开始我以为是编码错误，后来发现是因为是插入数据的大小超过的字段限制的大小,这个也算是SonarQube的bug吧。我试了下，修改对应数据库字段类型longtext为longblob即可。</p>
-<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg" alt="Loading"></p>
-<p>执行成功后就可以看到扫描结果了:</p>
-<p><img src="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg" alt="Loading"></p>
-<p>配合Jira能够更方便的跟踪和分配问题，配合Jenkins能够进行自动化部署和自动化单元测试，我将在以后的文章里纪录Jenkins自动化部署和单元测试的方法。</p>
 
       
     </div>
