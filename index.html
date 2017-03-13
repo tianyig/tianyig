@@ -382,7 +382,7 @@ NSObject *testObj = <span class="comment">[<span class="comment">[<span class="c
 <p>假设某个线程的autoreleasepool的结构如下图所示，这个autoreleasepool的堆栈里有两个<code>POOL_SENTINEL</code>，说明代码里嵌套了两个autoreleasepool，在整个双向链表里，起始的第一个page为<code>coldPage</code>，最新的最后一个是<code>hotpage</code>。<code>hotPage</code>里保存了最新添加的对象:</p>
 <p><img src="/assets/images/autorelease/AutoreleasePoolPage1.png" alt="img01"></p>
 <p>此时，如果执行<code>pop(POOL_BOUNDARY)</code>操作，那么<code>autoreleasepool</code>的堆栈结构会变成下图：</p>
-<p><img src="/assets/images/autorelease/autoreleasepool2.png" alt="img01"></p>
+<p><img src="/assets/images/autorelease/AutoreleasePoolPage2.png" alt="img01"></p>
 <p>所以处理嵌套的<code>autoreleasepool</code>就很简单了，因为<code>autoreleasepool</code>与<code>autoreleasepool</code>之间用特殊的标记分割了，每个<code>autoreleasepool</code>的释放只需要释放到指定位置(初始化时push的nil指针的地址)即可,内层与外层互相不影响。</p>
 <h2 id="autorelease操作"><strong>autorelease操作</strong></h2><p>我们已经清楚了<code>autoreleasepool</code>的结构以及<code>autoreleasepool</code>对对象的管理方式，那么我们自己创建的对象是怎么和<code>autoreleasepool</code>关联的？在MRC中,<code>autorelease</code>的调用例如<code>[[[NSObject alloc]init] autorelease]</code>调用堆栈如下：</p>
 <p><img src="/assets/images/autorelease/page3.jpeg" alt="img01"></p>
@@ -521,6 +521,12 @@ RLMSchema *cachedRealmSchema;
 <li>在内存读取上有着3倍的效率，创建时比以前快106倍。</li>
 </ol>
 <p>为什么要用<code>Tagged Pointer</code>?因为数据类型的长度是和CPU长度有关的，这样就导致了在64位CPU上一些对象占用的内存会翻倍。同时维护程序中的对象需要 分配内存，维护引用计数，管理生命周期，使用对象给程序的运行增加了负担。我们可以将一个对象的指针拆成两部分，一部分直接保存数据，另一部分作为特殊标记，表示这是一个特别的指针，不指向任何一个地址。因为<code>Tagged pointer</code>不是一个真正的对象，如果使用isa指针在编译时会报错。</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://draveness.me/autoreleasepool/" target="_blank" rel="external">自动释放池的前世今生 —- 深入解析 autoreleasepool</a></li>
+<li><a href="http://blog.sunnyxx.com/2014/10/15/behind-autorelease/" target="_blank" rel="external">黑幕背后的Autorelease</a></li>
+<li><a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/" target="_blank" rel="external">Objective-C Autorelease Pool 的实现原理</a></li>
+<li></li>
+</ol>
 
       
     </div>

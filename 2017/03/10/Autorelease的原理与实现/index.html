@@ -12,11 +12,11 @@
 <meta property="og:site_name" content="得胜的技术博客，谢谢关注">
 <meta property="og:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage1.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/autorelease/autoreleasepool2.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage2.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page3.jpeg">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page4.jpeg">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page5.jpeg">
-<meta property="og:updated_time" content="2017-03-12T08:19:13.000Z">
+<meta property="og:updated_time" content="2017-03-13T02:13:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Autorelease的原理与实现">
 <meta name="twitter:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
@@ -397,7 +397,7 @@ NSObject *testObj = <span class="comment">[<span class="comment">[<span class="c
 <p>假设某个线程的autoreleasepool的结构如下图所示，这个autoreleasepool的堆栈里有两个<code>POOL_SENTINEL</code>，说明代码里嵌套了两个autoreleasepool，在整个双向链表里，起始的第一个page为<code>coldPage</code>，最新的最后一个是<code>hotpage</code>。<code>hotPage</code>里保存了最新添加的对象:</p>
 <p><img src="/assets/images/autorelease/AutoreleasePoolPage1.png" alt="img01"></p>
 <p>此时，如果执行<code>pop(POOL_BOUNDARY)</code>操作，那么<code>autoreleasepool</code>的堆栈结构会变成下图：</p>
-<p><img src="/assets/images/autorelease/autoreleasepool2.png" alt="img01"></p>
+<p><img src="/assets/images/autorelease/AutoreleasePoolPage2.png" alt="img01"></p>
 <p>所以处理嵌套的<code>autoreleasepool</code>就很简单了，因为<code>autoreleasepool</code>与<code>autoreleasepool</code>之间用特殊的标记分割了，每个<code>autoreleasepool</code>的释放只需要释放到指定位置(初始化时push的nil指针的地址)即可,内层与外层互相不影响。</p>
 <h2 id="autorelease操作"><strong>autorelease操作</strong></h2><p>我们已经清楚了<code>autoreleasepool</code>的结构以及<code>autoreleasepool</code>对对象的管理方式，那么我们自己创建的对象是怎么和<code>autoreleasepool</code>关联的？在MRC中,<code>autorelease</code>的调用例如<code>[[[NSObject alloc]init] autorelease]</code>调用堆栈如下：</p>
 <p><img src="/assets/images/autorelease/page3.jpeg" alt="img01"></p>
@@ -536,6 +536,12 @@ RLMSchema *cachedRealmSchema;
 <li>在内存读取上有着3倍的效率，创建时比以前快106倍。</li>
 </ol>
 <p>为什么要用<code>Tagged Pointer</code>?因为数据类型的长度是和CPU长度有关的，这样就导致了在64位CPU上一些对象占用的内存会翻倍。同时维护程序中的对象需要 分配内存，维护引用计数，管理生命周期，使用对象给程序的运行增加了负担。我们可以将一个对象的指针拆成两部分，一部分直接保存数据，另一部分作为特殊标记，表示这是一个特别的指针，不指向任何一个地址。因为<code>Tagged pointer</code>不是一个真正的对象，如果使用isa指针在编译时会报错。</p>
+<h2 id="参考">参考</h2><ol>
+<li><a href="http://draveness.me/autoreleasepool/" target="_blank" rel="external">自动释放池的前世今生 —- 深入解析 autoreleasepool</a></li>
+<li><a href="http://blog.sunnyxx.com/2014/10/15/behind-autorelease/" target="_blank" rel="external">黑幕背后的Autorelease</a></li>
+<li><a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/" target="_blank" rel="external">Objective-C Autorelease Pool 的实现原理</a></li>
+<li></li>
+</ol>
 
       
     </div>
