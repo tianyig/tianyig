@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Autorelease的原理与实现 | 得胜的技术博客，谢谢关注</title>
+  <title>Autorelease的原理与实现 | 技术博客，谢谢关注</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Autorelease的原理与实现">
 <meta property="og:url" content="http://yoursite.com/2017/03/10/Autorelease的原理与实现/index.html">
-<meta property="og:site_name" content="得胜的技术博客，谢谢关注">
+<meta property="og:site_name" content="技术博客，谢谢关注">
 <meta property="og:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage1.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage2.png">
@@ -21,7 +21,7 @@
 <meta name="twitter:title" content="Autorelease的原理与实现">
 <meta name="twitter:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
   
-    <link rel="alternative" href="/atom.xml" title="得胜的技术博客，谢谢关注" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="技术博客，谢谢关注" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -550,6 +550,15 @@ RLMSchema *cachedRealmSchema;
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/03/17/swizzle-addObject-in-NSMutableArray/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          swizzle addObject: in NSMutableArray
+        
+      </div>
+    </a>
   
   
     <a href="/2017/02/27/SDWebImage源码阅读-一/" id="article-nav-older" class="article-nav-link-wrap">
