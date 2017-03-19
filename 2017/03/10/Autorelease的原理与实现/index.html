@@ -62,7 +62,7 @@
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page3.jpeg">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page4.jpeg">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page5.jpeg">
-<meta property="og:updated_time" content="2017-03-13T02:19:36.000Z">
+<meta property="og:updated_time" content="2017-03-19T02:20:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Autorelease的原理与实现">
 <meta name="twitter:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
@@ -440,8 +440,18 @@ objc_object::rootAutorelease()
     }
 }
 </code></pre><p>可以看出，在MRC中，通过对象主动调用<code>autorelease</code>的方式将对象加入到<code>autoreleasepool</code>的管理。那么在ARC中是怎么处理的呢？</p>
-<p>在ARC环境下，我们改写main函数如下：<br>    int main(int argc, const char <em> argv[]) {<br>    @autoreleasepool {<br>        NSString </em>testObj = [[NSObject alloc]init];<br>        @autoreleasepool {<br>            NSObject *objTest2 = [[NSObject alloc]init];<br>            objTest2 = testObj;<br>        }<br>    }<br>    return 0;<br>}</p>
-<p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
+<p>在ARC环境下，我们改写main函数如下：</p>
+<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+<span class="keyword">@autoreleasepool</span> {
+    <span class="built_in">NSString</span> *testObj = [[<span class="built_in">NSObject</span> alloc]init];
+    <span class="keyword">@autoreleasepool</span> {
+        <span class="built_in">NSObject</span> *objTest2 = [[<span class="built_in">NSObject</span> alloc]init];
+        objTest2 = testObj;
+    }
+}
+<span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
 <pre><code><span class="xml">define i32 @main(i32, i8**) #0 {
 </span><span class="perl">  <span class="variable">%3</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
 </span><span class="perl">  <span class="variable">%4</span> = alloca i32, align <span class="number">4</span></span><span class="xml">

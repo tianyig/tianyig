@@ -197,15 +197,6 @@
 
     
     
-      
-      
-        
-        
-        
-      
-
-      
-    
 
     
       
@@ -640,8 +631,18 @@ objc_object::rootAutorelease()
     }
 }
 </code></pre><p>可以看出，在MRC中，通过对象主动调用<code>autorelease</code>的方式将对象加入到<code>autoreleasepool</code>的管理。那么在ARC中是怎么处理的呢？</p>
-<p>在ARC环境下，我们改写main函数如下：<br>    int main(int argc, const char <em> argv[]) {<br>    @autoreleasepool {<br>        NSString </em>testObj = [[NSObject alloc]init];<br>        @autoreleasepool {<br>            NSObject *objTest2 = [[NSObject alloc]init];<br>            objTest2 = testObj;<br>        }<br>    }<br>    return 0;<br>}</p>
-<p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
+<p>在ARC环境下，我们改写main函数如下：</p>
+<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
+<span class="keyword">@autoreleasepool</span> {
+    <span class="built_in">NSString</span> *testObj = [[<span class="built_in">NSObject</span> alloc]init];
+    <span class="keyword">@autoreleasepool</span> {
+        <span class="built_in">NSObject</span> *objTest2 = [[<span class="built_in">NSObject</span> alloc]init];
+        objTest2 = testObj;
+    }
+}
+<span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
 <pre><code><span class="xml">define i32 @main(i32, i8**) #0 {
 </span><span class="perl">  <span class="variable">%3</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
 </span><span class="perl">  <span class="variable">%4</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
