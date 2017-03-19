@@ -59,7 +59,7 @@
 <meta property="og:site_name" content="技术博客，谢谢关注">
 <meta property="og:description" content="前言集合是Cocoa中常用的数据结构，但是对于程序员来说底层实现一般都是透明的。今天，我们根据使用场景自己实现一个NSMutableArray。
 概念因为NSMutableArray是一个class cluster,所以实现起来非常简单，只需要继承它然后实现它基本方法就能实现具有完整功能的NSMutableArray(上层方法是根据基本方法来实现的)。下面是NSMutableArray的基本方法：">
-<meta property="og:updated_time" content="2016-05-29T18:08:11.000Z">
+<meta property="og:updated_time" content="2017-03-19T02:28:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS数据结构(一):实现NSMutableArray">
 <meta name="twitter:description" content="前言集合是Cocoa中常用的数据结构，但是对于程序员来说底层实现一般都是透明的。今天，我们根据使用场景自己实现一个NSMutableArray。
@@ -373,8 +373,7 @@ cb2 = __<span class="built_in">CFArrayGetCallBacks</span>(array2);
 }
 <span class="keyword">return</span> <span class="literal">true</span>;
 }
-</code></pre><p>##引用</p>
-<ol>
+</code></pre><h2 id="References">References</h2><ol>
 <li><p><a href="http://www.vellios.com/2010/08/22/why-game-devs-dont-use-objective-c/" target="_blank" rel="external">http://www.vellios.com/2010/08/22/why-game-devs-dont-use-objective-c/</a></p>
 </li>
 <li><p><a href="http://www.gnustep.org/resources/OpenStepSpec/FoundationKit/Classes/NSMutableArray.html" target="_blank" rel="external">http://www.gnustep.org/resources/OpenStepSpec/FoundationKit/Classes/NSMutableArray.html</a></p>
@@ -522,7 +521,7 @@ cb2 = __<span class="built_in">CFArrayGetCallBacks</span>(array2);
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">2.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#接口定义"><span class="nav-number">3.1.</span> <span class="nav-text">接口定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义私有变量"><span class="nav-number">3.2.</span> <span class="nav-text">定义私有变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入的实现"><span class="nav-number">3.3.</span> <span class="nav-text">插入的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移除元素"><span class="nav-number">3.4.</span> <span class="nav-text">移除元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素替换"><span class="nav-number">3.5.</span> <span class="nav-text">元素替换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">2.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#接口定义"><span class="nav-number">3.1.</span> <span class="nav-text">接口定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义私有变量"><span class="nav-number">3.2.</span> <span class="nav-text">定义私有变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入的实现"><span class="nav-number">3.3.</span> <span class="nav-text">插入的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移除元素"><span class="nav-number">3.4.</span> <span class="nav-text">移除元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素替换"><span class="nav-number">3.5.</span> <span class="nav-text">元素替换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">5.</span> <span class="nav-text">References</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
