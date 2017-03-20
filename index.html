@@ -350,7 +350,7 @@ __NSArray0
 <li>更改系统的实现是个危险的操作。针对当前这种情况来说，可能有其他库依赖这种特性。比如<code>Core Data</code>捕获了插入<code>nil</code>的异常并且业务里处理了这种异常，我们更改了<code>addObject</code>的实现之后会影响<code>CoreData</code>。</li>
 <li>降低性能。作为一个包括底层框架和应用层很多库要用到的大量频繁的方法，增加一行判断也可能会降低性能。</li>
 </ol>
-<p>如果真的有必要在插入数据之前判断数据合法性，可以参考苹果官方给出的例子，使用继承的方式重写相关的函数：</p>
+<p>如果真的有必要在插入数据之前判断数据合法性，可以参考苹果官方给出的<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/CocoaEncyclopedia/ClassClusters/ClassClusters.html#//apple_ref/doc/uid/TP40010810-CH4-SW81" target="_blank" rel="external">例子</a>，使用如下继承的方式重写相关的函数：</p>
 <pre><code>@<span class="class"><span class="keyword">interface</span> <span class="title">ValidatingArray</span> : NSMutableArray
 </span>{
     NSMutableArray *embeddedArray;
