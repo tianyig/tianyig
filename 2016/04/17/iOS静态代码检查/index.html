@@ -1,18 +1,14 @@
 <!doctype html>
 <html class="theme-next   use-motion ">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -21,7 +17,11 @@
 
 
 
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -30,52 +30,43 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="iOS开发," />
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="iOS开发,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2">
 
 
 
 
 
 
-<meta name="description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
-准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
-所需工具
-SonarQube 官网下载链接
-Sonar">
+<meta name="description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。 准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。 所需工具 SonarQube 官网下载链接 Sonar">
+<meta name="keywords" content="iOS开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS静态代码检查">
 <meta property="og:url" content="http://yoursite.com/2016/04/17/iOS静态代码检查/index.html">
 <meta property="og:site_name" content="技术博客，谢谢关注">
-<meta property="og:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
-准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
-所需工具
-SonarQube 官网下载链接
-Sonar">
+<meta property="og:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。 准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。 所需工具 SonarQube 官网下载链接 Sonar">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/indexPage.jpg">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/databaseAlert.jpg">
 <meta property="og:image" content="http://7xorsh.com1.z0.glb.clouddn.com/scan_result.jpg">
 <meta property="og:updated_time" content="2016-09-09T08:53:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS静态代码检查">
-<meta name="twitter:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。
-准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。
-所需工具
-SonarQube 官网下载链接
-Sonar">
+<meta name="twitter:description" content="前言代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。 准备工作我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。 所需工具 SonarQube 官网下载链接 Sonar">
+<meta name="twitter:image" content="http://7xorsh.com1.z0.glb.clouddn.com/indexPage.jpg">
 
 
 
@@ -90,7 +81,7 @@ Sonar">
   <title> iOS静态代码检查 | 技术博客，谢谢关注 </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="">
 
   <!--[if lte IE 8]>
   <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
@@ -111,12 +102,12 @@ Sonar">
   <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-meta ">
   
 
   <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <span class="site-title">技术博客，谢谢关注</span>
       <span class="logo-line-after"><i></i></span>
@@ -143,9 +134,9 @@ Sonar">
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
             
-            首頁
+            Home
           </a>
         </li>
       
@@ -153,9 +144,9 @@ Sonar">
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
             
-            分類
+            Categories
           </a>
         </li>
       
@@ -163,9 +154,9 @@ Sonar">
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br>
             
-            關於
+            About
           </a>
         </li>
       
@@ -173,9 +164,9 @@ Sonar">
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
             
-            歸檔
+            Archives
           </a>
         </li>
       
@@ -183,9 +174,9 @@ Sonar">
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
             
-            標籤
+            Tags
           </a>
         </li>
       
@@ -216,7 +207,7 @@ Sonar">
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
 
     
       <header class="post-header">
@@ -235,7 +226,7 @@ Sonar">
 
         <div class="post-meta">
           <span class="post-time">
-            發表於
+            Posted on
             <time itemprop="dateCreated" datetime="2016-04-17T15:52:46+08:00" content="2016-04-17">
               2016-04-17
             </time>
@@ -260,34 +251,34 @@ Sonar">
       
 
       
-        <span itemprop="articleBody"><h3 id="前言">前言</h3><p>代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。</p>
-<h3 id="准备工作">准备工作</h3><p>我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。</p>
-<h4 id="所需工具">所需工具</h4><ol>
-<li>SonarQube <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="external">官网下载链接</a></li>
-<li>Sonar Runner <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="external">官网下载链接</a></li>
-<li>MySQL <a href="http://dev.mysql.com/downloads/mysql/" target="_blank" rel="external">官网下载链接</a></li>
-<li>OClint <a href="http://oclint.org/downloads.html" target="_blank" rel="external">官网下载链接</a></li>
-<li>xcodebuild (无需单独安装，Xcode自带,如果使用xctool，需要单独下载<a href="https://github.com/facebook/xctool" target="_blank" rel="external">Git链接</a>)</li>
-<li>XCPretty (xcodebuild格式化程序)  <a href="https://github.com/mneorr/xcpretty" target="_blank" rel="external">git链接</a></li>
+        <span itemprop="articleBody"><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>代码审查是保证代码质量的重要环节，代码审查主要是针对编码规范、代码走查、代码评审、单元测试、集成测试、持续集成、执行流程等编程方面的增强。本章介绍一些关于编码规范、代码评审阶段的一些自动化工具的配置和使用。</p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><p>我的操作系统为OS X EI Capitan 10.11.3，以下如果不作说明，默认在此环境下。以下工具安装的都是最新版本。</p>
+<h4 id="所需工具"><a href="#所需工具" class="headerlink" title="所需工具"></a>所需工具</h4><ol>
+<li>SonarQube <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="noopener">官网下载链接</a></li>
+<li>Sonar Runner <a href="http://www.sonarqube.org/downloads/" target="_blank" rel="noopener">官网下载链接</a></li>
+<li>MySQL <a href="http://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">官网下载链接</a></li>
+<li>OClint <a href="http://oclint.org/downloads.html" target="_blank" rel="noopener">官网下载链接</a></li>
+<li>xcodebuild (无需单独安装，Xcode自带,如果使用xctool，需要单独下载<a href="https://github.com/facebook/xctool" target="_blank" rel="noopener">Git链接</a>)</li>
+<li>XCPretty (xcodebuild格式化程序)  <a href="https://github.com/mneorr/xcpretty" target="_blank" rel="noopener">git链接</a></li>
 </ol>
-<p>以上工具都可以使用brew安装。关于brew不是本文的重点，这里不作介绍。<a href="http://brew.sh/" target="_blank" rel="external">brew官网</a></p>
-<h4 id="所需组件">所需组件</h4><p>Sonar Plugin for Objective C<br>可以直接下载Sonar官方提供的sonar-objective-c-plugin-x.x.x-SNAPSHOT.jar，不过这个是收费的。github上有提供的开源代码<a href="https://github.com/octo-technology/sonar-objective-c/tree/oclint" target="_blank" rel="external">sonar-plugin</a>,可以自己下载编译。也可以在网上搜编译安装好的jar文件。</p>
-<h3 id="环境搭建">环境搭建</h3><ol>
+<p>以上工具都可以使用brew安装。关于brew不是本文的重点，这里不作介绍。<a href="http://brew.sh/" target="_blank" rel="noopener">brew官网</a></p>
+<h4 id="所需组件"><a href="#所需组件" class="headerlink" title="所需组件"></a>所需组件</h4><p>Sonar Plugin for Objective C<br>可以直接下载Sonar官方提供的sonar-objective-c-plugin-x.x.x-SNAPSHOT.jar，不过这个是收费的。github上有提供的开源代码<a href="https://github.com/octo-technology/sonar-objective-c/tree/oclint" target="_blank" rel="noopener">sonar-plugin</a>,可以自己下载编译。也可以在网上搜编译安装好的jar文件。</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><ol>
 <li><p>创建sonar用户和sonar数据库</p>
 <p>第一次登陆mysql无需密码，直接执行<code>mysql -uroot</code>即可，在安装任何工具的时候都要注意console上的提示信息。</p>
-<pre><code><span class="operator"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> sonar <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;</span>
- <span class="operator"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'sonar'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</span>
- <span class="operator"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span>
+<pre><code>CREATE DATABASE sonar CHARACTER SET utf8 COLLATE utf8_general_ci;
+ CREATE USER &apos;sonar&apos; IDENTIFIED BY &apos;sonar&apos;;
+ GRANT ALL ON sonar.* TO &apos;sonar&apos;@&apos;%&apos; IDENTIFIED BY &apos;sonar&apos;;
+ GRANT ALL ON sonar.* TO &apos;sonar&apos;@&apos;localhost&apos; IDENTIFIED BY &apos;sonar&apos;;
+ FLUSH PRIVILEGES;
 </code></pre></li>
 <li><p>安装SonarQube</p>
 <p>解压SonarQube到安装目录(如/usr/local/),将sonar- objective-c-plugin-x.x.x-SNAPSHOT.jar放入sonarqube/extensions/plugins下。编辑配置文件sonar.properties。<br>设置数据库为mysql:</p>
-<pre><code>sonar<span class="class">.jdbc</span><span class="class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance</span>
+<pre><code>sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance
 </code></pre></li>
 <li><p>启动SonarQube</p>
 <p>终端执行<code>/etc/sonarqube/bin/macosx-universal-64/sonar.sh start</code>启动服务器。如果不想每次都写这么长的命令，可以把Sonar目录配置到环境变量里，或者直接给命令设置alias别名。启动成功会输出以下信息：</p>
-<pre><code><span class="string">liudesheng:</span> sheng$ <span class="regexp">/usr/</span>local<span class="regexp">/sonarqube-4.5.6/</span>bin<span class="regexp">/macosx-universal-64/</span>sonar.sh start
+<pre><code>liudesheng: sheng$ /usr/local/sonarqube-4.5.6/bin/macosx-universal-64/sonar.sh start
   Starting SonarQube...
  Started SonarQube.
 </code></pre></li>
@@ -298,55 +289,55 @@ Sonar">
 <li><p>Sonar Runner安装配置</p>
 <p>解压Sonar Runner到指定目录(如/usr/local)，配置Sonar Runner下的sonar-runner.properties。</p>
 <pre><code>#----- Default SonarQube server
-sonar<span class="class">.host</span><span class="class">.url</span>=http:<span class="comment">//localhost:9000</span>
+sonar.host.url=http://localhost:9000
    #----- MySQL
-sonar<span class="class">.jdbc</span><span class="class">.url</span>=jdbc:mysql:<span class="comment">//localhost:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8</span>
+sonar.jdbc.url=jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8
 #----- Global database settings
-sonar<span class="class">.jdbc</span><span class="class">.username</span>=sonar
-sonar<span class="class">.jdbc</span><span class="class">.password</span>=sonar
+sonar.jdbc.username=sonar
+sonar.jdbc.password=sonar
 </code></pre></li>
 <li><p>oclint安装配置</p>
 </li>
 </ol>
 <p>解压oclint到指定目录，并配置环境变量。终端输入<code>oclint</code>，有以下输出说明安装正确:</p>
-<pre><code><span class="string">oclint:</span> Not enough positional command line arguments specified!
-Must specify at least <span class="number">1</span> positional <span class="string">arguments:</span> <span class="string">See:</span> oclint -help
-</code></pre><h3 id="代码扫描">代码扫描</h3><p>进入项目根目录，执行</p>
-<pre><code>oclint-json-compilation-database -v -i scanPath/  -- -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">1</span> <span class="number">10000</span> -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">2</span> <span class="number">10000</span> -<span class="built_in">max</span>-<span class="built_in">priority</span>-<span class="number">3</span> <span class="number">10000</span> -report-<span class="built_in">type</span> pmd -o oclint.xml
+<pre><code>oclint: Not enough positional command line arguments specified!
+Must specify at least 1 positional arguments: See: oclint -help
+</code></pre><h3 id="代码扫描"><a href="#代码扫描" class="headerlink" title="代码扫描"></a>代码扫描</h3><p>进入项目根目录，执行</p>
+<pre><code>oclint-json-compilation-database -v -i scanPath/  -- -max-priority-1 10000 -max-priority-2 10000 -max-priority-3 10000 -report-type pmd -o oclint.xml
 </code></pre><p> 我在执行这个命令的时候，发现命令能执行完成，但是不能生成oclint.xml文件。查了下帮助文件发现有个debug模式：</p>
 <pre><code>optional arguments:
-  -<span class="ruby">h, --help            show this help message <span class="keyword">and</span> exit
-</span>  -<span class="ruby">v                    show invocation command with arguments
-</span>  -<span class="ruby">debug, --debug       invoke <span class="constant">OCLint</span> <span class="keyword">in</span> debug mode
-</span>  -<span class="ruby">i <span class="constant">INCLUDES</span>, -<span class="keyword">include</span> <span class="constant">INCLUDES</span>, --<span class="keyword">include</span> <span class="constant">INCLUDES</span>
-</span>                    extract files matching pattern
-  -<span class="ruby">e <span class="constant">EXCLUDES</span>, -exclude <span class="constant">EXCLUDES</span>, --exclude <span class="constant">EXCLUDES</span>
-</span>                    remove files matching pattern
+  -h, --help            show this help message and exit
+  -v                    show invocation command with arguments
+  -debug, --debug       invoke OCLint in debug mode
+  -i INCLUDES, -include INCLUDES, --include INCLUDES
+                    extract files matching pattern
+  -e EXCLUDES, -exclude EXCLUDES, --exclude EXCLUDES
+                    remove files matching pattern
 </code></pre><p> 但是在执行的时候报错说oclint不支持debug模式。又搜索很久还是无果，无奈进入官方翻了半天在某一页最后一行发现一行小字：<code>debug mode need oclint compile by debug mode</code>，知道真相的我眼泪掉下来，查了文档和stackoverflow最后也没找到如何<code>compile by debug mode</code>。</p>
 <p> 然后which到目录看了一下<code>oclint-json-compilation-database</code>是<code>oclint</code>的<code>Python</code>脚本,主要功能就是拼接oclint的参数并开启子进程执行命令：</p>
-<pre><code>oclint_invocation = OCLINT_BIN + debug_argument + oclint_arguments + <span class="string">' '</span> + source_paths
-<span class="keyword">if</span> args<span class="class">.invocation</span>:
-print <span class="string">'------------------------------ OCLint ------------------------------'</span>
+<pre><code>oclint_invocation = OCLINT_BIN + debug_argument + oclint_arguments + &apos; &apos; + source_paths
+if args.invocation:
+print &apos;------------------------------ OCLint ------------------------------&apos;
 print oclint_invocation
-print <span class="string">'--------------------------------------------------------------------'</span>
-exit_code = subprocess.<span class="function"><span class="title">call</span><span class="params">(oclint_invocation, shell=True)</span></span>
-sys.<span class="function"><span class="title">exit</span><span class="params">(exit_code)</span></span>
+print &apos;--------------------------------------------------------------------&apos;
+exit_code = subprocess.call(oclint_invocation, shell=True)
+sys.exit(exit_code)
 </code></pre><p>怪不得没有任何输出信息，原来是在子进程里执行的。开启-v模式把拼接的命令直接放入终端执行(因为文件太多，这个命令足足有3屏)，终于出现短短一行的出错信息：<br><code>Segmentation fault: 11</code>。</p>
 <p>段错误是Linux系统编程中非常常见的错误，原因主要是非法的内存访问，但是这个段错误没有生成Core dump文件，所以没办法分析具体错误原因。这时我想起了Linux下非常强大的系统级调试工具<code>trace</code>和<code>truss</code>。查了一下在Mac下与之对应的是<code>dtrace</code>和<code>dtruss</code>工具。dtrace一般用于系统函数跟踪，它的优点在于：可以在不影响原有程序运行的情况下调试，跟踪系统调用并生成日志文件。详细用法及说明可以man查看。</p>
 <p>执行<code>sudo dtruss -f oclint_invocation &amp;&gt;result.txt</code>分析命令执行情况并把所有输出重定向到result.txt中。打开文件并查找文件中的ERR或者ERROR字样，定位到很多这样的错误：</p>
-<pre><code><span class="number">44317</span>/<span class="number">0x485ef</span>:  stat64(<span class="string">"/AppleInternal/XBS/.isChrooted\0"</span>, <span class="number">0x7FFF56824EE8</span>, <span class="number">0x1</span>)         = -<span class="number">1</span> Err<span class="preprocessor">#<span class="number">2</span></span>
-<span class="number">44317</span>/<span class="number">0x485ef</span>:  stat64(<span class="string">"/AppleInternal\0"</span>, <span class="number">0x7FFF56824E58</span>, <span class="number">0x1</span>)         = -<span class="number">1</span> Err<span class="preprocessor">#<span class="number">2</span></span>
+<pre><code>44317/0x485ef:  stat64(&quot;/AppleInternal/XBS/.isChrooted\0&quot;, 0x7FFF56824EE8, 0x1)         = -1 Err#2
+44317/0x485ef:  stat64(&quot;/AppleInternal\0&quot;, 0x7FFF56824E58, 0x1)         = -1 Err#2
 </code></pre><p>说明是在调用stat64这个函数出错的，出错的返回值是-1，用man查下这个函数的说明：</p>
-<pre><code>The stat() <span class="function"><span class="keyword">function</span> <span class="title">obtains</span> <span class="title">information</span> <span class="title">about</span> <span class="title">the</span> <span class="title">file</span> <span class="title">pointed</span> <span class="title">to</span> <span class="title">by</span></span>
- path.  Read, <span class="built_in">write</span> <span class="operator">or</span> execute permission <span class="operator">of</span> <span class="operator">the</span> named <span class="built_in">file</span> is <span class="operator">not</span>
- required, but all <span class="built_in">directories</span> listed <span class="operator">in</span> <span class="operator">the</span> path name leading <span class="built_in">to</span> <span class="operator">the</span> <span class="built_in">file</span>
+<pre><code>The stat() function obtains information about the file pointed to by
+ path.  Read, write or execute permission of the named file is not
+ required, but all directories listed in the path name leading to the file
  must be searchable.
 
- <span class="constant">RETURN</span> VALUES
- Upon successful completion <span class="operator">a</span> <span class="built_in">value</span> <span class="operator">of</span> <span class="number">0</span> is returned.  Otherwise, <span class="operator">a</span> <span class="built_in">value</span>
- <span class="operator">of</span> -<span class="number">1</span> is returned <span class="operator">and</span> errno is <span class="built_in">set</span> <span class="built_in">to</span> indicate <span class="operator">the</span> error.
+ RETURN VALUES
+ Upon successful completion a value of 0 is returned.  Otherwise, a value
+ of -1 is returned and errno is set to indicate the error.
 </code></pre><p> 这个函数是获取文件信息的，成功返回0，失败返回-1并设置errno。到这里原因就大致清楚了，原因大概是同时分析的文件超过了oclint的上限。修改下参数重新执行就可以了。</p>
-<h3 id="导出扫描结果到Sonar">导出扫描结果到Sonar</h3><p>将<code>sonar-project.properties</code>放入代码根目录，根据具体情况修改对应的项，注意必须修改设置<code>sonar.objectivec.project</code>和<code>sonar.objectivec.appScheme</code>。如果是workspace工程，需要设置<code>sonar.objectivec.workspace</code>项。</p>
+<h3 id="导出扫描结果到Sonar"><a href="#导出扫描结果到Sonar" class="headerlink" title="导出扫描结果到Sonar"></a>导出扫描结果到Sonar</h3><p>将<code>sonar-project.properties</code>放入代码根目录，根据具体情况修改对应的项，注意必须修改设置<code>sonar.objectivec.project</code>和<code>sonar.objectivec.appScheme</code>。如果是workspace工程，需要设置<code>sonar.objectivec.workspace</code>项。</p>
 <p>然后在SonarQube中执行Sonar Runner：<code>sonar-runer.sh</code> （前面已经配置好环境变量，所以这里可以直接执行）。</p>
 <p>如果在执行的时候出现<code>java.database.connetion</code>字样的错误，请仔细检查数据库连接及配置信息。</p>
 <p>我执行这一步的时候发现导出的结果除了文件信息外其他都是空，仔细的分析了下执行时的log，发现这是SonarQuebe有个bug，SonarQuebe代码分析时默认生成的文件oclint.xml在Sonar-reports目录，但是读取时它会到根目录读取，截止目前为止，SonarQuebe仍有这个bug。解决办法就是把生成的xml文件拷贝到根目录在重新执行<code>sonar-runer.sh</code>。</p>
@@ -372,8 +363,8 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/12/MarkDown语法学习/" rel="next" title="MarkDown语法学习">
-                <i class="fa fa-chevron-left"></i> MarkDown语法学习
+              <a href="/2016/02/12/nil0Nil0NULL0null0nullptr0NSNull/" rel="next" title="nil/Nil/NULL/NUL/nullptr/NSNull">
+                <i class="fa fa-chevron-left"></i> nil/Nil/NULL/NUL/nullptr/NSNull
               </a>
             
           </div>
@@ -432,40 +423,40 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目錄
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            本站概覽
+            Overview
           </li>
         </ul>
       
 
       <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image"/>
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image">
           <p class="site-author-name" itemprop="name">刘得胜</p>
         </div>
         <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">文章</span>
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
-              <span class="site-state-item-name">分類</span>
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">6</span>
-              <span class="site-state-item-name">標籤</span>
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
               </a>
           </div>
 
@@ -514,10 +505,10 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
@@ -525,11 +516,11 @@ sys.<span class="function"><span class="title">exit</span><span class="params">(
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主題 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT
   </a>

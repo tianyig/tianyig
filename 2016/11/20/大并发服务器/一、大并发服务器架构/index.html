@@ -1,18 +1,14 @@
 <!doctype html>
 <html class="theme-next   use-motion ">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -21,7 +17,11 @@
 
 
 
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -30,37 +30,35 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="大并发服务器," />
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="大并发服务器,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2">
 
 
 
 
 
 
-<meta name="description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
-伸缩性(Scalabili">
+<meta name="description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。 伸缩性(Scalabili">
+<meta name="keywords" content="大并发服务器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一、大并发服务器架构">
 <meta property="og:url" content="http://yoursite.com/2016/11/20/大并发服务器/一、大并发服务器架构/index.html">
 <meta property="og:site_name" content="技术博客，谢谢关注">
-<meta property="og:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
-伸缩性(Scalabili">
+<meta property="og:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。 伸缩性(Scalabili">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
@@ -68,9 +66,8 @@
 <meta property="og:updated_time" content="2016-12-04T13:15:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一、大并发服务器架构">
-<meta name="twitter:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。
-高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。
-伸缩性(Scalabili">
+<meta name="twitter:description" content="服务器设计目标高性能(High Performance)对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。 高可用(High Availability)要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。 伸缩性(Scalabili">
+<meta name="twitter:image" content="http://yoursite.com/assets/images/concurrent_server/cs_net.png">
 
 
 
@@ -85,7 +82,7 @@
   <title> 一、大并发服务器架构 | 技术博客，谢谢关注 </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="">
 
   <!--[if lte IE 8]>
   <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
@@ -106,12 +103,12 @@
   <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-meta ">
   
 
   <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <span class="site-title">技术博客，谢谢关注</span>
       <span class="logo-line-after"><i></i></span>
@@ -138,9 +135,9 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
             
-            首頁
+            Home
           </a>
         </li>
       
@@ -148,9 +145,9 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
             
-            分類
+            Categories
           </a>
         </li>
       
@@ -158,9 +155,9 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br>
             
-            關於
+            About
           </a>
         </li>
       
@@ -168,9 +165,9 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
             
-            歸檔
+            Archives
           </a>
         </li>
       
@@ -178,9 +175,9 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
             
-            標籤
+            Tags
           </a>
         </li>
       
@@ -211,7 +208,7 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
 
     
       <header class="post-header">
@@ -230,7 +227,7 @@
 
         <div class="post-meta">
           <span class="post-time">
-            發表於
+            Posted on
             <time itemprop="dateCreated" datetime="2016-11-20T19:41:42+08:00" content="2016-11-20">
               2016-11-20
             </time>
@@ -255,19 +252,19 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="服务器设计目标">服务器设计目标</h2><h3 id="高性能(High_Performance)">高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
-<h3 id="高可用(High_Availability)">高可用(High Availability)</h3><p>要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。</p>
-<h3 id="伸缩性(Scalability)">伸缩性(Scalability)</h3><p>服务器采用良好的架构，分层设计，业务分离，能够进行灵活的部署。比如服务器有A，B两个组件，这两个组件可以部署在同一台服务器上，也可以部署在不同的服务器上，这就要求这两个组件不能使用本地通信机制，比如共享内存。而应该使用TCP这样的跨机器的通信方式。</p>
-<h2 id="典型的服务器结构">典型的服务器结构</h2><p>常用的软件体系结构有C/S和B/S两种，C/S是指客户端-服务器模型，B/S是指浏览器-服务器模型，因为浏览器也是客户端程序，所以说本质上也是C/S结构。下图是C/S结构图。</p>
+        <span itemprop="articleBody"><h2 id="服务器设计目标"><a href="#服务器设计目标" class="headerlink" title="服务器设计目标"></a>服务器设计目标</h2><h3 id="高性能-High-Performance"><a href="#高性能-High-Performance" class="headerlink" title="高性能(High Performance)"></a>高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
+<h3 id="高可用-High-Availability"><a href="#高可用-High-Availability" class="headerlink" title="高可用(High Availability)"></a>高可用(High Availability)</h3><p>要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。</p>
+<h3 id="伸缩性-Scalability"><a href="#伸缩性-Scalability" class="headerlink" title="伸缩性(Scalability)"></a>伸缩性(Scalability)</h3><p>服务器采用良好的架构，分层设计，业务分离，能够进行灵活的部署。比如服务器有A，B两个组件，这两个组件可以部署在同一台服务器上，也可以部署在不同的服务器上，这就要求这两个组件不能使用本地通信机制，比如共享内存。而应该使用TCP这样的跨机器的通信方式。</p>
+<h2 id="典型的服务器结构"><a href="#典型的服务器结构" class="headerlink" title="典型的服务器结构"></a>典型的服务器结构</h2><p>常用的软件体系结构有C/S和B/S两种，C/S是指客户端-服务器模型，B/S是指浏览器-服务器模型，因为浏览器也是客户端程序，所以说本质上也是C/S结构。下图是C/S结构图。</p>
 <p><img src="/assets/images/concurrent_server/cs_net.png" alt="CS结构图" title="加载中"></p>
-<h2 id="服务器并发的影响因素">服务器并发的影响因素</h2><h3 id="网络I/O+服务器高性能编程技术">网络I/O+服务器高性能编程技术</h3><p>对于Linux来说，网络I/O最高效的编程模型是epoll。对于服务器编程来说，耗时操作有以下几个类型：</p>
+<h2 id="服务器并发的影响因素"><a href="#服务器并发的影响因素" class="headerlink" title="服务器并发的影响因素"></a>服务器并发的影响因素</h2><h3 id="网络I-O-服务器高性能编程技术"><a href="#网络I-O-服务器高性能编程技术" class="headerlink" title="网络I/O+服务器高性能编程技术"></a>网络I/O+服务器高性能编程技术</h3><p>对于Linux来说，网络I/O最高效的编程模型是epoll。对于服务器编程来说，耗时操作有以下几个类型：</p>
 <ol>
 <li>数据拷贝 比如数据从内核拷贝到应用层，一般通过缓存常用的数据解决。</li>
 <li>环境切换 线程切换，对于单核服务器来说，使用多线程不一定能提高性能，采用状态机模型解决最好。</li>
 <li>内存分配 增加内存池，减少向操作系统申请内存。</li>
 <li>锁竞争    尽量减少锁竞争。</li>
 </ol>
-<h3 id="数据库限制">数据库限制</h3><ol>
+<h3 id="数据库限制"><a href="#数据库限制" class="headerlink" title="数据库限制"></a>数据库限制</h3><ol>
 <li><p>数据库连接数</p>
 <p>假如数据库并发连接数是10个，假设应用服务器有1000个连接请求，将会有990个请求失败。</p>
 </li>
@@ -275,7 +272,7 @@
 <p>假如数据库并发连接数10个，假设数据库1s之内最多处理1000个请求，如果应用服务器有1w个请求，那么处理全部请求需要10s。如果系统规定最大响应时间是5s，那么当前数据库最大并发量是5000。</p>
 </li>
 </ol>
-<h2 id="提高服务器性能">提高服务器性能</h2><h3 id="降低数据库访问压力">降低数据库访问压力</h3><ol>
+<h2 id="提高服务器性能"><a href="#提高服务器性能" class="headerlink" title="提高服务器性能"></a>提高服务器性能</h2><h3 id="降低数据库访问压力"><a href="#降低数据库访问压力" class="headerlink" title="降低数据库访问压力"></a>降低数据库访问压力</h3><ol>
 <li><p>增加DAL队列 + 连接池。为了解决这个问题，可以增加一个DAL队列，大量数据库访问的时候，我们可以让当前不能处理的连接排队。为了提升性能，也可以增加一个数据库连接池，连接池创建的时候申请一些数据库连接放到池里，当下一次需要数据库连接的时候直接从连接池中取出处理。如下图：</p>
 <p><img src="/assets/images/concurrent_server/cs_net.png" alt="" title="服务器结构图"></p>
 </li>
@@ -291,7 +288,7 @@
 <p><img src="/assets/images/concurrent_server/cs_net.png" alt="服务器结构图" title="服务器结构图"></p>
 </li>
 </ol>
-<h3 id="应用服务器负载均衡">应用服务器负载均衡</h3><ol>
+<h3 id="应用服务器负载均衡"><a href="#应用服务器负载均衡" class="headerlink" title="应用服务器负载均衡"></a>应用服务器负载均衡</h3><ol>
 <li><p>业务分离。将业务分割到不同服务器上，对应的业务访问对应的服务器。此时应用服务器也应该进行负载均衡，可以通过增加一个任务服务器来实现。实现方案有下面两种。一、应用服务器提供接口提供自己的状态，任务服务器监视应用服务器的状态（CPU、IO、并发、换页），任务服务器就可以选择负载最低的应用服务器分配任务。二、应用服务器空闲时，主动去任务服务器取任务。任务服务器也要实现faileover机制。</p>
 <p><img src="/assets/images/concurrent_server/cs_net.png" alt="服务器结构图" title="服务器结构图"></p>
 </li>
@@ -373,40 +370,40 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目錄
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            本站概覽
+            Overview
           </li>
         </ul>
       
 
       <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image"/>
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image">
           <p class="site-author-name" itemprop="name">刘得胜</p>
         </div>
         <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">文章</span>
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
-              <span class="site-state-item-name">分類</span>
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">6</span>
-              <span class="site-state-item-name">標籤</span>
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
               </a>
           </div>
 
@@ -437,7 +434,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器设计目标"><span class="nav-number">1.</span> <span class="nav-text">服务器设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高性能(High_Performance)"><span class="nav-number">1.1.</span> <span class="nav-text">高性能(High Performance)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用(High_Availability)"><span class="nav-number">1.2.</span> <span class="nav-text">高可用(High Availability)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伸缩性(Scalability)"><span class="nav-number">1.3.</span> <span class="nav-text">伸缩性(Scalability)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#典型的服务器结构"><span class="nav-number">2.</span> <span class="nav-text">典型的服务器结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器并发的影响因素"><span class="nav-number">3.</span> <span class="nav-text">服务器并发的影响因素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络I/O+服务器高性能编程技术"><span class="nav-number">3.1.</span> <span class="nav-text">网络I/O+服务器高性能编程技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库限制"><span class="nav-number">3.2.</span> <span class="nav-text">数据库限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提高服务器性能"><span class="nav-number">4.</span> <span class="nav-text">提高服务器性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降低数据库访问压力"><span class="nav-number">4.1.</span> <span class="nav-text">降低数据库访问压力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器负载均衡"><span class="nav-number">4.2.</span> <span class="nav-text">应用服务器负载均衡</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器设计目标"><span class="nav-number">1.</span> <span class="nav-text">服务器设计目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#高性能-High-Performance"><span class="nav-number">1.1.</span> <span class="nav-text">高性能(High Performance)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用-High-Availability"><span class="nav-number">1.2.</span> <span class="nav-text">高可用(High Availability)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伸缩性-Scalability"><span class="nav-number">1.3.</span> <span class="nav-text">伸缩性(Scalability)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#典型的服务器结构"><span class="nav-number">2.</span> <span class="nav-text">典型的服务器结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器并发的影响因素"><span class="nav-number">3.</span> <span class="nav-text">服务器并发的影响因素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络I-O-服务器高性能编程技术"><span class="nav-number">3.1.</span> <span class="nav-text">网络I/O+服务器高性能编程技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库限制"><span class="nav-number">3.2.</span> <span class="nav-text">数据库限制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提高服务器性能"><span class="nav-number">4.</span> <span class="nav-text">提高服务器性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降低数据库访问压力"><span class="nav-number">4.1.</span> <span class="nav-text">降低数据库访问压力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器负载均衡"><span class="nav-number">4.2.</span> <span class="nav-text">应用服务器负载均衡</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -455,10 +452,10 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
@@ -466,11 +463,11 @@
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主題 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT
   </a>

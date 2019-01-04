@@ -1,18 +1,14 @@
 <!doctype html>
 <html class="theme-next   use-motion ">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -21,7 +17,11 @@
 
 
 
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
@@ -30,21 +30,21 @@
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="iOS开发," />
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css">
 
 
+  <meta name="keywords" content="iOS开发,">
 
 
 
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2">
 
 
 
@@ -52,11 +52,13 @@
 
 
 <meta name="description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
+<meta name="keywords" content="iOS开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Autorelease的原理与实现">
 <meta property="og:url" content="http://yoursite.com/2017/03/10/Autorelease的原理与实现/index.html">
 <meta property="og:site_name" content="技术博客，谢谢关注">
 <meta property="og:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage1.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage2.png">
 <meta property="og:image" content="http://yoursite.com/assets/images/autorelease/page3.jpeg">
@@ -66,6 +68,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Autorelease的原理与实现">
 <meta name="twitter:description" content="前言众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;amp;&amp;amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Co">
+<meta name="twitter:image" content="http://yoursite.com/assets/images/autorelease/AutoreleasePoolPage1.png">
 
 
 
@@ -80,7 +83,7 @@
   <title> Autorelease的原理与实现 | 技术博客，谢谢关注 </title>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="">
 
   <!--[if lte IE 8]>
   <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
@@ -101,12 +104,12 @@
   <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-meta ">
   
 
   <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
+    <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
       <span class="site-title">技术博客，谢谢关注</span>
       <span class="logo-line-after"><i></i></span>
@@ -133,9 +136,9 @@
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
             
-            首頁
+            Home
           </a>
         </li>
       
@@ -143,9 +146,9 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories" rel="section">
             
-              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
             
-            分類
+            Categories
           </a>
         </li>
       
@@ -153,9 +156,9 @@
         <li class="menu-item menu-item-about">
           <a href="/about" rel="section">
             
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br>
             
-            關於
+            About
           </a>
         </li>
       
@@ -163,9 +166,9 @@
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
             
-            歸檔
+            Archives
           </a>
         </li>
       
@@ -173,9 +176,9 @@
         <li class="menu-item menu-item-tags">
           <a href="/tags" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
             
-            標籤
+            Tags
           </a>
         </li>
       
@@ -206,7 +209,7 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
 
     
       <header class="post-header">
@@ -225,7 +228,7 @@
 
         <div class="post-meta">
           <span class="post-time">
-            發表於
+            Posted on
             <time itemprop="dateCreated" datetime="2017-03-10T13:32:24+08:00" content="2017-03-10">
               2017-03-10
             </time>
@@ -250,74 +253,74 @@
       
 
       
-        <span itemprop="articleBody"><h2 id="前言"><strong>前言</strong></h2><p>众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;&amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Counting)。ARC是如何实现的？objc和编译器底层帮我们做了哪些事情，它们是如何管理内存的？</p>
-<h2 id="Autorelease"><strong>Autorelease</strong></h2><p>在MRC时代，<code>alloc</code>创建的对象必须在对象生命周期结束时调用<code>release</code>或者在创建之初调用<code>autorelease</code>。如下：</p>
+        <span itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;&amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Counting)。ARC是如何实现的？objc和编译器底层帮我们做了哪些事情，它们是如何管理内存的？</p>
+<h2 id="Autorelease"><a href="#Autorelease" class="headerlink" title="Autorelease"></a><strong>Autorelease</strong></h2><p>在MRC时代，<code>alloc</code>创建的对象必须在对象生命周期结束时调用<code>release</code>或者在创建之初调用<code>autorelease</code>。如下：</p>
 <pre><code>方式1
-NSObject *testObj = <span class="comment">[<span class="comment">[NSObject alloc]</span>init]</span>;
+NSObject *testObj = [[NSObject alloc]init];
 //insert code
-<span class="comment">[testObj release]</span>;
+[testObj release];
 
 方式2
-NSObject *testObj = <span class="comment">[<span class="comment">[<span class="comment">[NSObject alloc]</span>init]</span> autorelease]</span>;
+NSObject *testObj = [[[NSObject alloc]init] autorelease];
 </code></pre><p>内存管理的第一原则：谁创建，谁释放。所以方式1我们很容易理解；方式2是如何管理对象的生命周期的？其实调用<code>autorelease</code>方法其实是把当前对象添加到<code>autoreleasepool</code>中管理，我们就不需要手动释放了。</p>
-<h2 id="@autoreleasepool"><strong>@autoreleasepool</strong></h2><p>iOS工程<code>main.m</code>中<code>main</code>函数的实现如下：</p>
-<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[]) {  
-    <span class="keyword">@autoreleasepool</span> {
-        <span class="keyword">return</span> <span class="built_in">UIApplicationMain</span>(argc, argv, <span class="literal">nil</span>, <span class="built_in">NSStringFromClass</span>([AppDelegate class]));
+<h2 id="autoreleasepool"><a href="#autoreleasepool" class="headerlink" title="@autoreleasepool"></a><strong>@autoreleasepool</strong></h2><p>iOS工程<code>main.m</code>中<code>main</code>函数的实现如下：</p>
+<pre><code>int main(int argc, char * argv[]) {  
+    @autoreleasepool {
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }
 </code></pre><p>main函数的的业务实现我们不关心，我们只关心<code>@autoreleasepool</code>到底是什么，为了方便，我们改写main函数如下：</p>
-<pre><code><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span>
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-    <span class="keyword">@autoreleasepool</span> {
-        <span class="built_in">NSObject</span> *objTest = [[<span class="built_in">NSObject</span> alloc]init];
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+int main(int argc, const char * argv[]) {
+    @autoreleasepool {
+        NSObject *objTest = [[NSObject alloc]init];
     }
-    <span class="keyword">return</span> <span class="number">0</span>;
+    return 0;
 }
 </code></pre><p>在命令行中使用<code>clang -rewrite-objc main.m</code>让编译器用<code>C++</code>改写这个函数,改写后的代码简化如下：</p>
-<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-    <span class="comment">/* @autoreleasepool */</span> { __AtAutoreleasePool __autoreleasepool; 
-        <span class="built_in">NSObject</span> *objTest = ((<span class="built_in">NSObject</span> *(*)(<span class="keyword">id</span>, SEL))(<span class="keyword">void</span> *)objc_msgSend)((<span class="keyword">id</span>)((<span class="built_in">NSObject</span> *(*)(<span class="keyword">id</span>, SEL))(<span class="keyword">void</span> *)objc_msgSend)((<span class="keyword">id</span>)objc_getClass(<span class="string">"NSObject"</span>), sel_registerName(<span class="string">"alloc"</span>)), sel_registerName(<span class="string">"init"</span>));
+<pre><code>int main(int argc, const char * argv[]) {
+    /* @autoreleasepool */ { __AtAutoreleasePool __autoreleasepool; 
+        NSObject *objTest = ((NSObject *(*)(id, SEL))(void *)objc_msgSend)((id)((NSObject *(*)(id, SEL))(void *)objc_msgSend)((id)objc_getClass(&quot;NSObject&quot;), sel_registerName(&quot;alloc&quot;)), sel_registerName(&quot;init&quot;));
     }
-    <span class="keyword">return</span> <span class="number">0</span>;
+    return 0;
 }
 </code></pre><p><code>@autoreleasepool</code>在改写后被注释掉了，同时在作用域的第一行生成了一个<code>__AtAutoreleasePool</code>的C++对象，全局搜索可以看到<code>__AtAutoreleasePool</code>定义如下：</p>
 <pre><code>struct __AtAutoreleasePool {
-  __AtAutoreleasePool() {atautoreleasepoolobj = objc_autoreleasePoolPush()<span class="comment">;}</span>
-  ~__AtAutoreleasePool() {objc_autoreleasePoolPop(atautoreleasepoolobj)<span class="comment">;}</span>
-  void * atautoreleasepoolobj<span class="comment">;</span>
-}<span class="comment">;</span>
+  __AtAutoreleasePool() {atautoreleasepoolobj = objc_autoreleasePoolPush();}
+  ~__AtAutoreleasePool() {objc_autoreleasePoolPop(atautoreleasepoolobj);}
+  void * atautoreleasepoolobj;
+};
 </code></pre><p>这个结构体(和class的唯一区别是不能定义私有变量或私有函数)只有一个构造函数和析构函数，析构函数是在作用域结束时自动调用的，所以<code>main</code>函数代码等价如下：</p>
-<pre><code><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>{  
+<pre><code>int main(int argc, const char * argv[]) {  
     {
-        <span class="keyword">void</span> * atautoreleasepoolobj = objc_autoreleasePoolPush();
-        <span class="comment">//other operator</span>
+        void * atautoreleasepoolobj = objc_autoreleasePoolPush();
+        //other operator
          objc_autoreleasePoolPop(atautoreleasepoolobj);
     }
-    <span class="keyword">return</span> <span class="number">0</span>;
+    return 0;
 }
 </code></pre><p>然后看下这两个函数的实现：</p>
-<pre><code><span class="function"><span class="keyword">void</span> *
-<span class="title">objc_autoreleasePoolPush</span><span class="params">(<span class="keyword">void</span>)</span>
-</span>{
-    <span class="keyword">return</span> AutoreleasePoolPage::push();
+<pre><code>void *
+objc_autoreleasePoolPush(void)
+{
+    return AutoreleasePoolPage::push();
 }
 
-<span class="function"><span class="keyword">void</span>
-<span class="title">objc_autoreleasePoolPop</span><span class="params">(<span class="keyword">void</span> *ctxt)</span>
-</span>{
+void
+objc_autoreleasePoolPop(void *ctxt)
+{
     AutoreleasePoolPage::pop(ctxt);
 }
 </code></pre><p>可以看出只是简单的对<code>AutoreleasePoolPage</code>的封装。<code>AutoreleasePoolPage</code>又是什么？下面就从它的结构和实现上逐步剖析<code>AutoreleasePoolPage</code>。</p>
-<h3 id="AutoreleasePoolPage的结构"><em>AutoreleasePoolPage的结构</em></h3><p>它的结构如下：</p>
-<pre><code><span class="keyword">class</span> AutoreleasePoolPage {  
-    <span class="keyword">magic_t</span> <span class="keyword">const</span> magic;
+<h3 id="AutoreleasePoolPage的结构"><a href="#AutoreleasePoolPage的结构" class="headerlink" title="AutoreleasePoolPage的结构"></a><em>AutoreleasePoolPage的结构</em></h3><p>它的结构如下：</p>
+<pre><code>class AutoreleasePoolPage {  
+    magic_t const magic;
     id *next;
-    <span class="keyword">pthread_t</span> <span class="keyword">const</span> thread;
-    AutoreleasePoolPage * <span class="keyword">const</span> parent;
+    pthread_t const thread;
+    AutoreleasePoolPage * const parent;
     AutoreleasePoolPage *child;
-    <span class="keyword">uint32_t</span> <span class="keyword">const</span> depth;
-    <span class="keyword">uint32_t</span> hiwat;
+    uint32_t const depth;
+    uint32_t hiwat;
 };
 </code></pre><ol>
 <li>magic 用来校验 AutoreleasePoolPage 的结构是否完整；</li>
@@ -328,26 +331,26 @@ NSObject *testObj = <span class="comment">[<span class="comment">[<span class="c
 <li>depth 代表深度，从 0 开始，往后递增 1；</li>
 <li>hiwat 代表 high water mark。</li>
 </ol>
-<h3 id="push操作"><em>push操作</em></h3><p><code>objc_autoreleasePoolPush()</code>函数实际上调用了<code>AutoreleasePoolPage::push()</code>函数。</p>
-<pre><code><span class="function"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> *<span class="title">push</span><span class="params">()</span> 
-</span>{
+<h3 id="push操作"><a href="#push操作" class="headerlink" title="push操作"></a><em>push操作</em></h3><p><code>objc_autoreleasePoolPush()</code>函数实际上调用了<code>AutoreleasePoolPage::push()</code>函数。</p>
+<pre><code>static inline void *push() 
+{
     id *dest;
     dest = autoreleaseFast(POOL_BOUNDARY);
-    <span class="keyword">return</span> dest;
+    return dest;
 }
 </code></pre><p>其中<code>POOL_BOUNDARY</code>是<code>nil</code>的宏定义</p>
-<pre><code><span class="preprocessor">#   <span class="keyword">define</span> POOL_BOUNDARY nil`</span>
+<pre><code>#   define POOL_BOUNDARY nil`
 </code></pre><p>在首次创建AutoRelease Pool的时候插入一个nil值表示嵌套的<code>AutoreleasePool</code>的边界。</p>
 <p>push函数调又<code>autoreleaseFast</code>实现具体的插入：</p>
-<pre><code>static <span class="keyword">inline</span> id *autoreleaseFast(id obj)
+<pre><code>static inline id *autoreleaseFast(id obj)
 {
     AutoreleasePoolPage *page = hotPage();
-    <span class="keyword">if</span> (page <span class="subst">&amp;&amp;</span> <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="literal">full</span>()) {
-        <span class="keyword">return</span> page<span class="subst">-&gt;</span>add(obj);
-    } <span class="keyword">else</span> <span class="keyword">if</span> (page) {
-        <span class="keyword">return</span> autoreleaseFullPage(obj, page);
-    } <span class="keyword">else</span> {
-        <span class="keyword">return</span> autoreleaseNoPage(obj);
+    if (page &amp;&amp; !page-&gt;full()) {
+        return page-&gt;add(obj);
+    } else if (page) {
+        return autoreleaseFullPage(obj, page);
+    } else {
+        return autoreleaseNoPage(obj);
     }
 }
 </code></pre><p>插入新元素的时候分三种情况需要处理：</p>
@@ -359,152 +362,154 @@ NSObject *testObj = <span class="comment">[<span class="comment">[<span class="c
 <p>这三种情况最终都会调用<code>page-&gt;add(obj)</code>：</p>
 <pre><code>id *add(id obj)
 {
-    assert(!full())<span class="comment">;</span>
-    unprotect()<span class="comment">;</span>
-    id *ret = next<span class="comment">;</span>
-    *next++ = obj<span class="comment">;</span>
-    protect()<span class="comment">;</span>
-    return ret<span class="comment">;</span>
+    assert(!full());
+    unprotect();
+    id *ret = next;
+    *next++ = obj;
+    protect();
+    return ret;
 }
 </code></pre><p>首先断言当前page非满(<code>next != end()</code>),然后解除当前页保护(因为要插入，要使当前页可读可写),更新<code>next</code>指针地址，返回插入的元素地址。第一次初始化<code>autoreleasepool</code>时,传的nil值，返回值是nil值所在的地址。</p>
-<h3 id="Pop操作"><em>Pop操作</em></h3><p>同上，<code>objc_autoreleasePoolPop</code> 实际调用了<code>AutoreleasePoolPage::pop(ctxt)</code>,传入的参数是初始化是返回的<code>nil</code>值的地址:</p>
-<pre><code>static <span class="keyword">inline</span> <span class="literal">void</span> pop(<span class="literal">void</span> *token) 
+<h3 id="Pop操作"><a href="#Pop操作" class="headerlink" title="Pop操作"></a><em>Pop操作</em></h3><p>同上，<code>objc_autoreleasePoolPop</code> 实际调用了<code>AutoreleasePoolPage::pop(ctxt)</code>,传入的参数是初始化是返回的<code>nil</code>值的地址:</p>
+<pre><code>static inline void pop(void *token) 
 {
     AutoreleasePoolPage *page;
     id *stop;
 
-    <span class="keyword">if</span> (token == (<span class="literal">void</span>*)EMPTY_POOL_PLACEHOLDER) {
-        <span class="keyword">if</span> (hotPage()) {
-            pop(coldPage()<span class="subst">-&gt;</span>begin());
-        } <span class="keyword">else</span> {
+    if (token == (void*)EMPTY_POOL_PLACEHOLDER) {
+        if (hotPage()) {
+            pop(coldPage()-&gt;begin());
+        } else {
             setHotPage(nil);
         }
-        <span class="keyword">return</span>;
+        return;
     }
 
     page = pageForPointer(token);
     stop = (id *)token;
-    <span class="keyword">if</span> (*stop != POOL_BOUNDARY) {
-        <span class="keyword">if</span> (stop == page<span class="subst">-&gt;</span>begin()  <span class="subst">&amp;&amp;</span>  <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="keyword">parent</span>) {
-        } <span class="keyword">else</span> {
-            <span class="keyword">return</span> badPop(token);
+    if (*stop != POOL_BOUNDARY) {
+        if (stop == page-&gt;begin()  &amp;&amp;  !page-&gt;parent) {
+        } else {
+            return badPop(token);
         }
     }
 
-    <span class="keyword">if</span> (PrintPoolHiwat) printHiwat();
+    if (PrintPoolHiwat) printHiwat();
 
-    page<span class="subst">-&gt;</span>releaseUntil(stop);
+    page-&gt;releaseUntil(stop);
 
-    <span class="comment">// memory: delete empty children</span>
-      <span class="keyword">if</span> (page<span class="subst">-&gt;</span>lessThanHalfFull()) {                page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>kill();
+    // memory: delete empty children
+      if (page-&gt;lessThanHalfFull()) {                page-&gt;child-&gt;kill();
     }
-    <span class="keyword">else</span> <span class="keyword">if</span> (page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>child) {
-        page<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>child<span class="subst">-&gt;</span>kill();
+    else if (page-&gt;child-&gt;child) {
+        page-&gt;child-&gt;child-&gt;kill();
    }
 }
 </code></pre><p><code>pop</code>的参数的含义是需要<code>pop</code>到参数元素所在的地址，Pop的时候首先判断是不是<code>EMPTY_POOL_PLACEHOLDER</code>, <code>EMPTY_POOL_PLACEHOLDER</code>的解释如下：</p>
 <blockquote>
 <p>EMPTY_POOL_PLACEHOLDER is stored in TLS when exactly one pool is pushed and it has never contained any objects. This saves memory when the top level (i.e. libdispatch) pushes and pops pools but never uses them.</p>
 </blockquote>
-<p><code>EMPTY_POOL_PLACEHOLDER</code>是存储在TLS中的用来表示链表最上层没有元素的<code>pool</code>,这样就不用创建<code>pool</code>可以节约内存。TLS是什么以及具体实现<a href="http://blog.csdn.net/cywosp/article/details/26469435" target="_blank" rel="external">这篇文章</a>介绍的比较详细，这里不在解释。如果<code>pool</code>里面有数据，就把里面的数据清空；否者就把<code>hotPage</code>设置为<code>nil</code>。接着调用<code>page-&gt;releaseUntil(stop)</code>给此参数之前的所有对象发送<code>release</code>释放内存，对象内存释放之后，<code>终点page</code>之前的<code>page</code>都会变成空的，最后调用<code>page-&gt;child-&gt;kill()</code>回收这些<code>空page</code>资源。</p>
+<p><code>EMPTY_POOL_PLACEHOLDER</code>是存储在TLS中的用来表示链表最上层没有元素的<code>pool</code>,这样就不用创建<code>pool</code>可以节约内存。TLS是什么以及具体实现<a href="http://blog.csdn.net/cywosp/article/details/26469435" target="_blank" rel="noopener">这篇文章</a>介绍的比较详细，这里不在解释。如果<code>pool</code>里面有数据，就把里面的数据清空；否者就把<code>hotPage</code>设置为<code>nil</code>。接着调用<code>page-&gt;releaseUntil(stop)</code>给此参数之前的所有对象发送<code>release</code>释放内存，对象内存释放之后，<code>终点page</code>之前的<code>page</code>都会变成空的，最后调用<code>page-&gt;child-&gt;kill()</code>回收这些<code>空page</code>资源。</p>
 <p>假设某个线程的autoreleasepool的结构如下图所示，这个autoreleasepool的堆栈里有两个<code>POOL_SENTINEL</code>，说明代码里嵌套了两个autoreleasepool，在整个双向链表里，起始的第一个page为<code>coldPage</code>，最新的最后一个是<code>hotpage</code>。<code>hotPage</code>里保存了最新添加的对象:</p>
 <p><img src="/assets/images/autorelease/AutoreleasePoolPage1.png" alt="img01"></p>
 <p>此时，如果执行<code>pop(POOL_BOUNDARY)</code>操作，那么<code>autoreleasepool</code>的堆栈结构会变成下图：</p>
 <p><img src="/assets/images/autorelease/AutoreleasePoolPage2.png" alt="img01"></p>
 <p>所以处理嵌套的<code>autoreleasepool</code>就很简单了，因为<code>autoreleasepool</code>与<code>autoreleasepool</code>之间用特殊的标记分割了，每个<code>autoreleasepool</code>的释放只需要释放到指定位置(初始化时push的nil指针的地址)即可,内层与外层互相不影响。</p>
-<h2 id="autorelease操作"><strong>autorelease操作</strong></h2><p>我们已经清楚了<code>autoreleasepool</code>的结构以及<code>autoreleasepool</code>对对象的管理方式，那么我们自己创建的对象是怎么和<code>autoreleasepool</code>关联的？在MRC中,<code>autorelease</code>的调用例如<code>[[[NSObject alloc]init] autorelease]</code>调用堆栈如下：</p>
+<h2 id="autorelease操作"><a href="#autorelease操作" class="headerlink" title="autorelease操作"></a><strong>autorelease操作</strong></h2><p>我们已经清楚了<code>autoreleasepool</code>的结构以及<code>autoreleasepool</code>对对象的管理方式，那么我们自己创建的对象是怎么和<code>autoreleasepool</code>关联的？在MRC中,<code>autorelease</code>的调用例如<code>[[[NSObject alloc]init] autorelease]</code>调用堆栈如下：</p>
 <p><img src="/assets/images/autorelease/page3.jpeg" alt="img01"></p>
 <p><code>autorelease</code>转发给了<code>rootAutorelease</code>调用:</p>
-<pre><code>- (<span class="keyword">id</span>)autorelease {
-    <span class="keyword">return</span> ((<span class="keyword">id</span>)<span class="keyword">self</span>)-&gt;rootAutorelease();
+<pre><code>- (id)autorelease {
+    return ((id)self)-&gt;rootAutorelease();
 }
 
-<span class="keyword">inline</span> <span class="keyword">id</span> 
+inline id 
 objc_object::rootAutorelease()
 {
-    <span class="keyword">if</span> (isTaggedPointer()) <span class="keyword">return</span> (<span class="keyword">id</span>)<span class="keyword">this</span>;
-    <span class="keyword">if</span> (prepareOptimizedReturn(ReturnAtPlus1)) <span class="keyword">return</span> (<span class="keyword">id</span>)<span class="keyword">this</span>;
+    if (isTaggedPointer()) return (id)this;
+    if (prepareOptimizedReturn(ReturnAtPlus1)) return (id)this;
 
-    <span class="keyword">return</span> rootAutorelease2();
+    return rootAutorelease2();
 }
 </code></pre><p><code>rootAutorelease</code>首先判断是不是<code>Tagged Pointer</code>,是的话直接返回，因为<code>Tagged Pointer</code>是栈上的对象，不需要内存管理(文末有解释)。接着用<code>__builtin_return_address</code>判断外部是不是ARC环境。最终调用<code>autoreleaseFast</code>将对象插入到<code>autoreleasepool</code>中。</p>
-<pre><code>static <span class="keyword">inline</span> id *autoreleaseFast(id obj)
+<pre><code>static inline id *autoreleaseFast(id obj)
 {
     AutoreleasePoolPage *page = hotPage();
-    <span class="keyword">if</span> (page <span class="subst">&amp;&amp;</span> <span class="subst">!</span>page<span class="subst">-&gt;</span><span class="literal">full</span>()) {
-        <span class="keyword">return</span> page<span class="subst">-&gt;</span>add(obj);
-    } <span class="keyword">else</span> <span class="keyword">if</span> (page) {
-        <span class="keyword">return</span> autoreleaseFullPage(obj, page);
-    } <span class="keyword">else</span> {
-        <span class="keyword">return</span> autoreleaseNoPage(obj);
+    if (page &amp;&amp; !page-&gt;full()) {
+        return page-&gt;add(obj);
+    } else if (page) {
+        return autoreleaseFullPage(obj, page);
+    } else {
+        return autoreleaseNoPage(obj);
     }
 }
 </code></pre><p>可以看出，在MRC中，通过对象主动调用<code>autorelease</code>的方式将对象加入到<code>autoreleasepool</code>的管理。那么在ARC中是怎么处理的呢？</p>
 <p>在ARC环境下，我们改写main函数如下：</p>
-<pre><code><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {
-<span class="keyword">@autoreleasepool</span> {
-    <span class="built_in">NSString</span> *testObj = [[<span class="built_in">NSObject</span> alloc]init];
-    <span class="keyword">@autoreleasepool</span> {
-        <span class="built_in">NSObject</span> *objTest2 = [[<span class="built_in">NSObject</span> alloc]init];
+<pre><code>int main(int argc, const char * argv[]) {
+@autoreleasepool {
+    NSString *testObj = [[NSObject alloc]init];
+    @autoreleasepool {
+        NSObject *objTest2 = [[NSObject alloc]init];
         objTest2 = testObj;
     }
 }
-<span class="keyword">return</span> <span class="number">0</span>;
+return 0;
 }
 </code></pre><p>然后使用<code>clang -S -fobjc-arc -emit-llvm main.m -o main.cc</code>生成IR中间代码，截取关键部分如下：</p>
-<pre><code><span class="xml">define i32 @main(i32, i8**) #0 {
-</span><span class="perl">  <span class="variable">%3</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%4</span> = alloca i32, align <span class="number">4</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%5</span> = alloca i8**, align <span class="number">8</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%6</span> = alloca <span class="variable">%0</span>*, align <span class="number">8</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%7</span> = alloca <span class="variable">%1</span>*, align <span class="number">8</span></span><span class="xml">
+<pre><code>define i32 @main(i32, i8**) #0 {
+  %3 = alloca i32, align 4
+  %4 = alloca i32, align 4
+  %5 = alloca i8**, align 8
+  %6 = alloca %0*, align 8
+  %7 = alloca %1*, align 8
   store i32 0, i32* %3, align 4
   store i32 %0, i32* %4, align 4
   store i8** %1, i8*** %5, align 8
-</span><span class="perl">  <span class="variable">%8</span> = call i8* <span class="variable">@objc_autoreleasePoolPush</span>() <span class="comment">#2</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%9</span> = load <span class="variable">%struct</span>._class_t*, <span class="variable">%struct</span>._class_t** <span class="variable">@"</span>OBJC_CLASSLIST_REFERENCES<span class="number">_</span><span class="variable">$_</span><span class="string">", align 8</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%10</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>, align 8, !invariant.load !7</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%11</span> = bitcast <span class="variable">%struct</span>._class_t* <span class="variable">%9</span> to i8*</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%12</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%11</span>, i8* <span class="variable">%10</span>)</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%13</span> = bitcast i8* <span class="variable">%12</span> to <span class="variable">%1</span>*</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%14</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>.2, align 8, !invariant.load !7</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%15</span> = bitcast <span class="variable">%1</span>* <span class="variable">%13</span> to i8*</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%16</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%15</span>, i8* <span class="variable">%14</span>)</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%17</span> = bitcast i8* <span class="variable">%16</span> to <span class="variable">%1</span>*</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%18</span> = bitcast <span class="variable">%1</span>* <span class="variable">%17</span> to <span class="variable">%0</span>*</span></span><span class="xml">
+  %8 = call i8* @objc_autoreleasePoolPush() #2
+  %9 = load %struct._class_t*, %struct._class_t** @&quot;OBJC_CLASSLIST_REFERENCES_$_&quot;, align 8
+  %10 = load i8*, i8** @OBJC_SELECTOR_REFERENCES_, align 8, !invariant.load !7
+  %11 = bitcast %struct._class_t* %9 to i8*
+  %12 = call i8* bitcast (i8* (i8*, i8*, ...)* @objc_msgSend to i8* (i8*, i8*)*)(i8* %11, i8* %10)
+  %13 = bitcast i8* %12 to %1*
+  %14 = load i8*, i8** @OBJC_SELECTOR_REFERENCES_.2, align 8, !invariant.load !7
+  %15 = bitcast %1* %13 to i8*
+  %16 = call i8* bitcast (i8* (i8*, i8*, ...)* @objc_msgSend to i8* (i8*, i8*)*)(i8* %15, i8* %14)
+  %17 = bitcast i8* %16 to %1*
+  %18 = bitcast %1* %17 to %0*
   store %0* %18, %0** %6, align 8
-</span><span class="perl"><span class="string">  <span class="variable">%19</span> = call i8* <span class="variable">@objc_autoreleasePoolPush</span>() #2</span></span><span class="xml">
-</span><span class="perl"><span class="string">  <span class="variable">%20</span> = load <span class="variable">%struct</span>._class_t*, <span class="variable">%struct</span>._class_t** <span class="variable">@"</span>OBJC_CLASSLIST_REFERENCES_<span class="variable">$_</span>"</span>, align <span class="number">8</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%21</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>, align <span class="number">8</span>, !invariant.load !<span class="number">7</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%22</span> = bitcast <span class="variable">%struct</span>._class_t* <span class="variable">%20</span> to i8*</span><span class="xml">
-</span><span class="perl">  <span class="variable">%23</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%22</span>, i8* <span class="variable">%21</span>)</span><span class="xml">
-</span><span class="perl">  <span class="variable">%24</span> = bitcast i8* <span class="variable">%23</span> to <span class="variable">%1</span>*</span><span class="xml">
-</span><span class="perl">  <span class="variable">%25</span> = load i8*, i8** <span class="variable">@OBJC_SELECTOR_REFERENCES_</span>.<span class="number">2</span>, align <span class="number">8</span>, !invariant.load !<span class="number">7</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%26</span> = bitcast <span class="variable">%1</span>* <span class="variable">%24</span> to i8*</span><span class="xml">
-</span><span class="perl">  <span class="variable">%27</span> = call i8* bitcast (i8* (i8*, i8*, ...)* <span class="variable">@objc_msgSend</span> to i8* (i8*, i8*)*)(i8* <span class="variable">%26</span>, i8* <span class="variable">%25</span>)</span><span class="xml">
-</span><span class="perl">  <span class="variable">%28</span> = bitcast i8* <span class="variable">%27</span> to <span class="variable">%1</span>*</span><span class="xml">
+  %19 = call i8* @objc_autoreleasePoolPush() #2
+  %20 = load %struct._class_t*, %struct._class_t** @&quot;OBJC_CLASSLIST_REFERENCES_$_&quot;, align 8
+  %21 = load i8*, i8** @OBJC_SELECTOR_REFERENCES_, align 8, !invariant.load !7
+  %22 = bitcast %struct._class_t* %20 to i8*
+  %23 = call i8* bitcast (i8* (i8*, i8*, ...)* @objc_msgSend to i8* (i8*, i8*)*)(i8* %22, i8* %21)
+  %24 = bitcast i8* %23 to %1*
+  %25 = load i8*, i8** @OBJC_SELECTOR_REFERENCES_.2, align 8, !invariant.load !7
+  %26 = bitcast %1* %24 to i8*
+  %27 = call i8* bitcast (i8* (i8*, i8*, ...)* @objc_msgSend to i8* (i8*, i8*)*)(i8* %26, i8* %25)
+  %28 = bitcast i8* %27 to %1*
   store %1* %28, %1** %7, align 8
-</span><span class="perl">  <span class="variable">%29</span> = load <span class="variable">%0</span>*, <span class="variable">%0</span>** <span class="variable">%6</span>, align <span class="number">8</span></span><span class="xml">
-</span><span class="perl">  <span class="variable">%30</span> = bitcast <span class="variable">%0</span>* <span class="variable">%29</span> to <span class="variable">%1</span>*</span><span class="xml">
-</span><span class="perl">  <span class="variable">%31</span> = bitcast <span class="variable">%1</span>** <span class="variable">%7</span> to i8**</span><span class="xml">
-</span><span class="perl">  <span class="variable">%32</span> = bitcast <span class="variable">%1</span>* <span class="variable">%30</span> to i8*</span><span class="xml">
+  %29 = load %0*, %0** %6, align 8
+  %30 = bitcast %0* %29 to %1*
+  %31 = bitcast %1** %7 to i8**
+  %32 = bitcast %1* %30 to i8*
   call void @objc_storeStrong(i8** %31, i8* %32) #2
-</span><span class="perl">  <span class="variable">%33</span> = bitcast <span class="variable">%1</span>** <span class="variable">%7</span> to i8**</span><span class="xml">
+  %33 = bitcast %1** %7 to i8**
   call void @objc_storeStrong(i8** %33, i8* null) #2
   call void @objc_autoreleasePoolPop(i8* %19)
-</span><span class="perl">  <span class="variable">%34</span> = bitcast <span class="variable">%0</span>** <span class="variable">%6</span> to i8**</span><span class="xml">
+  %34 = bitcast %0** %6 to i8**
   call void @objc_storeStrong(i8** %34, i8* null) #2
   call void @objc_autoreleasePoolPop(i8* %8)
   ret i32 0
-}</span>
+}
 </code></pre><p>可以看出在ARC环境下，在<code>autoreleasePoolPop</code>之前会自动为我们生成<code>objc_storeStrong</code>,第一个参数是当前对象，第二个是赋值的对象(=右边的)。对象在外部被引用时，就retain:</p>
 <p><img src="/assets/images/autorelease/page4.jpeg" alt="img01"></p>
 <p>当对象没有被引用时，直接释放资源:</p>
 <p><img src="/assets/images/autorelease/page5.jpeg" alt="img01"></p>
 <p>这里比较奇怪的是对象并没有被加入到<code>autoreleasepool</code>中，应该是编译器对简单的情况作了优化，毕竟<code>autoreleasepool</code>的管理也是一个不小的开销。</p>
-<h2 id="@autoreleasepool使用场景"><strong>@autoreleasepool使用场景</strong></h2><p>什么情况下我们需要显示使用<code>Autorelease Pool</code>？可以参考下苹果文档<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html" target="_blank" rel="external">这里</a>。</p>
+<h2 id="autoreleasepool使用场景"><a href="#autoreleasepool使用场景" class="headerlink" title="@autoreleasepool使用场景"></a><strong>@autoreleasepool使用场景</strong></h2><p>什么情况下我们需要显示使用<code>Autorelease Pool</code>？可以参考下苹果文档<a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmAutoreleasePools.html" target="_blank" rel="noopener">这里</a>。</p>
 <blockquote>
 <p>Each thread in a Cocoa application maintains its own stack of autorelease pool blocks. If you are writing a Foundation-only program or if you detach a thread, you need to create your own autorelease pool block.</p>
+</blockquote>
+<blockquote>
 <p>If your application or thread is long-lived and potentially generates a lot of autoreleased objects, you should use autorelease pool blocks (like AppKit and UIKit do on the main thread); otherwise, autoreleased objects accumulate and your memory footprint grows. If your detached thread does not make Cocoa calls, you do not need to use an autorelease pool block.</p>
 </blockquote>
 <p>需要程序员自己使用<code>@autoreleasepool</code></p>
@@ -522,47 +527,47 @@ objc_object::rootAutorelease()
 <li>创建了子线程时，子线程里应该使用<code>@autoreleasepool</code>；如从<code>NSThread</code>中<code>detach</code>出的线程用了<code>Cocoa calls</code><br>以上两种情况需要使用。</li>
 </ol>
 <p>以下是几种使用的例子：</p>
-<pre><code><span class="comment">//情景1 SDWebImage源码</span>
-<span class="annotation">@autoreleasepool</span> {
-        UIImage *diskImage = [self <span class="string">diskImageForKey:</span>key];
-        <span class="comment">//other code</span>
+<pre><code>//情景1 SDWebImage源码
+@autoreleasepool {
+        UIImage *diskImage = [self diskImageForKey:key];
+        //other code
     }
 
-<span class="comment">//情景2 (MBProgressHUD源码)</span>
-[NSThread <span class="string">detachNewThreadSelector:</span><span class="annotation">@selector</span>(launchExecution) <span class="string">toTarget:</span>self <span class="string">withObject:</span>nil];
+//情景2 (MBProgressHUD源码)
+[NSThread detachNewThreadSelector:@selector(launchExecution) toTarget:self withObject:nil];
 
-- (<span class="typename">void</span>)launchExecution {
-    <span class="annotation">@autoreleasepool</span> {
-    <span class="comment">//代码实现</span>
+- (void)launchExecution {
+    @autoreleasepool {
+    //代码实现
     }
 }
 
-<span class="comment">//情景3 (Realm源码)</span>
+//情景3 (Realm源码)
 RLMSchema *cachedRealmSchema;
-<span class="annotation">@autoreleasepool</span> {
-    <span class="comment">// ensure that cachedRealm doesn't end up in this thread's autorelease pool</span>
-    <span class="comment">//确保cachedRealm在当前线程的autorelease pool没有被释放</span>
+@autoreleasepool {
+    // ensure that cachedRealm doesn&apos;t end up in this thread&apos;s autorelease pool
+    //确保cachedRealm在当前线程的autorelease pool没有被释放
     cachedRealmSchema = RLMGetAnyCachedRealmForPath(config.path).schema;
 }
 
-<span class="comment">// if we have a cached realm on another thread, copy without a transaction</span>
-<span class="keyword">if</span> (cachedRealmSchema) {
+// if we have a cached realm on another thread, copy without a transaction
+if (cachedRealmSchema) {
     RLMRealmSetSchemaAndAlign(realm, cachedRealmSchema);
 }
-<span class="keyword">else</span> <span class="keyword">if</span> (dynamic) {
-    RLMRealmSetSchemaAndAlign(realm, [RLMSchema <span class="string">dynamicSchemaFromObjectStoreSchema:</span>realm-&gt;_realm-&gt;schema()]
-</code></pre><h2 id="自己实现一个autoreleasepool">自己实现一个autoreleasepool</h2><p>根据以上原理，我们可以实现一个和系统功能差不多类似的<code>autoreleasepool</code>,源代码在GitHub<a href="https://github.com/tianyig/iOSAdvance.git" target="_blank" rel="external">autoreleasepool</a>.</p>
-<h2 id="相关知识点"><strong>相关知识点</strong></h2><h3 id="Tagged_Pointer"><strong>Tagged Pointer</strong></h3><p>苹果对于Tagged Pointer特点的介绍：</p>
+else if (dynamic) {
+    RLMRealmSetSchemaAndAlign(realm, [RLMSchema dynamicSchemaFromObjectStoreSchema:realm-&gt;_realm-&gt;schema()]
+</code></pre><h2 id="自己实现一个autoreleasepool"><a href="#自己实现一个autoreleasepool" class="headerlink" title="自己实现一个autoreleasepool"></a>自己实现一个autoreleasepool</h2><p>根据以上原理，我们可以实现一个和系统功能差不多类似的<code>autoreleasepool</code>,源代码在GitHub<a href="https://github.com/tianyig/iOSAdvance.git" target="_blank" rel="noopener">autoreleasepool</a>.</p>
+<h2 id="相关知识点"><a href="#相关知识点" class="headerlink" title="相关知识点"></a><strong>相关知识点</strong></h2><h3 id="Tagged-Pointer"><a href="#Tagged-Pointer" class="headerlink" title="Tagged Pointer"></a><strong>Tagged Pointer</strong></h3><p>苹果对于Tagged Pointer特点的介绍：</p>
 <ol>
 <li>Tagged Pointer专门用来存储小的对象，例如NSNumber和NSDate</li>
 <li>Tagged Pointer指针的值不再是地址了，而是真正的值。所以，实际上它不再是一个对象了，它只是一个披着对象皮的普通变量而已。所以，它的内存并不存储在堆中，也不需要malloc和free。</li>
 <li>在内存读取上有着3倍的效率，创建时比以前快106倍。</li>
 </ol>
 <p>为什么要用<code>Tagged Pointer</code>?因为数据类型的长度是和CPU长度有关的，这样就导致了在64位CPU上一些对象占用的内存会翻倍。同时维护程序中的对象需要 分配内存，维护引用计数，管理生命周期，使用对象给程序的运行增加了负担。我们可以将一个对象的指针拆成两部分，一部分直接保存数据，另一部分作为特殊标记，表示这是一个特别的指针，不指向任何一个地址。因为<code>Tagged pointer</code>不是一个真正的对象，如果使用isa指针在编译时会报错。</p>
-<h2 id="参考">参考</h2><ol>
-<li><a href="http://draveness.me/autoreleasepool/" target="_blank" rel="external">自动释放池的前世今生 —- 深入解析 autoreleasepool</a></li>
-<li><a href="http://blog.sunnyxx.com/2014/10/15/behind-autorelease/" target="_blank" rel="external">黑幕背后的Autorelease</a></li>
-<li><a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/" target="_blank" rel="external">Objective-C Autorelease Pool 的实现原理</a></li>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://draveness.me/autoreleasepool/" target="_blank" rel="noopener">自动释放池的前世今生 —- 深入解析 autoreleasepool</a></li>
+<li><a href="http://blog.sunnyxx.com/2014/10/15/behind-autorelease/" target="_blank" rel="noopener">黑幕背后的Autorelease</a></li>
+<li><a href="http://blog.leichunfeng.com/blog/2015/05/31/objective-c-autorelease-pool-implementation-principle/" target="_blank" rel="noopener">Objective-C Autorelease Pool 的实现原理</a></li>
 <li></li>
 </ol>
 </span>
@@ -642,40 +647,40 @@ RLMSchema *cachedRealmSchema;
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目錄
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
           </li>
           <li class="sidebar-nav-overview" data-target="site-overview">
-            本站概覽
+            Overview
           </li>
         </ul>
       
 
       <section class="site-overview sidebar-panel ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image"/>
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="刘得胜" itemprop="image">
           <p class="site-author-name" itemprop="name">刘得胜</p>
         </div>
         <p class="site-description motion-element" itemprop="description"></p>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
-              <span class="site-state-item-name">文章</span>
+              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">1</span>
-              <span class="site-state-item-name">分類</span>
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">6</span>
-              <span class="site-state-item-name">標籤</span>
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
               </a>
           </div>
 
@@ -706,7 +711,7 @@ RLMSchema *cachedRealmSchema;
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Autorelease"><span class="nav-number">2.</span> <span class="nav-text">Autorelease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#@autoreleasepool"><span class="nav-number">3.</span> <span class="nav-text">@autoreleasepool</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AutoreleasePoolPage的结构"><span class="nav-number">3.1.</span> <span class="nav-text">AutoreleasePoolPage的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push操作"><span class="nav-number">3.2.</span> <span class="nav-text">push操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pop操作"><span class="nav-number">3.3.</span> <span class="nav-text">Pop操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autorelease操作"><span class="nav-number">4.</span> <span class="nav-text">autorelease操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#@autoreleasepool使用场景"><span class="nav-number">5.</span> <span class="nav-text">@autoreleasepool使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自己实现一个autoreleasepool"><span class="nav-number">6.</span> <span class="nav-text">自己实现一个autoreleasepool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关知识点"><span class="nav-number">7.</span> <span class="nav-text">相关知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tagged_Pointer"><span class="nav-number">7.1.</span> <span class="nav-text">Tagged Pointer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Autorelease"><span class="nav-number">2.</span> <span class="nav-text">Autorelease</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autoreleasepool"><span class="nav-number">3.</span> <span class="nav-text">@autoreleasepool</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AutoreleasePoolPage的结构"><span class="nav-number">3.1.</span> <span class="nav-text">AutoreleasePoolPage的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#push操作"><span class="nav-number">3.2.</span> <span class="nav-text">push操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pop操作"><span class="nav-number">3.3.</span> <span class="nav-text">Pop操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autorelease操作"><span class="nav-number">4.</span> <span class="nav-text">autorelease操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autoreleasepool使用场景"><span class="nav-number">5.</span> <span class="nav-text">@autoreleasepool使用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自己实现一个autoreleasepool"><span class="nav-number">6.</span> <span class="nav-text">自己实现一个autoreleasepool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关知识点"><span class="nav-number">7.</span> <span class="nav-text">相关知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tagged-Pointer"><span class="nav-number">7.1.</span> <span class="nav-text">Tagged Pointer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
@@ -724,10 +729,10 @@ RLMSchema *cachedRealmSchema;
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="icon-next-heart fa fa-heart"></i>
   </span>
@@ -735,11 +740,11 @@ RLMSchema *cachedRealmSchema;
 </div>
 
 <div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 強力驅動
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
-  主題 -
+  Theme -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
     NexT
   </a>
