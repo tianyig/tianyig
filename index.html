@@ -227,6 +227,102 @@
             
               
                 
+                <a class="post-title-link" href="/2019/04/21/怀疑/" itemprop="url">
+                  天气
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2019-04-21T22:11:39+08:00" content="2019-04-21">
+              2019-04-21
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <span itemprop="articleBody">
+            
+              <p>我心中有过种种怀疑</p>
+<p>夏天是没有来过</p>
+<p>还是已经消失久远</p>
+<p>一袭秋风声势浩荡</p>
+<p>是热烈也是平淡无奇</p>
+<hr>
+<p>我不曾忘记和记住过任何一场天气</p>
+<p>仿佛一切正整装待发</p>
+<p>那些时光里的期许都不曾发生</p>
+<p>我却早早预料</p>
+<p>从相识到陌路确实无关爱情</p>
+<hr>
+<p>我们经历过从阴沉到晴朗</p>
+<p>也见证过雨后的阳光</p>
+<p>我无法忘记你</p>
+<p>也无法不忘记你</p>
+
+            
+          </span>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/12/16/JavaScript/JavaScript原理-单线程下的异步/" itemprop="url">
                   JavaScript原理:单线程下的异步
                 </a>
@@ -2438,168 +2534,6 @@ int main(void)
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/02/Swift-Name-Mangling/" itemprop="url">
-                  Name Mangling
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-06-02T15:35:37+08:00" content="2016-06-02">
-              2016-06-02
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp; In
-              
-                <span itemprop="about" itemscope="" itemtype="https://schema.org/Thing">
-                  <a href="/categories/新测试/" itemprop="url" rel="index">
-                    <span itemprop="name">新测试</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>什么是Name Mangling？Name Mangling是一种通过在函数里添加附加信息，把函数名转换成链接器符号的一个步骤。具体解释可以参看wiki。<a href="https://en.wikipedia.org/wiki/Name_mangling" target="_blank" rel="noopener">Name Mangling</a></p>
-<p>为什么需要Name Mangling?因为有些语言(如C++)在特定情况下允许函数重名，比如重载、继承等。这样在函数调用的时候仅仅根据函数名无法判断要调用哪个函数，这就需要对这些函数做一定的处理以便于区分重名函数调用。</p>
-<p>在C语言里，虽然不存在命名冲突的问题，但是在C语言里还是做了命名处理，在函数名字前都加了下划线。例如：</p>
-<p>新建一个文件test.c如下,</p>
-<pre><code>#include &lt;stdio.h&gt;
-int main(){ return 0; }
-</code></pre><p>编译后查看二进制符号:</p>
-<pre><code>172-0-0-136:Desktop sheng$ gcc test.c | nm
-0000000100000000 T __mh_execute_header
-0000000100000fa0 T _main
-             U dyld_stub_binder
-</code></pre><p>C语言的命名处理基本没什么用处，但是为了兼容性等其它原因，还是保留下来了。根据惯例，C语言中的符号默认都会加上下划线，但是汇编中的符号不会自动加上下划线。</p>
-<p>Objective-C不会存在命名冲突，因为OC的方法调用是通过消息机制实现的，而且OC不支持函数重载。在支持函数重载的语言里，Name Mangling就变得有用处了。</p>
-<h2 id="C-函数重载"><a href="#C-函数重载" class="headerlink" title="C++函数重载"></a>C++函数重载</h2><p>新建一个文件test.cpp，如下,</p>
-<pre><code>int test(int a) {return a + 1;}
-int test(double a) {return a + 2; }
-int main() {return test(1) - test(2.0); }
-</code></pre><p>编译查看二进制结构：</p>
-<pre><code>172-0-0-136:Desktop sheng$ g++ test.cpp | nm
-0000000100000f50 T __Z4testd
-0000000100000f30 T __Z4testi
-0000000100000000 T __mh_execute_header
-0000000100000f70 T _main
-             U dyld_stub_binder
-</code></pre><p>C++支持函数重名，如果仅仅是按照C语言的方式简单生成两个_test符号的话，那么链接器就无法区分两者的区别，也不知道具体要链接到哪一个函数上去。</p>
-<p>我们首先能想到的最简单的处理规则就是把函数名和函数需要的参数直接拼接作为最终的符号。（如上可以拼接成test(int)和test(double),因为函数重载不支持根据返回值重载，所以不需要添加返回值)。但是这样不仅会造成生成的目标符号冗余并且在类型相同但是类型名字不同的时候会有歧义(例如unsigned和unsigned int)。所以，C++使用了一套复杂的类型转换和编码规则来处理这些函数来保证链接器能简单的获取函数中的信息。</p>
-<p>例如上面的test.cpp生成的符号含义如下：</p>
-<ol>
-<li>开头的__是为了兼容C，没有什么意义。</li>
-<li>__后的Z代表这个符号是被处理过的全局C++函数。</li>
-<li>Z后面的数字4代表后面的字符个数，这里代表test这个字符串。</li>
-<li>最后的d和i代表内置的参数类型double和int。前面提到过返回值不是函数的一部分，所以这个符号已经能表示整个函数的信息了。</li>
-</ol>
-<p>关于C++编译器命名处理的细节，可以参看侯捷翻译的《深度探索C++对象模型》和<a href="http://mentorembedded.github.io/cxx-abi/abi.html#mangling" target="_blank" rel="noopener">C++ ABI Document</a>。</p>
-<p>Swift Name Mangling</p>
-<p>Swift采用的Name Mangling原理上和C++类似，但是作为新出的语言，Swift吸收了C++的优点，补充了C++的不足，所以Swift的处理比C++要成熟和完善。</p>
-<p>新建Swift文件如下test.swift：</p>
-<pre><code>struct e {
-            enum f {
-                    case G, H, I
-            }
-    }
-    class a {
-            class b {
-                    class c {
-                            func d(y: a, x w: b, v u: (x: Int) -&gt; Int) -&gt; e.f {
-                                    return e.f.G
-                            }
-                    }
-            }
-    }
-</code></pre><p>编译查看二进制结构：</p>
-<pre><code>172-0-0-136:Desktop sheng$ xcrun swiftc -emit-library -o test test.swift | nm -g
-...
-0000000000003c00 S __TWoFCCC1a1a1b1c1dfTS0_1xS1_1vFT1xSi_Si_OVS_1e1f
-...
-</code></pre><p>生成了很多符号，我们选择函数符号来分析:</p>
-<ol>
-<li>nm生成信息的含义可以查看man手册。第二列的S含义： S (symbol in a section other than those above)</li>
-<li>开头的_代表这是一个Swift符号。</li>
-<li>_T代表这是一个全局符号。（global text）</li>
-<li>F说明这个符号是个函数。（Function）</li>
-<li>大的 </li>
-<li>大写的C代表”class Type”,因为这里class内嵌了3层，所以有3个大写的C。</li>
-<li>第一个1a代表”module name”,第二个代表”class name”。</li>
-<li>大的</li>
-</ol>
-
-            
-          </span>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -2646,7 +2580,7 @@ int main() {return test(1) - test(2.0); }
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">16</span>
+              <span class="site-state-item-count">17</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
