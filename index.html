@@ -1,9 +1,22 @@
-<!doctype html>
-<html class="theme-next   use-motion ">
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="">
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
 
 
 
@@ -21,18 +34,38 @@
 
 
 
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
 
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
 
 
 
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css">
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
 
 
   <meta name="keywords" content="Hexo, NexT">
@@ -40,11 +73,6 @@
 
 
 
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2">
 
 
 
@@ -61,28 +89,39 @@
 
 
 
-<script type="text/javascript" id="hexo.configuration">
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
   var CONFIG = {
+    root: '/',
     scheme: 'Gemini',
-    sidebar: 'post',
-    motion: true
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
   };
 </script>
 
-  <title> 风过无痕 </title>
-</head>
 
-<body itemscope="" itemtype="http://schema.org/WebPage" lang="">
 
-  <!--[if lte IE 8]>
-  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
-    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
-      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
-           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
-           style='margin-left:auto;margin-right:auto;display: block;'/>
-    </a>
-  </div>
-<![endif]-->
+  <link rel="canonical" href="http://yoursite.com/">
+
+
+
+
+
+  <title>风过无痕</title>
   
 
 
@@ -90,91 +129,134 @@
 
 
 
-  <div class="container one-column 
-   page-home 
-">
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+  page-home">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
 
-  <div class="custom-logo-site-title">
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">风过无痕</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">风过无痕</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">这城市华灯初上，多两个人悲剧散场</p>
+      
   </div>
-  <p class="site-subtitle">这城市华灯初上，多两个人悲剧散场</p>
-</div>
 
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
 
 <nav class="site-nav">
   
 
   
-    <ul id="menu" class="menu ">
+    <ul id="menu" class="menu">
       
         
         <li class="menu-item menu-item-home">
           <a href="/" rel="section">
             
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-th fa-fw"></i> <br>
-            
-            Categories
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
+          <a href="/about/" rel="section">
             
-              <i class="menu-item-icon fa fa-user fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
             
             About
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             Archives
           </a>
         </li>
       
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
             
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
             
-            Tags
+            Schedule
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-sitemap">
+          <a href="/sitemap.xml" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            Sitemap
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            Commonweal 404
           </a>
         </li>
       
 
-      
       
     </ul>
   
@@ -182,40 +264,42 @@
   
 </nav>
 
+
+
  </div>
     </header>
 
     <main id="main" class="main">
       <div class="main-inner">
-        <div id="content" class="content">
-          
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
   <section id="posts" class="posts-expand">
-
-    
-
-    
-    
-      
-      
-        
-        
-        
-      
-
-      
-    
-
     
       
 
-  
   
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/21/怀疑/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -223,24 +307,27 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2019/04/21/怀疑/" itemprop="url">
-                  天气
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2019/04/21/怀疑/" itemprop="url">天气</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2019-04-21T22:11:39+08:00" content="2019-04-21">
-              2019-04-21
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-21T22:11:39+08:00">
+                2019-04-21
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -250,22 +337,30 @@
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <p>我心中有过种种怀疑</p>
+          
+            <p>我心中有过种种怀疑</p>
 <p>夏天是没有来过</p>
 <p>还是已经消失久远</p>
 <p>一袭秋风声势浩荡</p>
@@ -282,13 +377,23 @@
 <p>我无法忘记你</p>
 <p>也无法不忘记你</p>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -298,6 +403,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -305,13 +414,27 @@
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/16/JavaScript/JavaScript原理-单线程下的异步/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -319,31 +442,42 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2018/12/16/JavaScript/JavaScript原理-单线程下的异步/" itemprop="url">
-                  JavaScript原理:单线程下的异步
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2018/12/16/JavaScript/JavaScript原理-单线程下的异步/" itemprop="url">JavaScript原理:单线程下的异步</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2018-12-16T21:55:14+08:00" content="2018-12-16">
-              2018-12-16
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-16T21:55:14+08:00">
+                2018-12-16
+              </time>
+            
+
+            
+
+            
           </span>
 
           
             <span class="post-category">
-              &nbsp; | &nbsp; In
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
               
-                <span itemprop="about" itemscope="" itemtype="https://schema.org/Thing">
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
                   <a href="/categories/JavaScript/" itemprop="url" rel="index">
                     <span itemprop="name">JavaScript</span>
                   </a>
@@ -351,7 +485,6 @@
 
                 
                 
-
               
             </span>
           
@@ -361,22 +494,30 @@
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="JavaScript是单线程"><a href="#JavaScript是单线程" class="headerlink" title="JavaScript是单线程"></a>JavaScript是单线程</h3><p>简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线程能继续处理用户交互或者界面渲染， 让用户体验变得更好。  </p>
+          
+            <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="JavaScript是单线程"><a href="#JavaScript是单线程" class="headerlink" title="JavaScript是单线程"></a>JavaScript是单线程</h3><p>简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线程能继续处理用户交互或者界面渲染， 让用户体验变得更好。  </p>
 <p>JavaScript语言的一大特点就是单线程。JavaScript的主要功能是操作DOM和和用户交互，假设设计成多线程，其中一个线程往某个DOM节点添加内容，另一个线程删除了该DOM节点，这个时候，浏览器应该以哪个线程为准呢？所以，为了避免复杂性，JavaScript就被设计成了一个单线程的语言。但是，作为一个单线程语言，是怎么处理异步事件的呢？为了解答这个疑问我们先看下下面两个概念。    </p>
 <h3 id="JavaScript引擎"><a href="#JavaScript引擎" class="headerlink" title="JavaScript引擎"></a>JavaScript引擎</h3><p>JavaScript引擎最流行的就是Google的V8引擎了,Chrome和Node.js目前都使用了<a href="https://v8.dev/" target="_blank" rel="noopener">V8引擎</a>。除此之外，FireFox用的是SpiderMonkey，Safari用的是JavaScriptCore，IE用的是Chakra。下面是一个简化了的JS引擎示意图：</p>
 <p><img src="/assets/images/javascript/engine.png" alt="img01"></p>
@@ -400,13 +541,23 @@
 <li><a href="http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D" target="_blank" rel="noopener">JavaScript执行过程示意图</a></li>
 </ol>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -416,6 +567,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -423,13 +578,27 @@
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/17/swizzle-addObject-in-NSMutableArray/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -437,24 +606,27 @@
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2017/03/17/swizzle-addObject-in-NSMutableArray/" itemprop="url">
-                  swizzle addObject: in NSMutableArray
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2017/03/17/swizzle-addObject-in-NSMutableArray/" itemprop="url">swizzle addObject: in NSMutableArray</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2017-03-17T13:51:12+08:00" content="2017-03-17">
-              2017-03-17
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-17T13:51:12+08:00">
+                2017-03-17
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -464,22 +636,30 @@
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>事情的经过是这样的，有个朋友问为何<code>swizzle addObject</code>没有效果并贴出代码。下面是当时的实现(有修改)：</p>
+          
+            <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>事情的经过是这样的，有个朋友问为何<code>swizzle addObject</code>没有效果并贴出代码。下面是当时的实现(有修改)：</p>
 <pre><code>+(void)load
 {
     Class class = [self class];
@@ -583,13 +763,23 @@ __NSArray0
 <li><a href="https://developer.apple.com/library/content/documentation/General/Conceptual/CocoaEncyclopedia/ClassClusters/ClassClusters.html" target="_blank" rel="noopener">Class Clusters</a></li>
 </ol>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -599,6 +789,10 @@ __NSArray0
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -606,13 +800,27 @@ __NSArray0
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/10/Autorelease的原理与实现/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -620,24 +828,27 @@ __NSArray0
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2017/03/10/Autorelease的原理与实现/" itemprop="url">
-                  Autorelease的原理与实现
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2017/03/10/Autorelease的原理与实现/" itemprop="url">Autorelease的原理与实现</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2017-03-10T13:32:24+08:00" content="2017-03-10">
-              2017-03-10
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-10T13:32:24+08:00">
+                2017-03-10
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -647,22 +858,30 @@ __NSArray0
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;&amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Counting)。ARC是如何实现的？objc和编译器底层帮我们做了哪些事情，它们是如何管理内存的？</p>
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>众所周知，在C/C++中内存管理是非常重要的内容，内存管理是C／C++程序员的基本功，为了方便内存管理，C++的库(STL&amp;&amp;Boost)提供了各种智能指针的实现。同样在iOS MRC时代，iOS的开发也是需要手动内存管理，手动内存管理麻烦而且容易出错，严重影响程序健壮性和开发效率。为了改善这种情况，苹果在iOS5推出了新功能ARC(Automatic Reference Counting)。ARC是如何实现的？objc和编译器底层帮我们做了哪些事情，它们是如何管理内存的？</p>
 <h2 id="Autorelease"><a href="#Autorelease" class="headerlink" title="Autorelease"></a><strong>Autorelease</strong></h2><p>在MRC时代，<code>alloc</code>创建的对象必须在对象生命周期结束时调用<code>release</code>或者在创建之初调用<code>autorelease</code>。如下：</p>
 <pre><code>方式1
 NSObject *testObj = [[NSObject alloc]init];
@@ -980,13 +1199,23 @@ else if (dynamic) {
 <li></li>
 </ol>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -996,6 +1225,10 @@ else if (dynamic) {
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1003,13 +1236,27 @@ else if (dynamic) {
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/SDWebImage源码阅读-一/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -1017,24 +1264,27 @@ else if (dynamic) {
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2017/02/27/SDWebImage源码阅读-一/" itemprop="url">
-                  SDWebImage源码阅读笔记
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2017/02/27/SDWebImage源码阅读-一/" itemprop="url">SDWebImage源码阅读笔记</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2017-02-27T10:55:02+08:00" content="2017-02-27">
-              2017-02-27
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-27T10:55:02+08:00">
+                2017-02-27
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -1044,22 +1294,30 @@ else if (dynamic) {
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。</p>
+          
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>SDWebImage是一个非常好用的图片异步加载的库，在GitHub上目前已经有16984个star。这么优秀的库，我们当然要好好学习一下它的设计和实现，接下来我们就看看SDWebImage的源码是如何实现的。</p>
 <h2 id="SDWebImage结构"><a href="#SDWebImage结构" class="headerlink" title="SDWebImage结构"></a><strong>SDWebImage结构</strong></h2><p>首先我们看看SDWebImage的项目组织结构：</p>
 <p><img src="/assets/images/SDWebImage/01.png" alt="img01"></p>
 <blockquote>
@@ -1802,13 +2060,23 @@ dispatch_async(self.ioQueue, ^{
 </blockquote>
 <p><code>SDWebImageCompat</code>是根据屏幕大小设置图片的<code>scale</code>，实现比较简单，这里不再解释。</p>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -1818,6 +2086,10 @@ dispatch_async(self.ioQueue, ^{
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -1825,13 +2097,27 @@ dispatch_async(self.ioQueue, ^{
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/13/大并发服务器/四、epoll函数/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -1839,24 +2125,27 @@ dispatch_async(self.ioQueue, ^{
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/12/13/大并发服务器/四、epoll函数/" itemprop="url">
-                  四、epoll函数
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/12/13/大并发服务器/四、epoll函数/" itemprop="url">四、epoll函数</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-12-13T21:41:43+08:00" content="2016-12-13">
-              2016-12-13
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-13T21:41:43+08:00">
+                2016-12-13
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -1866,22 +2155,30 @@ dispatch_async(self.ioQueue, ^{
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3><pre><code>#include &lt;sys/epoll.h&gt;
+          
+            <h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3><pre><code>#include &lt;sys/epoll.h&gt;
 int epoll_create(int size);
 int epoll_create1(int flags);
 
@@ -2058,13 +2355,23 @@ int main(void)
 <p><img src="/assets/images/concurrent_server/05img05.png" alt="img01"></p>
 <p><img src="/assets/images/concurrent_server/05img06.png" alt="img01"></p>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2074,6 +2381,10 @@ int main(void)
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -2081,13 +2392,27 @@ int main(void)
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/04/大并发服务器/三、poll函数/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -2095,24 +2420,27 @@ int main(void)
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/12/04/大并发服务器/三、poll函数/" itemprop="url">
-                  三、poll函数
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/12/04/大并发服务器/三、poll函数/" itemprop="url">三、poll函数</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-12-04T21:12:48+08:00" content="2016-12-04">
-              2016-12-04
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-04T21:12:48+08:00">
+                2016-12-04
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -2122,22 +2450,30 @@ int main(void)
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h3 id="Linux-I-O复用模型"><a href="#Linux-I-O复用模型" class="headerlink" title="Linux I/O复用模型"></a>Linux I/O复用模型</h3><p>Linux下有三种I/O复用模型，select、poll、epoll,前两种在内核中的处理方式是一致的，第三种效率最高。</p>
+          
+            <h3 id="Linux-I-O复用模型"><a href="#Linux-I-O复用模型" class="headerlink" title="Linux I/O复用模型"></a>Linux I/O复用模型</h3><p>Linux下有三种I/O复用模型，select、poll、epoll,前两种在内核中的处理方式是一致的，第三种效率最高。</p>
 <h3 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h3><h4 id="函数原型"><a href="#函数原型" class="headerlink" title="函数原型"></a>函数原型</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd *fds, <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>返回值为发生时间描述符的个数。</p>
 <p>pollfd结构体定义：</p>
@@ -2158,13 +2494,23 @@ int main(void)
 </ul>
 <p>最后一种方式处理的代码如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">#include &lt;netinet/in.h&gt;</span><br><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">#include &lt;signal.h&gt;</span><br><span class="line">#include &lt;sys/wait.h&gt;</span><br><span class="line">#include &lt;poll.h&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;errno.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">#define ERR_EXIT(m) \</span><br><span class="line">        do \</span><br><span class="line">        &#123; \</span><br><span class="line">                perror(m); \</span><br><span class="line">                exit(EXIT_FAILURE); \</span><br><span class="line">        &#125; while(0)</span><br><span class="line"></span><br><span class="line">typedef std::vector&lt;struct pollfd&gt; PollFdList;</span><br><span class="line"></span><br><span class="line">int main(void)</span><br><span class="line">&#123;</span><br><span class="line">	signal(SIGPIPE, SIG_IGN);</span><br><span class="line">	signal(SIGCHLD, SIG_IGN);</span><br><span class="line"></span><br><span class="line">	int idlefd = open(&quot;/dev/null&quot;, O_RDONLY | O_CLOEXEC);</span><br><span class="line">	int listenfd;</span><br><span class="line"></span><br><span class="line">	//if ((listenfd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) &lt; 0)</span><br><span class="line">	if ((listenfd = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP)) &lt; 0)</span><br><span class="line">		ERR_EXIT(&quot;socket&quot;);</span><br><span class="line"></span><br><span class="line">	struct sockaddr_in servaddr;</span><br><span class="line">	memset(&amp;servaddr, 0, sizeof(servaddr));</span><br><span class="line">	servaddr.sin_family = AF_INET;</span><br><span class="line">	servaddr.sin_port = htons(5188);</span><br><span class="line">	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line">	int on = 1;</span><br><span class="line">	if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on)) &lt; 0)</span><br><span class="line">		ERR_EXIT(&quot;setsockopt&quot;);</span><br><span class="line"></span><br><span class="line">	if (bind(listenfd, (struct sockaddr*)&amp;servaddr, sizeof(servaddr)) &lt; 0)</span><br><span class="line">		ERR_EXIT(&quot;bind&quot;);</span><br><span class="line">	if (listen(listenfd, SOMAXCONN) &lt; 0)</span><br><span class="line">		ERR_EXIT(&quot;listen&quot;);</span><br><span class="line"></span><br><span class="line">	struct pollfd pfd;</span><br><span class="line">	pfd.fd = listenfd;</span><br><span class="line">	pfd.events = POLLIN;</span><br><span class="line"></span><br><span class="line">	PollFdList pollfds;</span><br><span class="line">	pollfds.push_back(pfd);</span><br><span class="line"></span><br><span class="line">	int nready;</span><br><span class="line"></span><br><span class="line">	struct sockaddr_in peeraddr;</span><br><span class="line">	socklen_t peerlen;</span><br><span class="line">	int connfd;</span><br><span class="line"></span><br><span class="line">	while (1)</span><br><span class="line">	&#123;</span><br><span class="line">		nready = poll(&amp;*pollfds.begin(), pollfds.size(), -1);</span><br><span class="line">		if (nready == -1)</span><br><span class="line">		&#123;</span><br><span class="line">			if (errno == EINTR)</span><br><span class="line">				continue;</span><br><span class="line">			</span><br><span class="line">			ERR_EXIT(&quot;poll&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">		if (nready == 0)	// nothing happended</span><br><span class="line">			continue;</span><br><span class="line">		</span><br><span class="line">		if (pollfds[0].revents &amp; POLLIN)</span><br><span class="line">		&#123;</span><br><span class="line">			peerlen = sizeof(peeraddr);</span><br><span class="line">			connfd = accept4(listenfd, (struct sockaddr*)&amp;peeraddr,</span><br><span class="line">						&amp;peerlen, SOCK_NONBLOCK | SOCK_CLOEXEC);</span><br><span class="line"></span><br><span class="line">/*			if (connfd == -1)</span><br><span class="line">				ERR_EXIT(&quot;accept4&quot;);</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			if (connfd == -1)</span><br><span class="line">			&#123;</span><br><span class="line">				if (errno == EMFILE)</span><br><span class="line">				&#123;</span><br><span class="line">					close(idlefd);</span><br><span class="line">					idlefd = accept(listenfd, NULL, NULL);</span><br><span class="line">					close(idlefd);</span><br><span class="line">					idlefd = open(&quot;/dev/null&quot;, O_RDONLY | O_CLOEXEC);</span><br><span class="line">					continue;</span><br><span class="line">				&#125;</span><br><span class="line">				else</span><br><span class="line">					ERR_EXIT(&quot;accept4&quot;);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			pfd.fd = connfd;</span><br><span class="line">			pfd.events = POLLIN;</span><br><span class="line">			pfd.revents = 0;</span><br><span class="line">			pollfds.push_back(pfd);</span><br><span class="line">			--nready;</span><br><span class="line"></span><br><span class="line">			// 连接成功</span><br><span class="line">			std::cout&lt;&lt;&quot;ip=&quot;&lt;&lt;inet_ntoa(peeraddr.sin_addr)&lt;&lt;</span><br><span class="line">				&quot; port=&quot;&lt;&lt;ntohs(peeraddr.sin_port)&lt;&lt;std::endl;</span><br><span class="line">			if (nready == 0)</span><br><span class="line">				continue;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		//std::cout&lt;&lt;pollfds.size()&lt;&lt;std::endl;</span><br><span class="line">		//std::cout&lt;&lt;nready&lt;&lt;std::endl;</span><br><span class="line">		for (PollFdList::iterator it=pollfds.begin()+1;</span><br><span class="line">			it != pollfds.end() &amp;&amp; nready &gt;0; ++it)</span><br><span class="line">		&#123;</span><br><span class="line">				if (it-&gt;revents &amp; POLLIN)</span><br><span class="line">				&#123;</span><br><span class="line">					--nready;</span><br><span class="line">					connfd = it-&gt;fd;</span><br><span class="line">					char buf[1024] = &#123;0&#125;;</span><br><span class="line">					int ret = read(connfd, buf, 1024);</span><br><span class="line">					if (ret == -1)</span><br><span class="line">						ERR_EXIT(&quot;read&quot;);</span><br><span class="line">					if (ret == 0)</span><br><span class="line">					&#123;</span><br><span class="line">						std::cout&lt;&lt;&quot;client close&quot;&lt;&lt;std::endl;</span><br><span class="line">						it = pollfds.erase(it);</span><br><span class="line">						--it;</span><br><span class="line"></span><br><span class="line">						close(connfd);</span><br><span class="line">						continue;</span><br><span class="line">					&#125;</span><br><span class="line"></span><br><span class="line">					std::cout&lt;&lt;buf;</span><br><span class="line">					write(connfd, buf, strlen(buf));</span><br><span class="line">					</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2174,6 +2520,10 @@ int main(void)
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -2181,13 +2531,27 @@ int main(void)
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/01/大并发服务器/二、大型网站架构演变/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -2195,24 +2559,27 @@ int main(void)
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/12/01/大并发服务器/二、大型网站架构演变/" itemprop="url">
-                  二、大型网站架构演变
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/12/01/大并发服务器/二、大型网站架构演变/" itemprop="url">二、大型网站架构演变</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-12-01T11:30:57+08:00" content="2016-12-01">
-              2016-12-01
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-01T11:30:57+08:00">
+                2016-12-01
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -2222,22 +2589,30 @@ int main(void)
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。</p>
+          
+            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>上一篇大并发服务器架构大致讲了下大并发服务器架构演变，这一章以大型网站为例，介绍下大并发服务器架构演变的过程。</p>
 <h3 id="Web-Server和Database-Server分离"><a href="#Web-Server和Database-Server分离" class="headerlink" title="Web Server和Database Server分离"></a>Web Server和Database Server分离</h3><p>网站刚开始建站时，访问量比较小，可以将web服务器和数据库服务器部署在同一台服务器上。此时Web服务器和数据库服务器互相影响。任何一个出现性能瓶颈，都会影响网站的访问速度。不符合大并发服务器的高性能的要求。任何一个瘫痪，都会导致整个网站瘫痪，不符合大并发服务器的高可用要求。我们可以将Web Server和Database Server分离：</p>
 <p><img src="/assets/images/concurrent_server/img01.png" alt="img01"></p>
 <p>对Web资源的请求从请求方式上来说可以分为对静态资源和对动态资源的请求:</p>
@@ -2305,13 +2680,23 @@ int main(void)
 <p><img src="/assets/images/concurrent_server/img12.png" alt="img01"></p>
 <p>key-value数据库，作为NoSql的解决方案，基本都支持Map/Reduce算法。</p>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2321,6 +2706,10 @@ int main(void)
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -2328,13 +2717,27 @@ int main(void)
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/20/大并发服务器/一、大并发服务器架构/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -2342,24 +2745,27 @@ int main(void)
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/11/20/大并发服务器/一、大并发服务器架构/" itemprop="url">
-                  一、大并发服务器架构
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/11/20/大并发服务器/一、大并发服务器架构/" itemprop="url">一、大并发服务器架构</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-11-20T19:41:42+08:00" content="2016-11-20">
-              2016-11-20
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-20T19:41:42+08:00">
+                2016-11-20
+              </time>
+            
+
+            
+
+            
           </span>
 
           
@@ -2369,22 +2775,30 @@ int main(void)
           
 
           
+          
+
+          
+
+          
+
+          
 
         </div>
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h2 id="服务器设计目标"><a href="#服务器设计目标" class="headerlink" title="服务器设计目标"></a>服务器设计目标</h2><h3 id="高性能-High-Performance"><a href="#高性能-High-Performance" class="headerlink" title="高性能(High Performance)"></a>高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
+          
+            <h2 id="服务器设计目标"><a href="#服务器设计目标" class="headerlink" title="服务器设计目标"></a>服务器设计目标</h2><h3 id="高性能-High-Performance"><a href="#高性能-High-Performance" class="headerlink" title="高性能(High Performance)"></a>高性能(High Performance)</h3><p>对于大量的并发请求，服务器能否及时快速的做出响应，这就要求我们编写的程序能够最大发挥出机器的性能，能够在短时间处理尽可能多的的并发请求。</p>
 <h3 id="高可用-High-Availability"><a href="#高可用-High-Availability" class="headerlink" title="高可用(High Availability)"></a>高可用(High Availability)</h3><p>要求服务器能够提供7x24小时不间断的服务，如果某台服务器出现故障，也能自动转移到备用机，而不需要人工干预（faileover机制）。</p>
 <h3 id="伸缩性-Scalability"><a href="#伸缩性-Scalability" class="headerlink" title="伸缩性(Scalability)"></a>伸缩性(Scalability)</h3><p>服务器采用良好的架构，分层设计，业务分离，能够进行灵活的部署。比如服务器有A，B两个组件，这两个组件可以部署在同一台服务器上，也可以部署在不同的服务器上，这就要求这两个组件不能使用本地通信机制，比如共享内存。而应该使用TCP这样的跨机器的通信方式。</p>
 <h2 id="典型的服务器结构"><a href="#典型的服务器结构" class="headerlink" title="典型的服务器结构"></a>典型的服务器结构</h2><p>常用的软件体系结构有C/S和B/S两种，C/S是指客户端-服务器模型，B/S是指浏览器-服务器模型，因为浏览器也是客户端程序，所以说本质上也是C/S结构。下图是C/S结构图。</p>
@@ -2426,13 +2840,23 @@ int main(void)
 </li>
 </ol>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2442,6 +2866,10 @@ int main(void)
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -2449,13 +2877,27 @@ int main(void)
       
 
   
-  
 
   
   
   
 
-  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/09/关于iOS组件化方案的思考/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="天意">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="风过无痕">
+    </span>
 
     
       <header class="post-header">
@@ -2463,30 +2905,40 @@ int main(void)
         
         
           <h1 class="post-title" itemprop="name headline">
-            
-            
-              
                 
-                <a class="post-title-link" href="/2016/09/09/关于iOS组件化方案的思考/" itemprop="url">
-                  关于iOS组件化方案的思考
-                </a>
-              
-            
-          </h1>
+                <a class="post-title-link" href="/2016/09/09/关于iOS组件化方案的思考/" itemprop="url">关于iOS组件化方案的思考</a></h1>
         
 
         <div class="post-meta">
           <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-09-09T16:13:26+08:00" content="2016-09-09">
-              2016-09-09
-            </time>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-09T16:13:26+08:00">
+                2016-09-09
+              </time>
+            
+
+            
+
+            
           </span>
 
           
 
           
             
+          
+
+          
+          
+
+          
+
           
 
           
@@ -2495,17 +2947,18 @@ int main(void)
       </header>
     
 
-
-    <div class="post-body">
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
       
 
       
         
-          <span itemprop="articleBody">
-            
-              <h3 id="什么是组件化？"><a href="#什么是组件化？" class="headerlink" title="什么是组件化？"></a>什么是组件化？</h3><p>组件化其实是封装的一种，将功能模块</p>
+          
+            <h3 id="什么是组件化？"><a href="#什么是组件化？" class="headerlink" title="什么是组件化？"></a>什么是组件化？</h3><p>组件化其实是封装的一种，将功能模块</p>
 <ul>
 <li><a href="http://www.tuicool.com/articles/vyeUf2J" target="_blank" rel="noopener">蘑菇街 App 的组件化之路</a> 原博客已删</li>
 <li><a href="http://www.tuicool.com/articles/QneYvmi" target="_blank" rel="noopener">蘑菇街 App 的组件化之路·续</a> 原博客已删</li>
@@ -2514,13 +2967,23 @@ int main(void)
 <li><a href="http://reviewcode.cn/article.html?reviewId=20" target="_blank" rel="noopener">围观神仙打架，反革命工程师《iOS应用架构谈 组件化方案》和蘑菇街Limboy的《蘑菇街 App 的组件化之路》的阅读指导</a></li>
 </ul>
 
-            
-          </span>
+          
         
       
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
 
     <footer class="post-footer">
+      
+
       
 
       
@@ -2530,11 +2993,14 @@ int main(void)
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
     
-
   </section>
 
   
@@ -2544,17 +3010,15 @@ int main(void)
 
 
 
+          </div>
+          
+
+
+          
+
         </div>
-
         
-
-
-        
-
-      </div>
-
-      
-        
+          
   
   <div class="sidebar-toggle">
     <div class="sidebar-toggle-line-wrap">
@@ -2565,56 +3029,74 @@ int main(void)
   </div>
 
   <aside id="sidebar" class="sidebar">
+    
     <div class="sidebar-inner">
 
       
 
       
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
-        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-          <img class="site-author-image" src="http://7xorsh.com1.z0.glb.clouddn.com/headIcon.jpg" alt="天意" itemprop="image">
-          <p class="site-author-name" itemprop="name">天意</p>
-        </div>
-        <p class="site-description motion-element" itemprop="description"></p>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">17</span>
-              <span class="site-state-item-name">posts</span>
-            </a>
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">天意</p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
-          <div class="site-state-item site-state-categories">
-            <a href="/categories">
-              <span class="site-state-item-count">2</span>
-              <span class="site-state-item-name">categories</span>
-              </a>
-          </div>
+          <nav class="site-state motion-element">
 
-          <div class="site-state-item site-state-tags">
-            <a href="/tags">
-              <span class="site-state-item-count">7</span>
-              <span class="site-state-item-name">tags</span>
-              </a>
-          </div>
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
 
-        </nav>
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
 
-        
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
 
-        <div class="links-of-author motion-element">
+          </nav>
+
           
-        </div>
 
-        
-        
-
-        <div class="links-of-author motion-element">
           
-        </div>
 
+          
+          
+
+          
+          
+
+          
+
+        </div>
       </section>
+
+      
 
       
 
@@ -2622,77 +3104,198 @@ int main(void)
   </aside>
 
 
-      
+        
+      </div>
     </main>
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
-    <i class="icon-next-heart fa fa-heart"></i>
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">天意</span>
-</div>
 
-<div class="powered-by">
-  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
-</div>
-
-<div class="theme-info">
-  Theme -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Gemini
-  </a>
+  
 </div>
 
 
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
       </div>
     </footer>
 
-    <div class="back-to-top"></div>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
   </div>
 
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
 
   
   
 
   
-    
-    
 
   
 
-
-  
-
-  
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
-
-
-  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
-
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-
-  <script type="text/javascript" src="/js/bootstrap.js"></script>
-
-  
-  
-
-  
   
 
 </body>
