@@ -392,7 +392,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/16/JavaScript原理-单线程下的异步/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/30/MarkDown语法学习/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天意">
@@ -412,7 +412,7 @@
           <h1 class="post-title" itemprop="name headline">
                 
                 
-                <a href="/2018/12/16/JavaScript原理-单线程下的异步/" class="post-title-link" itemprop="url">JavaScript原理:单线程下的异步</a>
+                <a href="/2016/01/30/MarkDown语法学习/" class="post-title-link" itemprop="url">MarkDown语法学习</a>
               
             
           </h1>
@@ -437,46 +437,12 @@
                 
               
 
-              <time title="Created: 2018-12-16 21:55:14" itemprop="dateCreated datePublished" datetime="2018-12-16T21:55:14+08:00">2018-12-16</time>
+              <time title="Created: 2016-01-30 12:30:35" itemprop="dateCreated datePublished" datetime="2016-01-30T12:30:35+08:00">2016-01-30</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-01-04 17:28:15" itemprop="dateModified" datetime="2019-01-04T17:28:15+08:00">2019-01-04</time>
-              
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -508,29 +474,81 @@
       
         
           
-            <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="JavaScript是单线程"><a href="#JavaScript是单线程" class="headerlink" title="JavaScript是单线程"></a>JavaScript是单线程</h3><p>简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线程能继续处理用户交互或者界面渲染， 让用户体验变得更好。  </p>
-<p>JavaScript语言的一大特点就是单线程。JavaScript的主要功能是操作DOM和和用户交互，假设设计成多线程，其中一个线程往某个DOM节点添加内容，另一个线程删除了该DOM节点，这个时候，浏览器应该以哪个线程为准呢？所以，为了避免复杂性，JavaScript就被设计成了一个单线程的语言。但是，作为一个单线程语言，是怎么处理异步事件的呢？为了解答这个疑问我们先看下下面两个概念。    </p>
-<h3 id="JavaScript引擎"><a href="#JavaScript引擎" class="headerlink" title="JavaScript引擎"></a>JavaScript引擎</h3><p>JavaScript引擎最流行的就是Google的V8引擎了,Chrome和Node.js目前都使用了<a href="https://v8.dev/" target="_blank" rel="noopener">V8引擎</a>。除此之外，FireFox用的是SpiderMonkey，Safari用的是JavaScriptCore，IE用的是Chakra。下面是一个简化了的JS引擎示意图：</p>
-<p><img src="/assets/images/javascript/engine.png" alt="img01"></p>
-<p>JS引擎主要有两个部分组成：</p>
-<ul>
-<li>内存堆：这是进行内存管理的地方。</li>
-<li>调用堆栈：这是管理代码执行过程中函数栈帧的地方。</li>
-</ul>
-<h3 id="JavaScript运行时"><a href="#JavaScript运行时" class="headerlink" title="JavaScript运行时"></a>JavaScript运行时</h3><p>JavaScript开发人员基本上都用过<code>setTimeout</code>或者<code>ajax</code>等这些异步的API。但是JavaScript是单线程的，JS引擎并没有提供这些API。那么这些API来自哪里呢？</p>
-<p><img src="/assets/images/javascript/runtime.png" alt="img01"></p>
-<p>实际上，这些都是JS的运行时环境提供的。如果JS运行在浏览器上，那么这些就都属于Web API，这些API还有<code>EventLoop</code>和<code>callback queue</code>都是由浏览器提供的。</p>
-<p>JS引擎只有一个线程，当前函数栈执行完成之后就去不断的取消息队列里的的消息，取到了就执行。JS运行时，就负责给消息队列发送消息，例如网络请求或者用户的交互事件。JS引擎负责取消息执行，JS运行时负责发送消息。</p>
-<h2 id="JavaScript运行过程"><a href="#JavaScript运行过程" class="headerlink" title="JavaScript运行过程"></a>JavaScript运行过程</h2><p>JS运行时不断产生事件放到消息队列里，JS引擎的唯一线程也就是主线程不断从消息队列中取出事件去执行。伪代码实现如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while (queue.waitForMessage()) &#123;</span><br><span class="line">  queue.processNextMessage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>具体过程可以也参考下图：<br>（引用<a href="http://vimeo.com/96425312" target="_blank" rel="noopener">《Help, I’m stuck in an event-loop》</a>）</p>
-<p><img src="/assets/images/javascript/eventloop.png" alt="eventloop"></p>
-<p>从图中可以看出，JS引擎的运行的过程中，维护了一个主线程的执行过程的堆栈信息。如果在运行的过程中代码调用了外部API，JS运行时会把这个消息添加到队列。继续运行直到当前执行栈为空，事件循环会从队列中取出下一个消息放到执行栈中。</p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop" target="_blank" rel="noopener">Concurrency model and Event Loop</a></li>
-<li><a href="https://vimeo.com/96425312" target="_blank" rel="noopener">I’m stuck in an event-loop.</a></li>
-<li><a href="http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D" target="_blank" rel="noopener">JavaScript执行过程示意图</a></li>
-</ol>
+            <p>欢迎来到我的<a href="www.liudesheng.com">博客</a>,第一篇我们会学习使用MarkDown语法来书写文章。</p>
+<h2 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h2><p>在Markdown语法中，标题是文本前面加上<code>#</code>来表示的，一个#代表一级标题，同里，还可以增加二级标题，三级标题，最大不能超过六级。例如:</p>
+<blockquote>
+<pre><code># 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+</code></pre></blockquote>
+<h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>无序列表只需在文字前面加上 <code>-</code>。例如：</p>
+<blockquote>
+<pre><code>- 文本1
+- 文本2
+- 文本3
+</code></pre></blockquote>
+<p>如果需要创建有序列表，在文字前加上1.2.3.。注意：-、1.和文本之间要保留一个空格。例如:</p>
+<blockquote>
+<pre><code>1. 文本1
+2. 文本2
+3. 文本3
+</code></pre></blockquote>
+<h2 id="链接和图片"><a href="#链接和图片" class="headerlink" title="链接和图片"></a>链接和图片</h2><p>在Markdown中，插入链接需要语法即可。例如:</p>
+<blockquote>
+<pre><code>[博客](www.liudesheng.com)
+</code></pre></blockquote>
+<p>插入图片使用以下的格式：</p>
+<blockquote>
+<pre><code>![]()(http://weibo.com/hnrain?s=6cm7D0)
+</code></pre></blockquote>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>如果在写作的时候需要引用别人的文字，直接在需要引用的文字前面加<code>&gt;</code>就好。例如：</p>
+<blockquote>
+<pre><code>这是一段引用的文字。
+</code></pre></blockquote>
+<h2 id="粗体斜体"><a href="#粗体斜体" class="headerlink" title="粗体斜体"></a>粗体斜体</h2><p>用两个<code>*</code>包含的文本是粗体，用一个<code>*</code>包含的文本是斜体。例如:</p>
+<blockquote>
+<pre><code>**这是粗体**
+*这是斜体*
+</code></pre><p>生存还是<strong>毁灭</strong>,这是一个<em>问题</em>。</p>
+</blockquote>
+<h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><p>在MarkDown中表格的表示方式非常形象。例子如下</p>
+<blockquote>
+<pre><code>| table            | row           | pes  |
+| -------------     |:-------------:| -----:|
+| col1              | right-aligned | data12345 |
+| col2              | centered      | data2 |
+| col3             | test      |    d3 |
+</code></pre></blockquote>
+<p>默认居左，横线两边加冒号的是居中，冒号在右边的是居右。效果如下：</p>
+<table>
+<thead>
+<tr>
+<th>table</th>
+<th style="text-align:center">row</th>
+<th style="text-align:right">pes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col1</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">data12345</td>
+</tr>
+<tr>
+<td>col2</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">data2</td>
+</tr>
+<tr>
+<td>col3</td>
+<td style="text-align:center">test</td>
+<td style="text-align:right">d3</td>
+</tr>
+</tbody>
+</table>
 
           
         
@@ -621,41 +639,7 @@
               
 
               
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                    <span class="site-state-item-count">1</span>
-                    <span class="site-state-item-name">categories</span>
-                  </a>
-                </div>
-              
 
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                    <span class="site-state-item-count">1</span>
-                    <span class="site-state-item-name">tags</span>
-                  </a>
-                </div>
               
             </nav>
           
