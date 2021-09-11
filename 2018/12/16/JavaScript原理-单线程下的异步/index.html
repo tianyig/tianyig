@@ -96,25 +96,22 @@
 
 
 
-  <meta name="description" content="相关函数#include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  int epoll_ctl(int epfd,int op,int fd,struct epoll_event *event); int epoll_wait(int epld,struct epoll_event">
-<meta name="keywords" content="大并发服务器">
+  <meta name="description" content="背景知识JavaScript是单线程简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="四、epoll函数">
-<meta property="og:url" content="http://yoursite.com/2016/12/13/大并发服务器/四、epoll函数/index.html">
+<meta property="og:title" content="JavaScript原理:单线程下的异步">
+<meta property="og:url" content="http://yoursite.com/2018/12/16/JavaScript原理-单线程下的异步/index.html">
 <meta property="og:site_name" content="风过无痕">
-<meta property="og:description" content="相关函数#include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  int epoll_ctl(int epfd,int op,int fd,struct epoll_event *event); int epoll_wait(int epld,struct epoll_event">
+<meta property="og:description" content="背景知识JavaScript是单线程简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img01.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img02.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img03.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img04.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img05.png">
-<meta property="og:image" content="http://yoursite.com/assets/images/concurrent_server/05img06.png">
-<meta property="og:updated_time" content="2016-12-19T01:53:06.000Z">
+<meta property="og:image" content="http://yoursite.com/assets/images/javascript/engine.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/javascript/runtime.png">
+<meta property="og:image" content="http://yoursite.com/assets/images/javascript/eventloop.png">
+<meta property="og:updated_time" content="2019-01-04T09:28:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="四、epoll函数">
-<meta name="twitter:description" content="相关函数#include &amp;lt;sys/epoll.h&amp;gt; int epoll_create(int size); int epoll_create1(int flags);  int epoll_ctl(int epfd,int op,int fd,struct epoll_event *event); int epoll_wait(int epld,struct epoll_event">
-<meta name="twitter:image" content="http://yoursite.com/assets/images/concurrent_server/05img01.png">
+<meta name="twitter:title" content="JavaScript原理:单线程下的异步">
+<meta name="twitter:description" content="背景知识JavaScript是单线程简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线">
+<meta name="twitter:image" content="http://yoursite.com/assets/images/javascript/engine.png">
 
 
 
@@ -122,7 +119,7 @@
 
   
   
-  <link rel="canonical" href="http://yoursite.com/2016/12/13/大并发服务器/四、epoll函数/">
+  <link rel="canonical" href="http://yoursite.com/2018/12/16/JavaScript原理-单线程下的异步/">
 
 
 
@@ -132,7 +129,7 @@
   };
 </script>
 
-  <title>四、epoll函数 | 风过无痕</title>
+  <title>JavaScript原理:单线程下的异步 | 风过无痕</title>
   
 
 
@@ -403,7 +400,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/13/大并发服务器/四、epoll函数/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/16/JavaScript原理-单线程下的异步/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="天意">
@@ -420,7 +417,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">四、epoll函数
+          <h1 class="post-title" itemprop="name headline">JavaScript原理:单线程下的异步
 
               
             
@@ -446,7 +443,7 @@
                 
               
 
-              <time title="Created: 2016-12-13 21:41:43" itemprop="dateCreated datePublished" datetime="2016-12-13T21:41:43+08:00">2016-12-13</time>
+              <time title="Created: 2018-12-16 21:55:14" itemprop="dateCreated datePublished" datetime="2018-12-16T21:55:14+08:00">2018-12-16</time>
             
 
             
@@ -463,11 +460,29 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2016-12-19 09:53:06" itemprop="dateModified" datetime="2016-12-19T09:53:06+08:00">2016-12-19</time>
+                <time title="Modified: 2019-01-04 17:28:15" itemprop="dateModified" datetime="2019-01-04T17:28:15+08:00">2019-01-04</time>
               
             
           </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -497,182 +512,29 @@
       
 
       
-        <h3 id="相关函数"><a href="#相关函数" class="headerlink" title="相关函数"></a>相关函数</h3><pre><code>#include &lt;sys/epoll.h&gt;
-int epoll_create(int size);
-int epoll_create1(int flags);
-
-int epoll_ctl(int epfd,int op,int fd,struct epoll_event *event);
-int epoll_wait(int epld,struct epoll_event *events,int maxevents,int timeout);
-
-typedef union epoll_data {
-    void     *ptr;
-    int     fd;
-    uint32_t u32;
-    uint64_t u64;
-} epoll_data_t;
-
-struct epoll_event {
-    uint32_t events;        //Epoll events
-    epoll_data_t data;    //User data variable
-};
-</code></pre><h3 id="编程模型"><a href="#编程模型" class="headerlink" title="编程模型"></a>编程模型</h3><p>epoll有两种触发模式，LT(Level-Triggered，水平触发)，ET(Edge–Triggered边缘触发)。其中LT编程模型和poll是一样的。</p>
-<p>LT电平触发和ET触发模式的区别是ET触发是高电平到低电平切换的时候或者低电平切换高电平才会触发。</p>
+        <h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="JavaScript是单线程"><a href="#JavaScript是单线程" class="headerlink" title="JavaScript是单线程"></a>JavaScript是单线程</h3><p>简单的来说，GUI开发一般是要处理两类事件：界面布局渲染、用户交互。用户交互的过程中可能会触发耗时操作，例如请求网络、查询本地数据库等。如果代码的执行是同步顺序执行的话，就意味着所有的任务包括用户的交互操作都要排队，前一个任务结束，才能执行下一个任务，假设前一个任务次次不结束，界面就会出现卡死的情况。所以图形界面编程语言都支持多线程，把耗时的任务放在子线程，住线程能继续处理用户交互或者界面渲染， 让用户体验变得更好。  </p>
+<p>JavaScript语言的一大特点就是单线程。JavaScript的主要功能是操作DOM和和用户交互，假设设计成多线程，其中一个线程往某个DOM节点添加内容，另一个线程删除了该DOM节点，这个时候，浏览器应该以哪个线程为准呢？所以，为了避免复杂性，JavaScript就被设计成了一个单线程的语言。但是，作为一个单线程语言，是怎么处理异步事件的呢？为了解答这个疑问我们先看下下面两个概念。    </p>
+<h3 id="JavaScript引擎"><a href="#JavaScript引擎" class="headerlink" title="JavaScript引擎"></a>JavaScript引擎</h3><p>JavaScript引擎最流行的就是Google的V8引擎了,Chrome和Node.js目前都使用了<a href="https://v8.dev/" target="_blank" rel="noopener">V8引擎</a>。除此之外，FireFox用的是SpiderMonkey，Safari用的是JavaScriptCore，IE用的是Chakra。下面是一个简化了的JS引擎示意图：</p>
+<p><img src="/assets/images/javascript/engine.png" alt="img01"></p>
+<p>JS引擎主要有两个部分组成：</p>
 <ul>
-<li><p>EPOLLIN事件:</p>
-<ul>
-<li>内核的输入缓冲区 为空     低电平</li>
-<li>内核的输入缓冲区 不为空     高电平（一直触发EPOLLIN）</li>
+<li>内存堆：这是进行内存管理的地方。</li>
+<li>调用堆栈：这是管理代码执行过程中函数栈帧的地方。</li>
 </ul>
-</li>
-<li><p>EPOLLOUT事件:</p>
-<ul>
-<li>内核发送缓冲区不满    高电平(一直触发EPOLLOUT)</li>
-<li>内核发送缓冲区满        低电平</li>
-</ul>
-</li>
-</ul>
-<h4 id="LT模型例子"><a href="#LT模型例子" class="headerlink" title="LT模型例子"></a>LT模型例子</h4><pre><code>#include &lt;unistd.h&gt;
-#include &lt;sys/types.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;sys/socket.h&gt;
-#include &lt;netinet/in.h&gt;
-#include &lt;arpa/inet.h&gt;
-#include &lt;signal.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;sys/wait.h&gt;
-#include &lt;sys/epoll.h&gt;
-
-#include &lt;stdlib.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;errno.h&gt;
-#include &lt;string.h&gt;
-
-#include &lt;vector&gt;
-#include &lt;algorithm&gt;
-#include &lt;iostream&gt;
-
-typedef std::vector&lt;struct epoll_event&gt; EventList;
-
-#define ERR_EXIT(m) \
-    do \
-    { \
-            perror(m); \
-            exit(EXIT_FAILURE); \
-    } while(0)
-
-int main(void)
-{
-    signal(SIGPIPE, SIG_IGN);
-    signal(SIGCHLD, SIG_IGN);
-    int idlefd = open(&quot;dev/null&quot;,O_RDONLY | O_CLOEXEC);
-    int listenfd;
-    if ((listenfd = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP)) &lt; 0)
-        ERR_EXIT(&quot;socket&quot;);
-    struct sockaddr_in servaddr;
-    memset(&amp;servaddr, 0, sizeof(servaddr));
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(5188);
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-    int on = 1;
-    if (setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, &amp;on, sizeof(on)) &lt; 0)
-        ERR_EXIT(&quot;socksockopt&quot;);
-    if (bind(listenfd, (struct sockaddr *)&amp;servaddr, sizeof(servaddr)) &lt; 0)
-        ERR_EXIT(&quot;bind&quot;);
-    if (listen(listenfd, SOMAXCONN) &lt; 0)
-        ERR_EXIT(&quot;listen&quot;);
-
-    std::vector&lt;int&gt; clients;
-    int epollfd;
-    epollfd = epoll_create1(EPOLL_CLOEXEC);
-
-    struct epoll_event event;
-    event.data.fd = listenfd;
-    event.events = EPOLLIN;
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &amp;event);
-
-    EventList events(16);
-    struct sockaddr_in peeraddr;
-    socklen_t peerlen;
-    int connfd;
-
-    int nready;
-    while(true)
-    {
-        //和poll的区别
-        nready = epoll_wait(epollfd, &amp;*events.begin(), static_cast&lt;int&gt;(events.size()),-1);
-        if (-1 == nready)
-        {
-            if (EINTR == errno)
-                continue;
-        }
-        if (0 == nready)
-            continue;
-
-        if ((size_t)nready == events.size())
-            events.resize(events.size() * 2);
-
-        for (int i = 0; i &lt; nready; ++i)
-        {
-            if (events[i].data.fd == listenfd)
-            {
-                peerlen = sizeof(peeraddr);
-                connfd = ::accept4(listenfd, (struct sockaddr*)&amp;peeraddr,
-                        &amp;peerlen, SOCK_NONBLOCK | SOCK_CLOEXEC);
-                if (-1 == connfd)
-                {
-                    if (EMFILE == errno)
-                    {
-                        close(idlefd);
-                        idlefd = accept(listenfd, NULL, NULL);
-                        close(idlefd);
-                        idlefd = open(&quot;/dev/null&quot;, O_RDONLY | O_CLOEXEC);
-                        continue;
-                    } else {
-                        ERR_EXIT(&quot;accept4&quot;);
-                    }
-                }
-
-                std::cout&lt;&lt;&quot;ip=&quot;&lt;&lt;inet_ntoa(peeraddr.sin_addr)&lt;&lt;
-                    &quot; port=&quot;&lt;&lt;ntohs(peeraddr.sin_port)&lt;&lt;std::endl;
-                clients.push_back(connfd);
-
-                event.data.fd = connfd;
-                event.events = EPOLLIN;
-                epoll_ctl(epollfd, EPOLL_CTL_ADD, connfd, &amp;event);
-            }
-            else if (events[i].events &amp; EPOLLIN)
-            {
-                connfd = events[i].data.fd;
-                if (connfd &lt; 0)
-                    continue;
-                char buf[1024];
-                int ret = read(connfd, buf, 1024);
-                if (ret == -1)
-                    ERR_EXIT(&quot;read&quot;);
-                if (ret == 0)
-                {
-                    std::cout&lt;&lt;&quot;client close&quot;&lt;&lt;std::endl;
-                    close(connfd);
-                    event = events[i];
-                    epoll_ctl(epollfd, EPOLL_CTL_DEL,connfd, &amp;event);
-                    clients.erase(std::remove(clients.begin(), clients.end(), connfd), clients.end());
-                }
-                std::cout&lt;&lt;buf;
-                write(connfd, buf, strlen(buf));
-            }
-        }
-    }
-}
-</code></pre><p>LT模式下什么时候关注EPOLLOUT事件呢？如果在得到一个套接字马上关注，就会出现busy loop的状态。所以应该在write的时候关注EPOLLOUT事件，如果数据没有写完，我们就需要把未发送完的数据添加到应用层缓冲区，然后关注这个连接套接字的EPOLLOUT事件，等到EPOLLOUT事件到来，取出应用层缓冲区的数据发送，如果应用层缓冲区数据发送完成，取消关注EPOLLOUT事件。流程如下：</p>
-<p><img src="/assets/images/concurrent_server/05img01.png" alt="img01"></p>
-<h4 id="ET模型"><a href="#ET模型" class="headerlink" title="ET模型"></a>ET模型</h4><p>ET表示边缘触发，是电平从低到高或者从高到低才会触发。我们一开始就可以关注EPOLLIN事件和EPOLLOUT事件，不回出现busy loop。所以当接收缓冲区处于高电平状态时，一定要一次性把数据全部读完。因为如果一次没有读完，接收缓冲区仍然处于高电平状态，下次不会在触发EPOLLIN事件。同理，发送缓冲区的处理类似。处理流程如下：</p>
-<p><img src="/assets/images/concurrent_server/05img02.png" alt="img01"></p>
-<p>ET模型如何处理EMFILE事件呢？如果accept返回了了EMFILE事件，那么epoll将一直保持在高电平状态，后面新的客户端连接都没有办法处理，需要更复杂的处理逻辑。</p>
-<h3 id="select-poll-epoll对比"><a href="#select-poll-epoll对比" class="headerlink" title="select/poll/epoll对比"></a>select/poll/epoll对比</h3><p><img src="/assets/images/concurrent_server/05img03.png" alt="img01"></p>
-<p><img src="/assets/images/concurrent_server/05img04.png" alt="img01"></p>
-<p><img src="/assets/images/concurrent_server/05img05.png" alt="img01"></p>
-<p><img src="/assets/images/concurrent_server/05img06.png" alt="img01"></p>
+<h3 id="JavaScript运行时"><a href="#JavaScript运行时" class="headerlink" title="JavaScript运行时"></a>JavaScript运行时</h3><p>JavaScript开发人员基本上都用过<code>setTimeout</code>或者<code>ajax</code>等这些异步的API。但是JavaScript是单线程的，JS引擎并没有提供这些API。那么这些API来自哪里呢？</p>
+<p><img src="/assets/images/javascript/runtime.png" alt="img01"></p>
+<p>实际上，这些都是JS的运行时环境提供的。如果JS运行在浏览器上，那么这些就都属于Web API，这些API还有<code>EventLoop</code>和<code>callback queue</code>都是由浏览器提供的。</p>
+<p>JS引擎只有一个线程，当前函数栈执行完成之后就去不断的取消息队列里的的消息，取到了就执行。JS运行时，就负责给消息队列发送消息，例如网络请求或者用户的交互事件。JS引擎负责取消息执行，JS运行时负责发送消息。</p>
+<h2 id="JavaScript运行过程"><a href="#JavaScript运行过程" class="headerlink" title="JavaScript运行过程"></a>JavaScript运行过程</h2><p>JS运行时不断产生事件放到消息队列里，JS引擎的唯一线程也就是主线程不断从消息队列中取出事件去执行。伪代码实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while (queue.waitForMessage()) &#123;</span><br><span class="line">  queue.processNextMessage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>具体过程可以也参考下图：<br>（引用<a href="http://vimeo.com/96425312" target="_blank" rel="noopener">《Help, I’m stuck in an event-loop》</a>）</p>
+<p><img src="/assets/images/javascript/eventloop.png" alt="eventloop"></p>
+<p>从图中可以看出，JS引擎的运行的过程中，维护了一个主线程的执行过程的堆栈信息。如果在运行的过程中代码调用了外部API，JS运行时会把这个消息添加到队列。继续运行直到当前执行栈为空，事件循环会从队列中取出下一个消息放到执行栈中。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop" target="_blank" rel="noopener">Concurrency model and Event Loop</a></li>
+<li><a href="https://vimeo.com/96425312" target="_blank" rel="noopener">I’m stuck in an event-loop.</a></li>
+<li><a href="http://latentflip.com/loupe/?code=JC5vbignYnV0dG9uJywgJ2NsaWNrJywgZnVuY3Rpb24gb25DbGljaygpIHsKICAgIHNldFRpbWVvdXQoZnVuY3Rpb24gdGltZXIoKSB7CiAgICAgICAgY29uc29sZS5sb2coJ1lvdSBjbGlja2VkIHRoZSBidXR0b24hJyk7ICAgIAogICAgfSwgMjAwMCk7Cn0pOwoKY29uc29sZS5sb2coIkhpISIpOwoKc2V0VGltZW91dChmdW5jdGlvbiB0aW1lb3V0KCkgewogICAgY29uc29sZS5sb2coIkNsaWNrIHRoZSBidXR0b24hIik7Cn0sIDUwMDApOwoKY29uc29sZS5sb2coIldlbGNvbWUgdG8gbG91cGUuIik7!!!PGJ1dHRvbj5DbGljayBtZSE8L2J1dHRvbj4%3D" target="_blank" rel="noopener">JavaScript执行过程示意图</a></li>
+</ol>
 
       
     </div>
@@ -696,7 +558,7 @@ int main(void)
       
         <div class="post-tags">
           
-            <a href="/tags/大并发服务器/" rel="tag"># 大并发服务器</a>
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
           
         </div>
       
@@ -705,26 +567,6 @@ int main(void)
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2016/12/04/大并发服务器/三、poll函数/" rel="next" title="三、poll函数">
-                <i class="fa fa-chevron-left"></i> 三、poll函数
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/27/SDWebImage源码阅读-一/" rel="prev" title="SDWebImage源码阅读笔记">
-                SDWebImage源码阅读笔记 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -790,7 +632,7 @@ int main(void)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">posts</span>
                   </a>
                 </div>
@@ -828,15 +670,7 @@ int main(void)
                     
                       
                     
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-count">1</span>
                     <span class="site-state-item-name">tags</span>
                   </a>
                 </div>
@@ -874,7 +708,7 @@ int main(void)
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关函数"><span class="nav-number">1.</span> <span class="nav-text">相关函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编程模型"><span class="nav-number">2.</span> <span class="nav-text">编程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#LT模型例子"><span class="nav-number">2.1.</span> <span class="nav-text">LT模型例子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ET模型"><span class="nav-number">2.2.</span> <span class="nav-text">ET模型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-poll-epoll对比"><span class="nav-number">3.</span> <span class="nav-text">select/poll/epoll对比</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景知识"><span class="nav-number">1.</span> <span class="nav-text">背景知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript是单线程"><span class="nav-number">1.1.</span> <span class="nav-text">JavaScript是单线程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript引擎"><span class="nav-number">1.2.</span> <span class="nav-text">JavaScript引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript运行时"><span class="nav-number">1.3.</span> <span class="nav-text">JavaScript运行时</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript运行过程"><span class="nav-number">2.</span> <span class="nav-text">JavaScript运行过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
