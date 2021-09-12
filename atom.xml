@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>天意</title>
+  
+  <subtitle>知不足者，方知路远；知路远着，必勤慎独行</subtitle>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2016-01-30T04:30:35.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>天意</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MarkDown语法学习</title>
+    <link href="http://yoursite.com/2016/01/30/MarkDown%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/"/>
+    <id>http://yoursite.com/2016/01/30/MarkDown%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</id>
+    <published>2016-01-30T04:30:35.000Z</published>
+    <updated>2016-01-30T04:30:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>欢迎来到我的<a href="www.liudesheng.com">博客</a>,第一篇我们会学习使用MarkDown语法来书写文章。</p><h2 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h2><p>在Markdown语法中，标题是文本前面加上<code>#</code>来表示的，一个#代表一级标题，同里，还可以增加二级标题，三级标题，最大不能超过六级。例如:</p><blockquote><pre><code># 一级标题## 二级标题### 三级标题#### 四级标题##### 五级标题###### 六级标题</code></pre></blockquote><h2 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h2><p>无序列表只需在文字前面加上 <code>-</code>。例如：</p><blockquote><pre><code>- 文本1- 文本2- 文本3</code></pre></blockquote><p>如果需要创建有序列表，在文字前加上1.2.3.。注意：-、1.和文本之间要保留一个空格。例如:</p><blockquote><pre><code>1. 文本12. 文本23. 文本3</code></pre></blockquote><h2 id="链接和图片"><a href="#链接和图片" class="headerlink" title="链接和图片"></a>链接和图片</h2><p>在Markdown中，插入链接需要语法即可。例如:</p><blockquote><pre><code>[博客](www.liudesheng.com)</code></pre></blockquote><p>插入图片使用以下的格式：</p><blockquote><pre><code>![]()(http://weibo.com/hnrain?s=6cm7D0)</code></pre></blockquote><h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p>如果在写作的时候需要引用别人的文字，直接在需要引用的文字前面加<code>&gt;</code>就好。例如：</p><blockquote><pre><code>这是一段引用的文字。</code></pre></blockquote><h2 id="粗体斜体"><a href="#粗体斜体" class="headerlink" title="粗体斜体"></a>粗体斜体</h2><p>用两个<code>*</code>包含的文本是粗体，用一个<code>*</code>包含的文本是斜体。例如:</p><blockquote><pre><code>**这是粗体***这是斜体*</code></pre><p>生存还是<strong>毁灭</strong>,这是一个<em>问题</em>。</p></blockquote><h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><p>在MarkDown中表格的表示方式非常形象。例子如下</p><blockquote><pre><code>| table            | row           | pes  || -------------     |:-------------:| -----:|| col1              | right-aligned | data12345 || col2              | centered      | data2 || col3             | test      |    d3 |</code></pre></blockquote><p>默认居左，横线两边加冒号的是居中，冒号在右边的是居右。效果如下：</p><table><thead><tr><th>table</th><th style="text-align:center">row</th><th style="text-align:right">pes</th></tr></thead><tbody><tr><td>col1</td><td style="text-align:center">right-aligned</td><td style="text-align:right">data12345</td></tr><tr><td>col2</td><td style="text-align:center">centered</td><td style="text-align:right">data2</td></tr><tr><td>col3</td><td style="text-align:center">test</td><td style="text-align:right">d3</td></tr></tbody></table>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;欢迎来到我的&lt;a href=&quot;www.liudesheng.com&quot;&gt;博客&lt;/a&gt;,第一篇我们会学习使用MarkDown语法来书写文章。&lt;/p&gt;
+&lt;h2 id=&quot;标题&quot;&gt;&lt;a href=&quot;#标题&quot; class=&quot;headerlink&quot; title=&quot;标题&quot;&gt;&lt;/a&gt;标题&lt;/</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
