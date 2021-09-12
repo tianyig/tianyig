@@ -6,7 +6,7 @@
   <link href="http://yoursite.com/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-09-12T05:46:40.221Z</updated>
+  <updated>2021-09-12T06:34:42.735Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>你单薄的双肩</title>
+    <link href="http://yoursite.com/2021/09/12/%E4%BD%A0%E5%8D%95%E8%96%84%E7%9A%84%E5%8F%8C%E8%82%A9/"/>
+    <id>http://yoursite.com/2021/09/12/%E4%BD%A0%E5%8D%95%E8%96%84%E7%9A%84%E5%8F%8C%E8%82%A9/</id>
+    <published>2021-09-12T06:27:49.000Z</published>
+    <updated>2021-09-12T06:34:42.735Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：曼德尔施塔姆</p><p>你单薄的双肩应该让鞭子抽得通红，</p><p>让鞭子抽得通红，在生硬的寒冷中闪着光辉。<br><br></p><p>你稚嫩的手指应该举起熨斗，</p><p>举起熨斗，给绳子打结。<br><br></p><p>你敏感的双脚应该走在碎玻璃上，</p><p>走在碎玻璃上，穿过血迹斑斑的沙漠。<br><br></p><p>而我应该像一支黑蜡烛为你燃烧，</p><p>像一支不敢祈祷的黑蜡烛为你燃烧。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;作者：曼德尔施塔姆&lt;/p&gt;
+&lt;p&gt;你单薄的双肩应该让鞭子抽得通红，&lt;/p&gt;
+&lt;p&gt;让鞭子抽得通红，在生硬的寒冷中闪着光辉。&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;你稚嫩的手指应该举起熨斗，&lt;/p&gt;
+&lt;p&gt;举起熨斗，给绳子打结。&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;你敏感的双脚应该走在碎玻</summary>
+      
+    
+    
+    
+    <category term="诗歌" scheme="http://yoursite.com/categories/诗歌/"/>
+    
+    
+    <category term="诗歌" scheme="http://yoursite.com/tags/诗歌/"/>
+    
+    <category term="转载" scheme="http://yoursite.com/tags/转载/"/>
+    
+  </entry>
   
   <entry>
     <title>MarkDown语法学习</title>
