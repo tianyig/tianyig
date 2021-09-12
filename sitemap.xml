@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2016/01/30/MarkDown%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2021-09-12</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/about/index.html</loc>
     
     <lastmod>2017-03-18</lastmod>
@@ -19,13 +26,6 @@
     <loc>http://yoursite.com/tags/index.html</loc>
     
     <lastmod>2017-03-18</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2016/01/30/MarkDown%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2016-01-30</lastmod>
     
   </url>
   
